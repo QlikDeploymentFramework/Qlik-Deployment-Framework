@@ -52,7 +52,7 @@ else // Validate single LIB mount
 		LET vG.BasePath= '$(vG.RootPath)$(vG.HomeContainer)\';
 		trace '### DF Info, identified Sense home container  $(vG.BasePath)';
 	
-	elseif not '$(vG.RootPath)' ='' then //Search for a valid container under Root
+	elseif not '$(vG.RootPath)' ='' then // Search for Initlink.qvs in a valid container under Root
 		for each vL.QDF.DoDir in dirlist ('$(vG.RootPath)*') 
 		if filesize('$(vL.QDF.DoDir)\Initlink.qvs') > 1 then
 			LET vG.BasePath= '$(vL.QDF.DoDir)\';
@@ -105,7 +105,5 @@ endif
 	next vL.QDF.DoDir
 	SET vL.QDF.DoDir=;
 	SET vL.QDF.DoDir2=;
-
-
 
 $(Include=$(vL.QDF.BaseVariablePath)1.Init.qvs);
