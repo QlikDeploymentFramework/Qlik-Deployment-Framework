@@ -1,0 +1,37 @@
+﻿//  ____________________________________________________________
+// |   Deployment Framework BaseVariable 3.SystemVariables.qvs |
+// |  This Include contains system folder path for event logs, |
+// |  Publisher database and custom data source logs           |
+// |___________________________________________________________|
+// Writing information in log
+trace '### DF 3.SystemVariables.qvs Started';
+
+$(Include=$(vG.SubPath)\2.LoadVariableCSV.qvs);
+
+// Loading include file containing the CSV sub function LoadVariableCSV
+$(Include=$(vG.SubPath)\1.FileExist.qvs);
+call vL.FileExist ('$(vG.BaseVariablePath)\System*');
+
+if vL.FileExist = 'false' then 
+call LoadContainerGlobalVariables('Admin','BaseVariable');	
+	call vL.FileExist ('$(vG.AdminBaseVariablePath)\System*');
+	if vL.FileExist = 'true' then
+		call LCGV('Admin','BaseVariable');
+		call LoadVariableCSV('$(vG.AdminBaseVariablePath)\System*.csv');
+	else
+		trace '### DF Error 3.SystemVariables.qvs have no access to $(vG.AdminBaseVariablePath)\System.Variables.csv';
+	endif
+else
+	call LoadVariableCSV('$(vG.BaseVariablePath)\System*.csv');
+endif
+
+SET vL.FileExist=;
+// Writing information in log
+trace '### DF 3.SystemVariables.qvs Finished';
+
+
+
+// **********************************
+// Application written by Magnus Berg
+// QlikView International AB
+// **********************************

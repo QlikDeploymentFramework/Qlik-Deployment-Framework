@@ -1,0 +1,35 @@
+// Create Folder function will create folder (if non existing) or folder structure. 
+// First include the script: $(Include=$(vG.SubPath)\6.CreateFolder.qvs);
+// After execute (call) the Sub CreateFolder inside the script.
+// sub CreateFolder (vL.FolderName) vL.FolderName Is the folder name or folder structure to create
+// Example: call CreateFolder ('$(vG.QVDPath)\NorthWind'); // Will create NorthWind folder under vG.QVDPath
+
+SUB CreateFolder (vL.FolderName_1);
+$(Include=$(vG.SubPath)\1.FileExist.qvs);
+
+// Remove backslash in end
+do while right( '$(vL.FolderName_1)' , 1 ) ='\'
+			let vL.FolderName_1 =left('$(vL.FolderName_1)',len('$(vL.FolderName_1)')-1);
+			exit do unless right( '$(vL.FolderName_1)' , 1 ) ='\';
+loop ;
+
+
+call vL.FileExist ('$(vL.FolderName_1)'); // Only execute on non-existing folder
+
+if vL.FileExist = 'false' then // If Folder do not exist it will be created
+Let vL.FolderIndex_tmp=index('$(vL.FolderName_1)','\',-1);
+let vL.FolderName_2=left('$(vL.FolderName_1)',vL.FolderIndex_tmp-1); // Identifying folder path
+let vL.FolderName_3=mid('$(vL.FolderName_1)',vL.FolderIndex_tmp+1,Len('$(vL.FolderName_1)'));// Identifying folder name
+	execute cmd.exe /Q /C pushd ^"$(vL.FolderName_2)^" & mkdir ^"$(vL.FolderName_3)^" & popd; // Mounting folder path and create Folder
+endif;
+
+SET vL.FolderName_1= ;
+SET vL.FolderName_2= ;
+SET vL.FolderName_3= ;
+SET vL.FolderIndex_tmp= ;
+end sub
+
+// **********************************
+// Application written by Magnus Berg
+// QlikView International AB
+// **********************************

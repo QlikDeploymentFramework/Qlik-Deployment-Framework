@@ -1,0 +1,17 @@
+/* 
+### This script loads all sub functions in one single batch
+### Just include this script in the QDF initiation Tab
+### $(Must_Include=$(vG.SubPath)\99.LoadAll.qvs);
+*/
+$(Include=$(vG.SubPath)\1.FileExist.qvs);
+$(Include=$(vG.SubPath)\2.LoadVariableCSV.qvs);
+$(Include=$(vG.SubPath)\3.LoadContainerMap.qvs);
+$(Include=$(vG.SubPath)\4.GenericContainerLoader.qvs);
+$(Include=$(vG.SubPath)\5.DoDir.qvs);
+$(Include=$(vG.SubPath)\6.CreateFolder.qvs);
+$(Include=$(vG.SubPath)\7.CalendarGen.qvs);
+$(Include=$(vG.SubPath)\8.QVFileInfo.qvs);
+$(Include=$(vG.SubPath)\9.QVDMigration.qvs);
+$(Include=$(vG.SubPath)\10.QVDLoad.qvs);
+$(Include=$(vG.SubPath)\11.DynamicContainerLoader.qvs);
+$(Include=$(vG.SubPath)\12.Index.qvs);

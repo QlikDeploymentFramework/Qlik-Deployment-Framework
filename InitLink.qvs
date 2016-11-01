@@ -1,0 +1,111 @@
+/*  ____________________________________________________________________________________
+   |      Deployment Framework InitLink.qvs    
+   | InitLink.qvs is the container identifier                                      
+   | InitLink is used as "sling shot" to 1.Init.qvs for QlikView and Qlik Sense               
+   |____________________________________________________________________________________
+   Writing information in log */
+trace '### DF InitLink Started, trying to link to 1.Init.qvs script';
+
+// Run Container initiation
+
+// Modify setting if the default .Include folder is changed, usually leve as is
+LET vL.QDF.IncludeFolder='Include';
+
+// Modify setting if the default .BaseVariable folder is changed, usually leve as is
+LET vL.QDF.BaseVariableFolder='BaseVariable';
+
+// Cleanup, Removing old values
+LET vG.BasePath=;
+LET vL.QDF.BaseVariablePath=;
+LET vG.RootPath=;
+
+//***************** Initiation for Qlik Sense and QlikView **********************************
+// Qlik Sense additions Validating if LIB root exists if yes then add this as vG.RootPath
+// Validate Separate LIB mounts
+if not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then	
+	LET vG.BasePath= 'lib://$(vG.HomeContainer)/';	
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then
+	LET vG.BasePath= '$(vG.HomeContainer)/';
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
+	LET vG.BasePath= 'lib://Home/';
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
+	LET vG.BasePath= 'lib://home/';
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+else // Validate single LIB mount
+	if not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
+		LET vG.RootPath= 'lib://$(vG.RootContainer)/';
+		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		SET vG.RootContainer = ;
+	elseif not IsNull(filesize('lib://Root/*')) = -1 then 
+		LET vG.RootPath= 'lib://Root/';
+		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+	elseif not IsNull(filesize('lib://root/*')) = -1 then
+		LET vG.RootPath= 'lib://root/';
+		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+	endif
+
+	// Validate fixed root url
+	if not '$(vG.HomeContainer)'='' and not IsNull(filesize('$(vG.RootPath)$(vG.HomeContainer)\Initlink.qvs')) = -1 then
+		LET vG.BasePath= '$(vG.RootPath)$(vG.HomeContainer)\';
+		trace '### DF Info, identified Sense home container  $(vG.BasePath)';
+	
+	elseif not '$(vG.RootPath)' ='' then //Search for a valid container under Root
+		for each vL.QDF.DoDir in dirlist ('$(vG.RootPath)*') 
+		if filesize('$(vL.QDF.DoDir)\Initlink.qvs') > 1 then
+			LET vG.BasePath= '$(vL.QDF.DoDir)\';
+			trace '### DF Info, identified Sense home container $(vG.BasePath)';
+		endif
+		exit for when not '$(vG.BasePath)'='';	
+		next vL.QDF.DoDir
+		set vL.QDF.DoDir=;
+
+	else // This is the QlikView vG.BasePath initiation section
+	LET vG.BasePath=; 
+		for vL.x_loop =1 to 20-1				
+		LET vL.QDF.InitLinkPath_tmp='$(vL.QDF.InitLinkPath)';
+			if FileTime('$(vL.QDF.InitLinkPath)InitLink.qvs') > 0 then		
+				// Set vG.BasePath based on InitLink.qvs location
+				LET vG.BasePath=left(DocumentPath(),index(DocumentPath(),'\', -(substringcount(  '$(vL.QDF.InitLinkPath)','\' )+1)));
+			endif	
+		LET vL.QDF.InitLinkPath='..\'&'$(vL.QDF.InitLinkPath_tmp)';
+		exit for when not '$(vG.BasePath)'= ''
+		next
+		SET vL.QDF.InitLinkPath = ; 
+		SET vL.QDF.InitLinkPath_tmp = ;
+		SET vL.x_loop = ;
+	endif
+endif
+
+SET vG.HomeContainer = ;
+SET vG.RootContainer = ;
+//***************** Initiation for Qlik Sense and QlikView done **********************************
+
+
+if '$(vG.BasePath)'= '' then // validate initiation
+		trace '### DF Warning, could not identify any valid container path, will exit';
+		trace '### DF Warning, if using Qlik Sense add SET vG.HomeContainer=container name before InitLink.qvs';
+		LET vG.BasePath=;		
+		exit script;
+endif
+
+	//Identify BaseVariablePath location during initiation
+	for each vL.QDF.DoDir in dirlist ('$(vG.BasePath)*') //Search for a valid container under Root
+		if right('$(vL.QDF.DoDir)',len('$(vL.QDF.IncludeFolder)'))='$(vL.QDF.IncludeFolder)' then
+			for each vL.QDF.DoDir2 in dirlist ('$(vL.QDF.DoDir)\*') //Search for a valid container under Root
+				if right('$(vL.QDF.DoDir2)',len('$(vL.QDF.BaseVariableFolder)'))='$(vL.QDF.BaseVariableFolder)' then
+					LET vL.QDF.BaseVariablePath= '$(vL.QDF.DoDir2)\';
+				endif
+			exit for when right('$(vL.QDF.DoDir2)',len('$(vL.QDF.BaseVariableFolder)'))='$(vL.QDF.BaseVariableFolder)';
+			next vL.QDF.DoDir2
+		endif
+	exit for when right('$(vL.QDF.DoDir)',len('$(vL.QDF.IncludeFolder)'))='$(vL.QDF.IncludeFolder)';	
+	next vL.QDF.DoDir
+	SET vL.QDF.DoDir=;
+	SET vL.QDF.DoDir2=;
+
+
+
+$(Include=$(vL.QDF.BaseVariablePath)1.Init.qvs);

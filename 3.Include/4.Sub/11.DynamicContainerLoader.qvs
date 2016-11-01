@@ -1,0 +1,139 @@
+/* __________________________________________________________________________
+ | Deployment Framework BaseVariable 11.DynamicContainerGlobalVariables.qvs  |
+ |  All path are based on vG.BasePath                        				 |
+ |  This script is used to dynamic connect to container folders     		 |
+ |____________________________________________________________________________*/
+
+// This script should only be accessed from QlikView via the LoadContainerGlobalVariables function
+// SUB DynamicContainerGlobalVariables (‘Container Path Name’,['Optional Single Folder'], [’Optional use alternative Container Map’]);
+// Example: call DynamicContainerGlobalVariables('1.AcmeStore');
+// Example: call DCGV('1.AcmeStore');
+SUB DynamicContainerGlobalVariables(vL.ContanerName,vL.SingleFolder,vL.OverridePrefix,vL.ContainerMapPath);
+
+// Writing information in log
+trace '### DF DynamicContainerGlobalVariables Started';
+SET vL.ContainerFolderName = ; // Reset variable 
+
+if '$(vL.ContainerMapPath)' = '' then // If null use default ContainerMap else Shared ContainerMap is used
+	let vL.ContainerMapPath = '$(vG.BaseVariablePath)\ContainerMap.csv';
+else
+	let vL.ContainerMapPath = '$(vG.SharedBaseVariablePath)\ContainerMap.csv';	
+end if
+
+
+// Load container mapping table and variables by using LoadContainerMap function
+
+if '$(vL.ContanerName)' = '' then // If no container specified populating my home container
+
+SET vL.BasePath = '$(vG.BasePath)';
+SET vL.ContainerPathName=;
+set vL.Comment='Loading vG.BasePath Global Path Variables'; 
+SET vL.ContainerFolderName='BasePath';
+
+else
+	$(Include=$(vG.SubPath)\3.LoadContainerMap.qvs);
+
+	call LoadContainerMap('$(vL.ContainerMapPath)','$(vL.ContanerName)'); // Using LoadContainerMap with special switches the Container links will be populated automatically
+	if trim('$(vL.ContainerPathName)')= '$(vL.ContanerName)' then // If container found by LoadContainerMap sub function
+		SET vL.BasePath  = '$(vL.RootPath)$(vL.ContainerFolderName)\';
+		
+	elseif not IsNull(filesize('$(vL.ContanerName)')) = -1 then // If container not found it could be a folder path instead of a Map reference
+		SET vL.BasePath  = '$(vL.ContanerName)\';
+		SET vL.ContainerFolderName = 'No folder found, Custom path used';
+	endif;
+endif;
+
+if not '$(vL.ContainerFolderName)'='' then // Execute only if container found
+
+if not '$(vL.OverridePrefix)'='' then // If OverridePrefix switsh is used set the prefix
+	LET vL.ContainerPathName='$(vL.OverridePrefix)';
+	trace '### DF Info Override Prefix switsh $(vL.OverridePrefix) used';
+endif;
+
+// Writing information in log
+trace '### DF $(vL.ContainerFolderName) Comments: $(vL.Comment)';
+$(Include=$(vG.SubPath)\5.DoDir.qvs)
+
+Call DoDir ('$(vL.BasePath)','vL.DoDir_Tmp_Table','true','','true'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.BasePath path
+
+if NoOfFields('vL.DoDir_Tmp_Table') > 0 then // Validate if DoDir table exists
+
+// loop through DoDir Table
+let vL.xxxxx = NoOfRows('vL.DoDir_Tmp_Table');
+
+for vL.ttttt = 0 to vL.xxxxx-1
+
+		LET vL.VariablePrefix = PurgeChar(subfield(peek('vL.DoDir_Tmp_Table.DoDirFileName',$(vL.ttttt),'vL.DoDir_Tmp_Table'),'.',-1),'=;,- '&chr(39));
+		LET vL.PhysicalFolderName = peek('vL.DoDir_Tmp_Table.FullyQualifiedName',$(vL.ttttt),'vL.DoDir_Tmp_Table');	
+		LET vL._DuplicatedFolders=peek('vL.DoDir_Tmp_Table.DoDirFileNameCount',$(vL.ttttt),'vL.DoDir_Tmp_Table');	
+		LET vL._SubStringSplitt=';'&'$(vL.SingleFolder)'&';'; // Creating a variable used for easy substring splitt
+		for vL._SubString=1 to substringcount ('$(vL._SubStringSplitt)',';') -1 // loop as many times there are folders defined (separated by ;)
+			if TextBetween('$(vL._SubStringSplitt)' , ';', ';' , vL._SubString ) = '$(vL.VariablePrefix)' or '$(vL.SingleFolder)'='' then
+				if vL._DuplicatedFolders > 1 then //If duplicated folders found send error message
+					trace '### DF Warning found duplicated folders of $(vL.VariablePrefix) in location $(vL.PhysicalFolderName)\'
+					trace '### DF Warning please fix the duplication error else there might be issues';
+					sleep 5000;
+					SET 5000=; // Remove strange variable created by sleep
+				endif
+				LET vG.$(vL.ContainerPathName)$(vL.VariablePrefix)Path='$(vL.PhysicalFolderName)\';
+			endif	
+		next vL._SubString;
+next vL.ttttt
+
+
+
+// Trim pace and last \
+if right('$(vL.BasePath)',1)='\' then
+	let vL.BasePath=left(trim('$(vL.BasePath)'), len('$(vL.BasePath)')-1);
+endif
+
+ if '$(vL.SingleFolder)' ='' then // If SingleFolder not used add global vG.xxBasePath variable among the others
+ 	LET vG.$(vL.ContainerPathName)BasePath='$(vL.BasePath)';
+endif
+
+drop table [vL.DoDir_Tmp_Table]; // Drop DoDir tmp table
+trace '### DF DynamicContainerGlobalVariables Finished';
+
+else
+	trace '### DF Warning unable to identify DoDir table, probably no valid folder exists';
+endif
+
+else
+	trace '### DF Could not find $(vL.ContainerPathName) container in Container Map';
+endif;
+
+
+
+// Clean Variables
+SET vL.ttttt = ;
+SET vL.xxxxx = ;
+SET vL.ContanerName=;
+SET vL.ContainerMapPath=;
+SET vL.SingleFolder=;
+SET vL.BasePath=;
+SET vL.ContainerFolderName=;
+SET vL.PhysicalFolderName=;
+SET vL.VariablePrefix=;
+SET vL.VariableLoop=;
+set vL.GetContainerStructure=;
+SET vL.ContainerPathName=;
+SET vL.RootPath=;
+SET vL.Comment=;
+SET vL.ContainerIdentification=;
+SET vL.SingleFolder=;
+SET vL._SubStringSplitt=;
+SET vL._SubString=;
+SET vL._DuplicatedFolders=;
+SET vL.OverridePrefix=;
+endsub
+
+// Sub Function short name for DynamicContainerGlobalVariables = DCGV
+SUB DCGV(vL.ContanerName_tmp,vL.SingleFolder_tmp,vL.ContainerMapPath_tmp); // Alias for LoadContainerGlobalVariables
+	call DynamicContainerGlobalVariables('$(vL.ContanerName_tmp)','$(vL.SingleFolder_tmp)','$(vL.OverridePrefix_tmp)','$(vL.ContainerMapPath_tmp)');
+	
+	// Clean Variables
+	SET vL.ContanerName_tmp=;
+	SET vL.SingleFolder_tmp=;
+	SET vL.ContainerPathName_tmp=;
+	SET vL.OverridePrefix_tmp=;
+end sub

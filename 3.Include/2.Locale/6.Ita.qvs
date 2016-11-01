@@ -1,0 +1,10 @@
+SET ThousandSep='.';
+SET DecimalSep=',';
+SET MoneyThousandSep='.';
+SET MoneyDecimalSep=',';
+SET MoneyFormat='€ #.##0,00;-€ #.##0,00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='DD/MM/YYYY';
+SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
+SET MonthNames='gen;feb;mar;apr;mag;giu;lug;ago;set;ott;nov;dic';
+SET DayNames='lun;mar;mer;gio;ven;sab;dom';

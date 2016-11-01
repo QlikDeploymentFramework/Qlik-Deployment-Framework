@@ -1,0 +1,132 @@
+/* ___________________________________________________________________________
+  |   Deployment Framework DoDir sub function 5.DoDir.qvs 
+  |
+  | Returns a Table containing files and path in selected file system (vL.DoDirRoot)
+  | First include the DoDir Function $(Include=$(vG.SubPath)\5.DoDir.qvs);
+  | Use the function DoDir to execute. examples:
+  | call DoDir ('$(vG.RootPath)'); //Simple Example
+  | call DoDir ('$(vG.RootPath)\*.qvd'); //Simple Example
+  | call DoDir ('$(vG.BasePath),Table Name)'); //Change Table name 
+*/
+sub DoDir (vL.DoDirRoot,vL.DoDirTableName,vL._FoldersOnly,vL._SingleFolder,vL._QualifyFelds,vL.QDF_Template_Exeptions)
+$(Include=$(vG.SubPath)\1.FileExist.qvs);
+
+
+let vL.DoDirRoot=trim('$(vL.DoDirRoot)'); // Trim vL.DoDirRoot
+let vL__Filename=; // remove variable (if exists)
+
+if '$(vL.DoDirTableName)'='' then // If no TableName specified use DoDirFileList
+	SET vL.DoDirTableName = 'DoDirFileList';
+endif;
+
+if lower('$(vL._QualifyFelds)')='true' then // if qualify switch set to true
+LET vL._QualifyFelds='$(vL.DoDirTableName).'; // Set vL._QualifyFelds as the same as table name
+else
+	LET vL._QualifyFelds=;
+endif 
+unqualify $(vL._QualifyFelds)FullyQualifiedName,$(vL._QualifyFelds)DoDirFileSize,$(vL._QualifyFelds)DoDirFileTime,$(vL._QualifyFelds)DoDirFileName,$(vL._QualifyFelds)DoDirContainerPath,$(vL._QualifyFelds)DoDirFileExtension,$(vL._QualifyFelds)DoDirFileNameCount ; 
+sub vL.DoDirTableName(vL.DoDirFile); //DoDir table generate sub
+	[$(vL.DoDirTableName)]:
+ 	ADD	
+ 	Load '$(vL.DoDirFile)' as '$(vL._QualifyFelds)FullyQualifiedName', 
+	FileSize( '$(vL.DoDirFile)' ) as '$(vL._QualifyFelds)DoDirFileSize',
+	timestamp(FileTime( '$(vL.DoDirFile)' ),'$(TimestampFormat)') as '$(vL._QualifyFelds)DoDirFileTime',
+	subfield('$(vL.DoDirFile)','\',-1) as '$(vL._QualifyFelds)DoDirFileName',
+	replace(subfield('$(vL.DoDirFile)','$(vL.DoDirRoot)',-1),'\\','\') as '$(vL._QualifyFelds)DoDirContainerPath',
+	if( lower('$(vL._FoldersOnly)')='true', '' , upper(subfield('$(vL.DoDirFile)','.',-1))) as '$(vL._QualifyFelds)DoDirFileExtension'
+	autogenerate 1;
+end sub
+
+// Check if a specific File Extension is used, separate out extension and filename Also special for Qlik Sense lib folders
+if index('$(vL.DoDirRoot)','*')>0 and FindOneOf('$(vL.DoDirRoot)','\')>0 then 
+	LET vL._Specific_File_Type= right('$(vL.DoDirRoot)',len( '$(vL.DoDirRoot)')-(index( '$(vL.DoDirRoot)', '.',-1))+1); // Get file extension
+  if FindOneOf('$(vL._Specific_File_Type)','\')>0 then // If filetype contains \ it's probably a folder
+    LET vL._Specific_File_Type=''; // remove filetype
+  endif
+  let vL__Filename=left(right('$(vL.DoDirRoot)',len('$(vL.DoDirRoot)')-index('$(vL.DoDirRoot)','\',-1)),len(right('$(vL.DoDirRoot)',len('$(vL.DoDirRoot)')-index('$(vL.DoDirRoot)','\',-1)))-len('$(vL._Specific_File_Type)')-1);
+  LET vL.DoDirRoot= left ('$(vL.DoDirRoot)',index('$(vL.DoDirRoot)','\',-1)); // Remove filename from path
+else 
+	LET vL._Specific_File_Type= '*';
+endif
+
+LET vL.DoDirRootTmp= '$(vL.DoDirRoot)';
+
+//call vL.FileExist ('$(vL.DoDirRoot)');
+//if vL.FileExist = 'true' then  // Execute only if vL.DoDirRoot contains a path
+
+
+if index(trim('$(vL.DoDirRootTmp)'),'\\',-1)>2 then // Remove double \\ in path, except in the beginning used in UNC path
+LET vL.DoDirRootTmp=left( '$(vL.DoDirRootTmp)' , (index( '$(vL.DoDirRootTmp)', '\\', -1 )-1))&right('$(vL.DoDirRootTmp)', (len( '$(vL.DoDirRootTmp)' ) -index( '$(vL.DoDirRootTmp)', '\\', -1 )));
+endif
+
+if lower('$(vL._FoldersOnly)')='true' then // If folders only is used (vL._FoldersOnly) execute vL.DoDirTableName to add first folder
+      call vL.DoDirTableName('$(vL.DoDirRootTmp)');
+endif
+
+//if right('$(vL.DoDirRootTmp)',1)='\' then // Trim vL.DoDirRoot of space and last \
+//	let vL.DoDirRootTmp=left(trim('$(vL.DoDirRootTmp)'), len('$(vL.DoDirRootTmp)')-1);
+//endif
+
+sub vL.DoDirTmp (vL.DoDirRootTmp) // DoDir main Sub
+if not lower('$(vL._FoldersOnly)')='true' then // If folders only is used (vL._Specific_File_Type) do not execute vL.DoDirTableName
+  for each vL.DoDirFile in filelist ('$(vL.DoDirRootTmp)$(vL__Filename)*$(vL._Specific_File_Type)') // Index Files
+		call vL.DoDirTableName('$(vL.DoDirFile)');
+  next vL.DoDirFile
+endif
+
+if not lower('$(vL._SingleFolder)')='true' then
+for each vL.DirTmp in dirlist ('$(vL.DoDirRootTmp)*' ) // Index folders
+	if not lower('$(vL.QDF_Template_Exeptions)')='true' then // Validate if switch to remove QDF templates/demo is activated (vL.QDF_Template_Exeptions)
+		if lower('$(vL._FoldersOnly)')='true' then // If folders only is used (vL._FoldersOnly) execute vL.DoDirTableName
+			call vL.DoDirTableName('$(vL.DirTmp)');
+		endif
+		call vL.DoDirTmp ('$(vL.DirTmp)\')
+		
+    // If vL.QDF_Template_Exeptions is true validate and ignore 0. or # on folders (used for Templates and examples) 
+	elseif num(subfield(right('$(vL.DirTmp)',(len('$(vL.DirTmp)')-len('$(vL.DoDirRootTmp)')-1)), '.'  , 1 )) >0 and substringcount (right('$(vL.DirTmp)',(len('$(vL.DirTmp)')-(len('$(vL.DoDirRootTmp)')+1))),'#') = 0 then
+		if lower('$(vL._FoldersOnly)')='true' then // If folders only is used (vL._FoldersOnly) execute vL.DoDirTableName
+			call vL.DoDirTableName('$(vL.DirTmp)');
+		endif
+		call vL.DoDirTmp ('$(vL.DirTmp)\')	
+	endif	
+	
+next vL.DirTmp
+endif
+end sub
+
+
+call vL.DoDirTmp ('$(vL.DoDirRootTmp)')
+
+if NoOfFields('$(vL.DoDirTableName)') > 0 then  // Validate DoDir table  
+
+// Join file count information field
+Left join ([$(vL.DoDirTableName)]) 
+Add 
+Load [$(vL._QualifyFelds)DoDirFileName],
+count([$(vL._QualifyFelds)DoDirFileName]) as [$(vL._QualifyFelds)DoDirFileNameCount]
+Resident [$(vL.DoDirTableName)] 
+group by [$(vL._QualifyFelds)DoDirFileName]; 
+//Else
+//trace '### DF Warning unable to identify table $(vL.DoDirTableName), probably no files exist or wrong function settings used';
+//endif
+
+
+
+
+else
+	trace '### DF 5.DoDir.qvs Cant find File Path $(vL.DoDirRoot)';
+endif 
+
+// SET vL.DoDirTableName =;
+SET vL.DoDirFile=;
+SET vL.DoDirRootTmp=;
+SET vL.DirTmp=;
+SET vL.QDF_Template_Exeptions=;
+SET vL._Specific_File_Type=;
+SET vL._SingleFolder=;
+SET vL._FoldersOnly=;
+SET vL._QualifyFelds=;
+SET vL__Filename=;
+end sub
+
+

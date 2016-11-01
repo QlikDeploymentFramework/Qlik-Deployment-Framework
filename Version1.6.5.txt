@@ -1,0 +1,356 @@
+Whats new in release 1.6.5?
+Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
+New container layout only for Qlik Sense Only, including extract transform load folders
+New container layout only for slimmed Down containers (fewer folders), including extract transform load folders 
+
+Whats new in release 1.6.0?
+New installer that can add additional containers in an active container structure (good for Qlik Sense)
+New installer that does not need QlikView during upgrade
+General improvements, CalendarGen.qvs Qlik Sense auto calendar
+
+Whats new in release 1.5.2?
+Added Qlik Sense initiation without need of a shared container
+Changed IndexAdd behaviour, files are created directly under Index, no subfolders created anymore
+Changed IndexDel behaviour, delete index and qvd based on the new index structure
+Added QVDMigration.qvs and QVDLoad.qvs optional row limitation setting
+Added QVDMigration.qvs transfer tags from source qvd files + add suffix as tag
+Added support for multiple date fields and formats in the CalendarGen function
+Added Native Qlik Sense Calendar support (simple version)
+DoDir, Qlik Sense improvements
+Overall Qlik Sense enhancements
+Documentation improvements
+
+Whats new in release 1.5.1?
+Added support for QlikView 12
+Added Major improvements of the IndexLoad function
+Added Smart idetification of container folders, folder numbers (1.) can be removed 
+Added Smart idetification makes it possible to add Extract/Transfor/Load folders under the QVD folder
+Added Northwind (qvw,qvf) IndexLoad and LoadVariableCSV Examples  in example container
+Added KPI.Variables.csv variable file in example container (used by Northwind)
+
+Whats new in release 1.5.0?
+Added the index functions IndexAdd, IndexLoad and IndexDel
+Added index functions into the Development Guide
+Changed code in how to identify a container in LoadContainerMap function (3.LoadContainerMap.qvs)
+Added support for tags (table comments) in the QVFileInfo function
+Fixed bug, DoDir function did not return initial folder when using folders only mode (5.DoDir.qvs)
+Stability enhancements to VariableEditor
+Qlik Sense enhancements to LoadContainerMap function
+DoDir enhancements, wild cards *sales*, *sales*.qvd now supported
+Added functionality in InitLink.qvs for both Sense and QlikView 
+Added Fiscal YTD Flag and Fiscal PYTD Flag to CalendarGen function /thx qliknerd (Qlik community)
+Fixed minor bug in CalendarGen /thx Bo
+Update Info.txt files in all container folders
+Added validation of qvd version (Qlik Sense and QlikView) in 8.QVFileInfo.qvs 
+Changed Index behaviour, problems found when not using table names in the Index
+Faster Min and Max search in CalendarGen function /thx Damian
+Fixed minor bug in 2.LoadVariableCSV.qvs function /thx Damian
+Fixed bug in IndexDel function
+Added support for Qualified fields in Index function
+Added automatic ContainerMap fail-over to shared if container is missing when trying to connect (LCGV)
+Fixed Qlik Sense error when Shared container is missing
+Fixed IndexLoad script halts when Shared container is missing
+Changed CalendarGen Fiscal Month field format  /thx Ian Tsang
+Added IndexMonitor app for Qlik Sense in 0.Administration container
+Fixed DoDir compatibility issue in 3.SystemVariables.qvs /thx Ian Tsang
+
+Whats new in release 1.4.1?
+Fixed bug, CalendarGen.qvs script fails when joining fiscal years, when field have spaces./thanks Frank Billes
+Incremental load support for DoDir.qvs /thanks Kevin Pickering
+Fixed bug, LoadVariableCSV values sometimes missed
+Fixed bug, DCGV did not identify folders
+Fixed bug, wrong variable files presented after changing containers in Variable Editor
+Added support for Qlik Sense in 1.Init.qvs
+Added support for Qlik Sense in 4.GenericContainerLoader.qvs
+Added QlikView Deployment Framework-Qlik Sense additional notes.pdf documentation
+
+Whats new in release 1.4.0?
+Created a much more competent LoadVariableCSV sub function
+All Variables files now have a dot in between, Example Custom.Variables.csv (only new QDF set-up)
+Cleaned up Variable Editor settings page and divided it into two different versions
+Repaired Variable Editor for the use of Variable Templates we will create a KPI library
+Fixed bug in FileExist SUB function
+Simplified and added some tweaks in the Variable Editor UI
+Added separate Upgrade page in Variable Editor 
+Optional Example Container including examples is now available, all examples stored in 0.Administration container are removed
+Fixed bug in DoDir sub function when using folder only mode
+Added new DoDirFileNameCount field in DoDir table
+Added new function DynamicContainerGlobalVariables (DCGV) that creates Global path variables based on DoDir and ContainerMap
+99.LoadAll.qvs is now pre-loaded in 4.Custom.qvs (only new QDF set-up) removes the need to add sub includes any more
+Added 9.Misc folder in the containers, storage for documentation, extension objects or whatever needed
+Added None option in Deploy Tool Advanced section, to create custom container structures without adding it into Publisher
+Added 12.Bra.qvs regional settings
+
+Whats new in release 1.3.2?
+Simplified the Variable Editor UI
+Added Format-Spec in QVDMigrate sub function
+Updated MigrateQVD example with new Format-Spec switch and removed legacy QVDExport example
+New Batch_run.cmd example in Variable Editor Folder
+Fixed AltRootPath bug to hinder use of relative path
+Added CurrentMonth Flag LastMonth Flag in CalendarGen sub function
+Fixed bug in CalendarGen sub function
+Fixed bug in CreateFolder sub function
+Added 'Single Folder' and 'Qualified fields' switches in DoDir sub function
+Added short name (LCGV) for LoadContainerGlobalVariables, example: call LCGV('Acme','QVD')
+Added 'Include Sub folders' switch to QVDMigration, this will migrate all qvd's within a directory tree
+Added new 10.QVDLoad.qvs sub function used when loading up a complete data model from qvd files, including sub folders.
+Updated Example_Northwind_Mart that now uses 10.QVDLoad.qvs sub function
+Changed to REPLACE LOAD in 1.Init.qvd, 3.LoadContainerMap.qvs and 2.LoadVariableCSV.qvs to work better with Incremental load
+
+
+Whats new in release 1.3.1?
+Improved robustness of FileExists sub function
+Improved robustness of CreateFolder sub function
+Improved robustness of Variable Editor
+Added Embeddable license to Variable Editor so it will work with personal edition
+Added vL.FoldersOnly switch in DoDir sub function if 'true' returns only folder names
+Added 99.LoadAll.qvs script that loads all subfunctions in one single go
+
+Whats new in release 1.3.0?
+Improved DoDir sub function and changed field names
+Added 8.QVFileInfo.qvs sub function that will return info regarding qvd and qvw files.
+Added 9.QVDMigration.qvs sub function and example app
+Added 7.QVD-Migration-example.qvw aplication
+Found Bug in LoadVariableCSV sub function (thanks Steve Perry)
+Updated version of the Governance Dashboard script (bug fixed and added functionality)
+Fixed Bug that would make Variable Editor hang during start (due to inputfields)
+Minor Variable Editor UI improvements (new Design Layout View)
+VariableEditor Shortcut in Administration container
+Added possibility to use development release CreateGlobalVariablesByFolderName.zip 
+Fix bug removing = when creating global variables for example Google Map
+Error in variable Editor when using "Save Before Reload" setting
+New upgrade wizard mode in Deploy tool that upgrade framework to latest release
+New WizardMode variable in Editor that works together with deploy tool
+Locale Change reame Eng to US, added Aus and UK
+Change ConnStrings to Must_Include in the documentation + other minor doc additions
+New Variable Editor function to add and remove variable files
+Fix error when using wrong charters in variables (charters are removed)
+Better check if Variable prefix is duplecated 
+Remove Copy SystemVariables to all containers function in Variable Editor Settings
+Container map is now replicated to containers by use of Store into function  
+
+
+Whats new in release 1.2?
+Bug found (thanks Clemens) regarding CustomVariables.csv not updating properly
+Container Map Editor will not copy csv files if date and time the same (less popup boxes)
+Identify vG.BasePath based on InitLink.qvs located in each container base (New way identifying vG.BasePath)
+Batch Mode added, Modify Container Map with the Variable Editor, batch script or Publisher creates the containers in background.
+Minor fix in 2.LoadVariableCSV.qvs, variable prefix containing a space would halt script
+Minor enhancements in 2.LoadVariableCSV.qvs, changed to utf8 (miss) and no longer needed to type SET in front of variable.
+
+What's new in release 1.1?
+Changed Variable Editor to use a Macro when reloading, much more silent now :) 
+New switch SET vG.SkippInit ='True' will skipp 1.Init.qvs script. 
+
+Whats new in release 1 (1.0)?
+Replacing / with \ in Container Map Editor
+Fixes to allow " in expressions
+Added CalendarGen Function
+Added CalendarGen example application
+Changed back to UTF8 after compability issiues
+Added Robocopy fallback if Container creation fails (see ContainerCreation.log if it's created)
+load several Global Container Variables at once by use of ‘;’ as separator:
+call LoadContainerGlobalVariables('SAP','QVD;Include;Application'); 
+
+
+Whats new in Pre-Release 1 (0.99)?
+Container Icon is now created for every container, this to differentiate containers and subfolders
+Force lower case when identifying and creating Global Variable Path due to behavior in QVB and DocumentPath() function showing path in upper cases.
+Small fixes to speed up Variable Editor
+Found a bug in 2.LoadVariableCSV.qvs creating an error when using ' and/or ,
+Changed utf8 to ansi in Variable editor to use special characters
+German locale missing (10.ger.qvs)
+New first page in Variable Editor
+
+Whats new in 0.98?
+Bugg found in GenericContainerLoader
+Changes in how vG.BasePath is identifyed, removes the limitation of only two levels of containers
+Added function for loading a single Container Variable
+New version of FileExist that can be used to check folders as well as files (thanks Frederik Nünning)
+Found bug in 3.LoadContainerMap.qvs creating error if empty row is found in the container map
+Bug in 2.LoadVariableCSV.qvs, complicated expressions do not calculate properly
+Bug in 2.LoadVariableCSV.qvs, ContainerMapMode does not work
+New 6.CreateFolder.qvs Function will validate and create missing folders
+QV System Monitor v4.1 are Included and configured to work with DF 
+Variable Editor Container Map will now add file emty rows in the end when needed (instead of working with 200 rows), this to increase reload speed
+Variable Editor editor will now add file emty rows in the end when needed (instead of working with 999 rows), this to increase reload speed
+
+Whats new in 0.97?
+Minor Variable Editor Bug Fixes
+Less command line boxes when creating containers
+Changed name of 5.Custom.qvs to 4.Custom.qvs
+Added 4.Custom.qvs in the 1.Init script
+Base include scripts are set to Read Only in the Template
+Container base scripts are set to Read Only by using Attrib +R
+Removed Meta Scanner that will be replaced by Governance Dashboard
+Changed name on System Monitor folder from  2.QlikViewSystemMonitor to 1.QlikViewSystemMonitor
+
+Whats new in 0.96?
+Minor changes in 2.LoadVariableCSV.qvs so that LET function removes space
+Better sort in Variable Editor Container Map Tree view (thanks Henrik)
+Changing 1.Init Containerstructure inline Table to vL.Containerstructure not to get any conflicts
+Variable Editor buggs
+2.LoadVariableCSV.qvs, Fix so that = will work together with LET
+Variable Editor during start Changing to Variable tab 
+Variable Editor fixing macro imputfield reset bug 
+
+Whats new in 0.95?
+Added automatic upgrade functionality in Variable Editor, Put update files in 0.Template\ContainerUpgrades folder use upgrade button in Variable Editor
+Added new Setting in VariableEditor "Copy to Alt Root Path Containers" (Turned off by default) 
+Added new Setting in VariableEditor "Copy Variable Editor to new Containers"
+Several bug fixes in VariableEditor
+VariableEditor cleanup
+New Sub function, DoDir
+Added hidden InitLink.qvs as default in vG.BasePath plus documenting how to Search for 1.Init.qvs in the script
+Added vG.TemplatePath variable if 0.Administration container is used (for Variable Editor)
+Added Variable to 0.template (vG.TemplatePath) in 1.init.qvs script, this variable is used by Variable Editor
+Version file (Version0.95.txt) now in all containers base path. Used by the upgrade function
+New SystemVariable Template (Pub and QVS Separated.csv) for systems with separated Publisher and QVS
+
+
+Whats new in 0.9?
+Simplifying Variable Editor when Admin
+Removing functionality in Variable Editor when not Admin
+Variable Editor cleanup
+Removed 4.ContainerPopulationTool
+
+Whats new in 0.86?
+1.Init Scrip cleanup
+Easier to change or add container folderstructure in 1.Init.
+Only one folder configuration (1.Init) all the other scripts uses the same config.
+Changed trace to ### DF in the Beginning making it easier to search for DF related errors
+
+
+Whats new in 0.85?
+Minor improvments in Variable Editor, removing '-' in variable name
+Fixed Meta-Scanner error
+
+Whats new in 0.84?
+Minor improvments in Variable Editor
+
+Whats new in 0.83?
+Wrong path to 1.init in Meta-Scanner application
+
+
+Whats new in 0.82?
+One minor bugg
+
+Whats new in 0.81?
+Minor buggs
+
+Whats new in 0.8?
+Deployment Framework Global Variable Editor have been updated with many new fetures:
+Better GUI
+Help
+Are you shure, boxes
+Settings page
+Different templates
+
+
+
+Whats new in 0.7?
+New Tool called Deployment Framework Global Variable Editor (VariableEditor.qvw) that will replace ContainerPopulationTool.qvw.
+The new editor is a very powerful tool. We can now graphically create Global Variables in each container.
+But also Container Global Variable that will be stored in the Shared Folder.
+The Variable Editor also have a Container Map editor so that container creation and maintenance is even easier.
+Custom Variables are now populated by default, edit in Variable Editor
+With the New Container Map it's no longer needed to include extra qvs scripts for connection to other container use the call LoadContainerGlobalVariables function instead.
+
+New version of System Monitor (3.2)
+New auto populated System architecture view (Beta)
+
+New generic container loader 4.GenericContainerLoader.qvs making it easier to connect to other containers
+
+New SUB file 2.LoadVariableCSV.qvs contain procedure to load variables from a csv file
+call LoadVariableCSV('CSV_My Tables.csv', Optional vL.ContainerMapMode);
+
+New SUB file 3.LoadContainerMap.qvs contain procedure to load Container Map
+call LoadContainerMap('container map csv', Optional specific variable);
+By using vL.ContainerMapMode the csv will be treated as an ContainerMap.csv file
+And Container base Variables will be loaded based on ContainerMap.csv
+
+New SUB file 4.LoadContainerGlobalVariables.qvs contain procedure to dynamically load Global Variables connecting to other container
+call LoadContainerGlobalVariables('Name of Container to load', 'Optional use Container map from Shared Folder');
+LoadContainerGlobalVariables are using LoadContainerMap.qvs and 4.GenericContainerLoader.qvs
+
+
+
+Whats new in 0.58?
+New version of System Monitor (3.1)
+Added and changed variables in 3.SystemVariables to fitt System Monitor 3.1
+
+Whats new in 0.57?
+Validation of the connected container folder path
+Automatically creation of connected container script in Create New Container tool, the scripts is stored in 99.Shared_Folders
+Shared_Folders is directly linked into 1.init.qvs as default with the switsh SET vL.LinkShared_Folders = '99.Shared_Folders';
+Changed name on 2.SharedFolders.qvs to 99.Shared_Folders.qvs the linking is now automatically and the sequential number is unnecessary
+Changed name on 5.Company_department_code to 1.Company_department_code so the file have same name as folder it represents
+Bugs and reduncency fixes in Create New Container tool
+Documentation of all the changes
+
+Whats new in 0.56?
+Added default support for Windows 2003 in SystemSettings.qvs
+
+
+Whats new in 0.55?
+New Sub 1.FileExist.qvs to check if a file exists on the filesystem, 
+Use before load statements to avoid errors during script load
+
+Create New Container populate tool: New copy SystemVariables.qvs into container function.
+
+Added 8.Import folder used to store import data from external systems
+
+
+Whats new in 0.54?
+Changed name on 2.Init.qvs to 2.SharedFiles.qvs this to easyer understand what that script does.
+Changed name on 3.Init.qvs to 3.SystemVariables.qvs this to easyer understand what that script does.
+
+Added Global Path variable in 3.SystemVariables.qvs to UserDocuments in AccessPoint's $(vG.UserDocumentPath1)
+
+Added different container scenarios (basic, system containers and ETL process) in core documentation
+
+
+Whats new in 0.53?
+CreateNewContainer.qvw template fix
+
+CreateNewContainer.qvw check if space not in container name
+
+Check in Init.1 if Framework is missing then Exit script.
+
+Trace in all scripts for easy debugging
+
+Now possible to have space in folder names (but not best practice)
+
+More core documentation
+
+Whats new in 0.52?
+7.Export folder and global variable vG.ExportPath
+
+Export Example application created, DataExportExample.qvw
+
+Documentation regarding 7.Export folder
+
+New functions in ContainerPopulationTool.qvw
+
+Whats new in 0.51?
+
+Changed:
+0.Administration\6.Script\2.CreateNewContainer\CreateNewContainer.qvw instead of CreateNewContainer.cmd
+Works much better than before
+
+Added:
+0.Administration\6.Script\1.Create-prj\Remove-prj.cmd to remove -prj folders
+
+Added:
+0.Administration\6.Script\3.CreateInitLinks\RemoveInitLinks.cmd to remove InitLinks
+
+Added:
+0.Administration\3.Include\1.BaseVariable\5.Administration.qvs script to connect to 0.Administration container from another container.
+
+Added:
+0.Administration\6.Script\4.ContainerPopulationTool\ContainerPopulationTool.qvw, a tool that finds vG.xx path variables from the MetaData repository
+and have the posibility to populate filestructure based on the variables.
+
+
+Added:
+More core documentation

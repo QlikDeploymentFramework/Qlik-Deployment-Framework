@@ -1,0 +1,170 @@
+
+/* ___________________________________________________________________________
+  |   Deployment Framework QVDMigration sub function 9.QVDMigration.qvs 
+  |
+  | Returns a Table containing files and path in selected file system (vL.DoDirRoot)
+  | First include the QVDMigration Function $(Include=$(vG.SubPath)\9.QVDMigration.qvs);
+  | Use the function QVDMigration to execute. examples:
+  | call QVDMigration (vL.QDF.MigrationSource,vL.QDF.MigrationDestination, vL.QDF.Store_Select); //Simple Example
+  | call QVDMigration ('$(vG.QVDPath)\Customer.qvd','$(vG.SharedQVDPath)\Customer.qvd', 'CustomerID,CompanyName');
+*/
+
+ 
+
+sub QVDMigration (vL.QDF.MigrationSource,vL.QDF.MigrationDestination,vL.QDF.Store_Select,vL.QDF.Scramble_fields,vL.QDF.QVTableName_Suffix,vL.QDF.IncludeSubFolders,vL.QDF.FormatSpec,vL.QDF.NoRecords)
+
+$(Include=$(vG.SubPath)\1.FileExist.qvs);
+call vL.FileExist('$(vL.QDF.MigrationSource)'); // Check if folder or file exist
+if vL.FileExist = 'true' then
+
+$(Include=$(vG.SubPath)\5.DoDir.qvs);
+$(Include=$(vG.SubPath)\8.QVFileInfo.qvs);
+
+// Migrate data to other formats then qvd
+if trim(lower('$(vL.QDF.FormatSpec)'))='txt' or  trim(lower('$(vL.QDF.FormatSpec)'))='qvx' then
+let vL.QDF.FormatSpec=trim(lower('$(vL.QDF.FormatSpec)')); //Create format-spec that will be in the Store statement
+else
+let vL.QDF.FormatSpec='qvd';
+endif
+
+if '$(vL.QDF.Store_Select)'='' or vL.QDF.Store_Select=null then // If no specific fields selected use *
+SET vL.QDF.Store_Select = '*';
+else 
+LET vL.QDF.Store_Select=Replace(Replace(','&'$(vL.QDF.Store_Select)'&',',' ,',','),', ',',');// Adding (,) to identify fields in loop, uses (,) as field separators and remove unwanted spaces
+end if
+
+LET vL.QDF.Scramble_fields=','&'$(vL.QDF.Scramble_fields)'&','; // Adding (,) to identify fields in loop, uses (,) as field separators
+
+if lower('$(vL.QDF.IncludeSubFolders)')='true' then // Change vL.QDF.IncludeSubFolders = true to false to parse into DoDir use single folder (default multiple folders)
+	let vL.QDF.IncludeSubFolders='';
+else
+	let  vL.QDF.IncludeSubFolders='true';
+endif
+
+//Limit amount of records
+if vL.QDF.NoRecords > 0 then 
+let vL.QDF.NoRecords = 'First $(vL.QDF.NoRecords)';
+else
+let vL.QDF.NoRecords=;
+endif
+
+switch upper(subfield(trim('$(vL.QDF.MigrationSource)'),'\',-1)) // change vL.QDF.MigrationSource depending on how users write 
+	case ''
+	let vL.QDF.MigrationSource= trim('$(vL.QDF.MigrationSource)')&'*.qvd';
+	case '*'
+	let vL.QDF.MigrationSource= trim('$(vL.QDF.MigrationSource)')&'.qvd';
+	default
+end switch
+
+call DoDir ('$(vL.QDF.MigrationSource)','__vL.DoDir_TMP','','$(vL.QDF.IncludeSubFolders)','true'); // Cal DoDir sub function
+
+if NoOfFields('__vL.DoDir_TMP') > 0 then // if no fields exist (no qvd files) do not continue
+
+for vL.QDF.DirList_tmp = 0 to (NoOfRows('__vL.DoDir_TMP'))-1
+
+LET vL.QDF.filelist_tmp = trim(peek(FieldName(2,'__vL.DoDir_TMP'),$(vL.QDF.DirList_tmp),'__vL.DoDir_TMP')); // Peek qvd files
+exit for when '$(vL.QDF.filelist_tmp)' = '';
+// Reset vL.QDF.Store_Select_new variable
+SET vL.QDF.Store_Select_new=;
+
+call QVFileInfo ('$(vL.QDF.filelist_tmp)','__vL.FileInfo_TMP'); // get QVD file info into table __vL.FileInfo_TMP and __vL.FileInfo_TMP_Fields
+
+LET vL.QDF.QVTableName=subfield(peek('QVTableName',0,'__vL.FileInfo_TMP'),'\',-1);
+LET vL.QDF.QVDTag = peek('QVTableComment',0,'__vL.FileInfo_TMP');
+
+if not '$(vL.QDF.QVTableName)' = '' then 
+
+for vL.QDF.NoOfRows_Loop = 0 to (NoOfRows('__vL.FileInfo_TMP_Fields')-1)
+
+LET vL.QDF.TempField = trim(peek('QVFieldName',$(vL.QDF.NoOfRows_Loop),'__vL.FileInfo_TMP_Fields'));
+LET vL.QDF.TempField_new = ','&'$(vL.QDF.TempField)'&','; // used to identify fields in loop, uses (,) as field separators
+
+
+	switch '$(vL.QDF.TempField_new)' //Change scramble field based on vL.SubString
+	case mid('$(vL.QDF.Scramble_fields)', index('$(vL.QDF.Scramble_fields)' , '$(vL.QDF.TempField_new)'), len('$(vL.QDF.TempField_new)'));
+		LET vL.QDF.Store_Select_new='$(vL.QDF.Store_Select_new)' & ' If(IsNum([$(vL.QDF.TempField)]),autonumberhash128([$(vL.QDF.TempField)]), Left(hash128(['&'$(vL.QDF.TempField)'&'],$(vL.NoOfRows_Loop_tmp)),Len($(vL.QDF.TempField)))) as ['&'$(vL.QDF.TempField)], '; // concat query, FPN
+
+	case mid('$(vL.QDF.Store_Select)', index('$(vL.QDF.Store_Select)' , '$(vL.QDF.TempField_new)'), len('$(vL.QDF.TempField_new)'));
+		LET vL.QDF.Store_Select_new='$(vL.QDF.Store_Select_new)' & '[$(vL.QDF.TempField)],';  // Concatenated statement
+	default
+	 if vL.QDF.Store_Select = '*' then
+		LET vL.QDF.Store_Select_new='$(vL.QDF.Store_Select_new)' & '[$(vL.QDF.TempField)],';  // Concatenated statement
+	 endif
+	end switch
+
+next vL.QDF.NoOfRows_Loop
+
+
+// Remove (,) in back of the lastconcatenated statement
+LET vL.QDF.Store_Select_new= left(trim('$(vL.QDF.Store_Select_new)'),(len( trim('$(vL.QDF.Store_Select_new)'))-1 ));
+
+if not '$(vL.QDF.Store_Select_new)' ='' then 
+	[$(vL.QDF.QVTableName)$(vL.QDF.QVTableName_Suffix)]: // Load QVD file based on vL.QDF.Store_Select_new concatenated statement
+	$(vL.QDF.NoRecords)
+	LOAD $(vL.QDF.Store_Select_new)
+	FROM '$(vL.QDF.filelist_tmp)'
+(qvd);
+
+if not '$(vL.QDF.MigrationDestination)' = '' then
+	
+	if lower(subfield('$(vL.QDF.MigrationDestination)','.',-1))='$(vL.QDF.FormatSpec)' then //Check QVD, qvx, txt destination file, if non existing use same as source
+		let vL.QDF.MigrationDestination_tmp='$(vL.QDF.MigrationDestination)';
+		trace '### DF 9.QVDMigration.qvs will migrate to a single qvd file due to no trailing \ at destination path, files could be overwritten';
+	else
+		// Identify Source qvd name and path and parse with destination path
+		LET vL.QDF.MigrationDestination_tmp=trim('$(vL.QDF.MigrationDestination)\'& mid('$(vL.QDF.filelist_tmp)', len(left ('$(vL.QDF.MigrationSource)',index('$(vL.QDF.MigrationSource)','\',-1)))));
+		LET vL.QDF.MigrationDestination_tmp=left('$(vL.QDF.MigrationDestination_tmp)',(len('$(vL.QDF.MigrationDestination_tmp)')-4))&'.$(vL.QDF.FormatSpec)'; // Create correct file extension
+	endif
+	
+
+	LET vL.QDF.FolderPath_tmp= left ('$(vL.QDF.MigrationDestination_tmp)',index('$(vL.QDF.MigrationDestination_tmp)','\',-1)); // Remove qvd file name to get folder names only
+	$(Include=$(vG.SubPath)\6.CreateFolder.qvs);
+	call CreateFolder('$(vL.QDF.FolderPath_tmp)');	// Check if SubFolders it need to be created under destination folder	
+	
+	if not '$(vL.QDF.QVDTag)'='' or not '$(vL.QDF.QVTableName_Suffix)'='' then //Transfer tags from source qvd + add suffix as tag 
+		comment table [$(vL.QDF.QVTableName)$(vL.QDF.QVTableName_Suffix)] with ',$(vL.QDF.QVDTag),$(vL.QDF.QVTableName_Suffix),' ; // add meta-tags
+	endif
+
+	Store * from [$(vL.QDF.QVTableName)$(vL.QDF.QVTableName_Suffix)] into '$(vL.QDF.MigrationDestination_tmp)' ($(vL.QDF.FormatSpec));
+	drop table [$(vL.QDF.QVTableName)$(vL.QDF.QVTableName_Suffix)];
+endif
+
+	drop table __vL.FileInfo_TMP,__vL.FileInfo_TMP_Fields;
+endif
+
+else
+	trace '### DF Warning 9.QVDMigration.qvs not a valid qvd file $(vL.QDF.filelist_tmp)';
+endif
+
+next vL.QDF.DirList_tmp
+ drop table __vL.DoDir_TMP;
+ 
+else
+	trace '### DF Warning 9.QVDMigration.qvs no qvd files found ';
+endif
+else
+	trace '### DF Warning 9.QVDMigration.qvs Cant find File Paths or qvd Suffix';
+end if 
+SET vL.QDF.QVTableName_Suffix=;
+SET vL.QDF.NoRecords=;
+SET vL.QDF.QVTableName=;
+SET vL.QDF.MigrationSource=;
+SET vL.QDF.MigrationDestination=;
+SET vL.QDF.MigrationDestination_tmp=;
+SET vL.QDF.Store_Select=; 
+SET vL.QDF.Store_Select_new=;
+SET vL.QDF.Scramble_fields=;
+SET vL.QDF.NoOfRows_Loop=;
+SET vL.QDF.filelist_tmp=;
+SET vL.QDF.TempField=;
+SET vL.QDF.TempField_new=;
+SET vL.QDF.IncludeSubFolders=;
+SET vL.QDF.DirList_tmp=;
+SET vL.QDF.FolderPath_tmp=;
+SET vL.QDF.FormatSpec=;
+end sub
+
+// **********************************
+// Application written by Magnus Berg
+// QlikView International AB
+// **********************************

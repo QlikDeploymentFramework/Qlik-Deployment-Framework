@@ -1,0 +1,151 @@
+﻿//  ____________________________________________________________
+// | Deployment Framework BaseVariable 4.GenericContainerLoader|
+// |  All path are based on vG.BasePath                        |
+// |  This script is used to connect to any container          |
+// |___________________________________________________________|
+
+// This script should only be accessed from QlikView via the LoadContainerGlobalVariables function
+// SUB LoadContainerGlobalVariables (‘Container Path Name’,['Optional Single Folder']);
+// Example: call LoadContainerGlobalVariables('1.AcmeStore');
+SUB LoadContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder);
+
+sub vL.QDF.FindFolders;
+if not '$(vL.QDF.Subfolder)'='' then
+		for each vL.QDF.DoDir in dirlist ('$(vG.$(vL.ContainerPathName)BasePath)$(vL.PhysicalFolderName)*')
+			if right('$(vL.QDF.DoDir)',len('$(vL.QDF.Subfolder)'))='$(vL.QDF.Subfolder)' then
+				LET vL.QDF.BasePath='$(vL.QDF.DoDir)\';
+			endif
+		next vL.QDF.DoDir
+	else
+		LET vL.QDF.BasePath='$(vG.$(vL.ContainerPathName)BasePath)$(vL.PhysicalFolderName)';	
+	endif
+		for each vL.QDF.DoDir in dirlist ('$(vL.QDF.BasePath)*') //Search for a valid container under Root				
+			if right('$(vL.QDF.DoDir)',len('$(vL.QDF.PhysicalFolderName)'))='$(vL.QDF.PhysicalFolderName)' then				
+				SET vG.$(vL.ContainerPathName)$(vL.QDF.VariablePrefix)Path='$(vL.QDF.DoDir)\'; // Set Global Variable
+			endif
+		exit for when right('$(vL.QDF.DoDir)',len('$(vL.QDF.PhysicalFolderName)'))='$(vL.QDF.PhysicalFolderName)'
+		next vL.QDF.DoDir
+		SET vL.QDF.DoDir=;
+endsub
+
+
+// Writing information in log
+trace '### DF 2.GenericContainerLoader.qvs  Started';
+
+LET vL.QDF.ContainerName=trim('$(vL.QDF.ContainerName)'); // Trim vL.QDF.ContainerName from white spaces
+
+// Qlik Sense folder repository validation
+if filesize('lib://$(vL.QDF.ContainerName)/Initlink.qvs') > 1 then
+	trace '### DF Info, Qlik Sense folder repository (Separate LIB mount)';
+	SET vG.$(vL.QDF.ContainerName)BasePath = 'lib://$(vL.QDF.ContainerName)/';
+	SET vL.ContainerPathName='$(vL.QDF.ContainerName)';	
+else
+
+$(Include=$(vG.SubPath)\3.LoadContainerMap.qvs);
+
+// Load container map and variables by using LoadContainerMap function
+// vL.ContainerFolderName, vL.ContainerPathName, vL.RootPath are all retrieved from LoadContainerMap sub function
+let vL.QDF.ContainerMapPath = '$(vG.BaseVariablePath)\ContainerMap.csv';
+call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContainerName)'); // Using LoadContainerMap with special switches the Container links will be populated automatically
+
+
+// If vL.ContainerPathName can't be found in the local ContainerMap try the shared ContainerMap
+if '$(vL.ContainerPathName)' = '' and FileSize('$(vG.SharedBaseVariablePath)\ContainerMap.csv') > 0 then 
+	let vL.QDF.ContainerMapPath = '$(vG.SharedBaseVariablePath)\ContainerMap.csv';
+	call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContainerName)');
+endif 
+	if not '$(vL.ContainerPathName)' = '' then 
+		// Base Search Path $(vG.BasePath) for this container
+		SET vG.$(vL.ContainerPathName)BasePath = '$(vL.RootPath)$(vL.ContainerFolderName)\';
+	endif
+
+endif
+
+if not '$(vL.ContainerPathName)' = '' then
+
+// Validates the connected folder path
+// call function to check if the folder exists
+$(Include=$(vG.SubPath)\1.FileExist.qvs);
+call vL.FileExist ('$(vG.$(vL.ContainerPathName)BasePath)*');
+	// If file exists continue
+if vL.FileExist = 'false' then
+	trace '### DF Error, vG.$(vL.ContainerPathName)BasePath missing';
+    SET vG.$(vL.ContainerPathName)BasePath = ;
+else
+
+// Writing information in log
+trace '### DF Info, found $(vL.ContainerPathName) Container' ;
+	if not '$(vL.Comment)' = '' then
+		trace '### DF Info $(vL.Comment)'; 
+	endif
+
+// Creating Sub Folder Path Global Variables to main folders
+Call GetContainerStructure ;
+FOR vL.QDF.VariableLoop = 0 to NoOfRows('vL.ContainerStructure')-1;
+
+	let vL.QDF.PhysicalFolderName = Peek(FieldName(1,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
+	let vL.QDF.VariablePrefix = Peek(FieldName(2,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
+	let vL.QDF.Subfolder = Peek(FieldName(3,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
+	
+	// If vL.QDF.SingleFolder mode not used add all path
+	if '$(vL.QDF.SingleFolder)'='' then 
+		call vL.QDF.FindFolders ;
+	// If vL.QDF.SingleFolder mode is used add specified path, also check if folder exists 	
+	// if not IsNull(Filesize('$(vG.$(vL.ContainerPathName)BasePath)$(vL.QDF.PhysicalFolderName)')) = -1 then
+	else
+		LET vL.QDF.SubStringSplitt=';'&'$(vL.QDF.SingleFolder)'&';'; // Creating a variable used for easy substring splitt
+		for vL.QDF.SubString=1 to substringcount ('$(vL.QDF.SubStringSplitt)',';') -1 // loop as many times there are folders defined (separated by ;)
+			if index(TextBetween('$(vL.QDF.SubStringSplitt)' , ';', ';' , vL.QDF.SubString ),'$(vL.QDF.VariablePrefix)') > 0 then // Pick folder in substring (vL.QDF.SubStringSplitt) based on vL.QDF.SubString
+				call vL.QDF.FindFolders ;
+			endif;
+		next vL.QDF.SubString;
+	endif
+
+Next vL.QDF.VariableLoop
+
+// Dropping ContainerStructure table when Base Global Variables are read into QlikView
+drop table vL.ContainerStructure ;
+
+// If vL.QDF.SingleFolder mode is used remove vG.$(vL.ContainerPathName)BasePath (if not BasePath exlicitly been selected)
+	if not '$(vL.QDF.SingleFolder)'='' and not trim('$(vL.QDF.SingleFolder)') = 'BasePath' then
+		SET vG.$(vL.ContainerPathName)BasePath = ;	
+	endif
+
+// Writing information in log
+trace '### DF $(vL.ContainerPathName) Finished';
+	
+else
+	trace '### DF Could not find $(vL.QDF.ContainerName) container in Container Map';
+endif;
+else
+	trace '### DF Could not find $(vL.QDF.ContainerName) container in Container Map';
+endif;
+
+
+// Clean up
+// Remove local variables
+
+SET vL.ContainerFolderName=;
+SET vL.QDF.PhysicalFolderName=;
+SET vL.QDF.VariablePrefix=;
+SET vL.QDF.VariableLoop=;
+SET vL.QDF.Subfolder=;
+set vL.QDF.VariableLoop=;
+SET vL.QDF.BasePath=;
+SET vL.QDF.ContainerMapPath = ;
+SET vL.ContainerPathName=;
+SET vL.RootPath=;
+SET vL.FileExist=;
+SET vL.QDF.ContainerName=;
+SET vL.Comment =;
+SET vL.QDF.SingleFolder=;
+SET vL.QDF.SubStringSplitt=;
+SET vL.QDF.SubString=;
+end sub
+
+SUB LCGV(vL.QDF.ContainerName_tmp,vL.QDF.SingleFolder_tmp); // Alias for LoadContainerGlobalVariables
+	call LoadContainerGlobalVariables('$(vL.QDF.ContainerName_tmp)','$(vL.QDF.SingleFolder_tmp)');
+	SET vL.QDF.ContainerName_tmp=;
+	SET vL.QDF.SingleFolder_tmp=;
+end sub
+

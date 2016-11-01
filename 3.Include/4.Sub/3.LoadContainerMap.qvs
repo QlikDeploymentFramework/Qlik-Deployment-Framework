@@ -1,0 +1,146 @@
+// SUB routine loading csv Container Map into a QlikView Script, is primarily used by 4.GenericContainerLoader.qvs
+// Execute (Call) the Sub in the script by first include the script in the beginning and then use:
+// call LoadContainerMap('container map csv', 'Name of Container to link'[,'Optional, retrive Root Path by typing current container name']);
+// Container base Variables will be loaded based on ContainerMap.csv
+// will return vL.ContainerPathName vL.ContainerFolderName vL.Comment vL.RootPath 
+
+
+SUB LoadContainerMap(vL.QDF.CVSTableName,vL.QDF.SpecificVariable,vL.QDF.GetRootPath);
+
+//Reset vL.LoadContainerMapCount variable used to identify if two or more identical Variable Prefix exist
+SET vL.LoadContainerMapCount=;
+SET vL.QDF.ValidatedBasePath=;
+
+if not '$(vL.QDF.GetRootPath)'='' then // If GetRootPath switsh activated find input base and relative path
+// Remove double backslash
+	if index(trim('$(vL.QDF.GetRootPath)'),'\\',-1)>2 then // Remove double \\ in path, except in the beginning used in UNC path
+		LET vL.QDF.GetRootPath=left( '$(vL.QDF.GetRootPath)' , (index( '$(vL.QDF.GetRootPath)', '\\', -1 )-1))&right('$(vL.QDF.GetRootPath)', (len( '$(vL.QDF.GetRootPath)' ) -index( '$(vL.QDF.GetRootPath)', '\\', -1 )));
+	endif
+
+let vL.QDF.To_Loop = substringcount ('$(vL.QDF.GetRootPath)' , '\'); // Number of sub-folders 
+
+let vL.QDF.To_Loop = $(vL.QDF.To_Loop) + substringcount ('$(vL.QDF.GetRootPath)' , '/'); // Do a second search for Qlik Sense LIB folders
+
+	for vL.QDF.From_Loop = vL.QDF.To_Loop to 1 step -1
+
+  if filesize(left( '$(vL.QDF.GetRootPath)' , findoneof('$(vL.QDF.GetRootPath)' , '\/',vL.QDF.From_Loop) )&'InitLink.qvs') >0 then
+ 		LET vL.QDF.ValidatedBasePath=left( '$(vL.QDF.GetRootPath)' , findoneof('$(vL.QDF.GetRootPath)' , '\/',vL.QDF.From_Loop)); //Found BasePath
+ 		LET vL.RelativePath=mid('$(vL.QDF.GetRootPath)' , findoneof('$(vL.QDF.GetRootPath)' , '\/',vL.QDF.From_Loop)+1,len('$(vL.QDF.GetRootPath)')); //Relative Path in Container
+  endif
+  exit for when not '$(vL.QDF.ValidatedBasePath)'='';	
+	next
+endif
+
+// Setting the correct ContainerMap.csv path
+if FileSize('$(vL.QDF.CVSTableName)') > 0 then 
+	Let vL.QDF.ContainerMapPath='$(vL.QDF.CVSTableName)';
+else
+	Let vL.QDF.ContainerMapPath='$(vG.BaseVariablePath)\ContainerMap.csv';
+endif
+
+
+
+// Loading Container Map csv table as vL.temp_table_map
+unqualify ContainerPathName,Prefix,ContainerPathNameCount ;
+vL.temp_table_map:
+REPLACE LOAD *
+FROM
+'$(vL.QDF.ContainerMapPath)'
+(txt, utf8, embedded labels, delimiter is ',', msq);
+
+LET vL.ContainerPathName = FieldName(1,'vL.temp_table_map'); // ContainerPathName variable field (Tag)
+
+// count(ContainerPathName) to find if more than one ContainerPathName is used
+REPLACE Left join
+Load $(vL.ContainerPathName),count($(vL.ContainerPathName)) as ContainerPathNameCount
+Resident vL.temp_table_map 
+group by $(vL.ContainerPathName); 
+
+// loop through CSV table entries in search for LET and SET expresion
+let vL.QDF.To_Loop = NoOfRows('vL.temp_table_map');
+
+	for vL.QDF.From_Loop = 0 to vL.QDF.To_Loop-1
+	
+	LET vL.Comment =''; //reset comment entries 
+	
+	LET vL.ContainerPathName = PurgeChar(trim(peek(FieldName(1,'vL.temp_table_map'),$(vL.QDF.From_Loop),'vL.temp_table_map')),'=;,- '&chr(39)); // ContainerPathName variable field (Tag)
+	LET vL.ContainerFolderName = lower(PurgeChar(trim(peek(FieldName(2,'vL.temp_table_map'),$(vL.QDF.From_Loop),'vL.temp_table_map')),'=;,'&chr(39))); // ContainerFolderName field
+	LET vL.Comment = PurgeChar(trim(peek(FieldName(3,'vL.temp_table_map'),$(vL.QDF.From_Loop),'vL.temp_table_map')),';,'&chr(39)); // Comment Field 
+	LET vL.RootPath = lower(PurgeChar(trim(peek(FieldName(4,'vL.temp_table_map'),$(vL.QDF.From_Loop),'vL.temp_table_map')),'=;,'&chr(39))); // RootPath other than default
+	LET vL.QDF.ContainerPathNameCount = peek(FieldName(5,'vL.temp_table_map'),$(vL.QDF.From_Loop),'vL.temp_table_map');
+	
+	// Do not do anything if row is empty
+	if not '$(vL.ContainerPathName)' = '' and not '$(vL.ContainerFolderName)' = '' then
+	
+	// Correct \ if not exist 
+		if not right( '$(vL.ContainerFolderName)' , 1 ) ='\' then 
+			let vL.QDF.ContainerName ='$(vL.ContainerFolderName)'&'\';
+			else
+			let vL.QDF.ContainerName ='$(vL.ContainerFolderName)';
+		endif;
+
+		if left(trim('$(vL.RootPath)'),2) ='\\' or index('$(vL.RootPath)', ':')>0  then // If vL.AltRootPath have a valid path
+
+			if not right('$(vL.RootPath)' , 1 ) ='\' then // Check and add '\' in root path
+				let vL.RootPath ='$(vL.RootPath)'&'\';
+			endif;
+		else
+			let vL.RootPath ='$(vG.RootPath)'; 
+		endif;
+		
+	// Special Switch to find vG.RootPath used by 1.Init during initiation process
+	// Will also identify current container (vL.ContainerPathName)
+	if not '$(vL.QDF.ValidatedBasePath)'='' and substringcount(lower('$(vL.QDF.ValidatedBasePath)'),lower('$(vL.RootPath)$(vL.QDF.ContainerName)')) >0 then
+
+   	LET vL.RootPath= left('$(vL.QDF.ValidatedBasePath)',len('$(vL.QDF.ValidatedBasePath)')-(len('$(vL.QDF.ContainerName)')));
+  	$(Include=$(vG.SubPath)\1.FileExist.qvs);
+		call vL.FileExist ('$(vL.RootPath)$(vL.QDF.ContainerName)'); //validate that rootpath is correct
+      if vL.FileExist = 'true' then
+				LET vG.RootPath= '$(vL.RootPath)'; // Set new vG.RootPath
+				Trace '### DF Creating vG.RootPath based on Container Map';
+				SET vL.QDF.Exit='True'; // When root path is set exit script 
+			endif
+	elseif not '$(vL.QDF.ValidatedBasePath)'='' and lower('$(vL.QDF.ValidatedBasePath)')=lower('lib://$(vL.ContainerPathName)/') then //Current Container validation for Qlik Sense
+		SET vL.QDF.Exit='True'; // When root path is set exit script 
+	endif
+
+	
+	// Finding vL.QDF.SpecificVariable and return values from Container Map
+	if ('$(vL.QDF.SpecificVariable)'='$(vL.ContainerPathName)' or '$(vL.QDF.SpecificVariable)'='$(vL.ContainerFolderName)')  then
+		
+		
+	if vL.QDF.ContainerPathNameCount = 1 then // If only one container Path exists then exit 
+			SET vL.QDF.Exit= 'True'; // Exit For Loop
+				
+		else // Several container Path exists, send error message
+			Trace '### DF Warning! more than one $(vL.ContainerPathName) exists, please identify and fix.';
+				//Reset vL.LoadContainerMapCount variable used to identify if two or more identical Variable Prefix exist
+			SET vL.LoadContainerMapCount='$(vL.ContainerPathName)';
+			Sleep 5000; SET 5000=; // Remove variable 5000 created when running sleep!?
+			SET vL.QDF.Exit= 'True'; // Exit For Loop
+	endif
+		exit for when '$(vL.QDF.Exit)'='True';
+	endif;
+		exit for when '$(vL.QDF.Exit)'='True';	
+	endif;
+next;
+
+drop table 'vL.temp_table_map'; // Dropping CSV Table after variables been read into the QlikView application
+
+//Resetting variables
+SET vL.QDF.From_Loop = ;
+SET vL.QDF.To_Loop = ;
+SET vL.QDF.CVSTableName = ;
+SET vL.QDF.SpecificVariable = ;
+SET vL.QDF.GetRootPath = ;
+SET vL.QDF.Exit= ;
+SET vL.QDF.ContainerName= ;
+SET vL.QDF.ContainerPathNameCount= ;
+SET vL.QDF.ValidatedBasePath=;
+SET vL.QDF.ContainerMapPath=;
+end sub
+
+// **********************************
+// Application written by Magnus Berg
+// QlikView International AB
+// **********************************

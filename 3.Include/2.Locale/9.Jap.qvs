@@ -1,0 +1,12 @@
+﻿///$tab Main
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='¥#,##0;-¥#,##0';
+SET TimeFormat='h:mm:ss';
+SET DateFormat='YYYY/MM/DD';
+SET TimestampFormat='YYYY/MM/DD h:mm:ss[.fff]';
+SET MonthNames='1;2;3;4;5;6;7;8;9;10;11;12';
+SET DayNames='月;火;水;木;金;土;日';
+
