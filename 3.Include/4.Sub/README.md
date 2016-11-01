@@ -1,4 +1,4 @@
-# 4.Sub contains functions loaded during initiation
+# 4.Sub function library
 
 - 99.LoadAll.qvs --> Auto loads all sub functions during initiation (by 1.Init.qvs)
 - 1.FileExist.qvs --> Validates file(s) or folder(s) , can be used to avoid errors during script load due to missing content.
