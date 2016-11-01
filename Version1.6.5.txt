@@ -2,6 +2,7 @@ Whats new in release 1.6.5?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
 New container layout only for Qlik Sense Only, including extract transform load folders
 New container layout only for slimmed Down containers (fewer folders), including extract transform load folders 
+Added code to GitHub
 
 Whats new in release 1.6.0?
 New installer that can add additional containers in an active container structure (good for Qlik Sense)
@@ -149,7 +150,7 @@ Added CalendarGen Function
 Added CalendarGen example application
 Changed back to UTF8 after compability issiues
 Added Robocopy fallback if Container creation fails (see ContainerCreation.log if it's created)
-load several Global Container Variables at once by use of ‘;’ as separator:
+load several Global Container Variables at once by use of Â‘;Â’ as separator:
 call LoadContainerGlobalVariables('SAP','QVD;Include;Application'); 
 
 
@@ -166,7 +167,7 @@ Whats new in 0.98?
 Bugg found in GenericContainerLoader
 Changes in how vG.BasePath is identifyed, removes the limitation of only two levels of containers
 Added function for loading a single Container Variable
-New version of FileExist that can be used to check folders as well as files (thanks Frederik Nünning)
+New version of FileExist that can be used to check folders as well as files (thanks Frederik NÃ¼nning)
 Found bug in 3.LoadContainerMap.qvs creating error if empty row is found in the container map
 Bug in 2.LoadVariableCSV.qvs, complicated expressions do not calculate properly
 Bug in 2.LoadVariableCSV.qvs, ContainerMapMode does not work
