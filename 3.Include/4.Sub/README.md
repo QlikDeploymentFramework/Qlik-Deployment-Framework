@@ -24,9 +24,9 @@ Call QVDLoad(QVD Repository, [Select specific fields (, separator) leave blank f
 - 11.DynamicContainerLoader.qvs --> Loads Global Variables within containers based on folder name.
 Call DynamicContainerGlobalVariables (‘Container Path Name’, ['Single Folder [; Additional folders separated by ;]'] , [’Override Prefix’] , [’Use Shared Folder Container Map’]);
 - 12.Index.qvs --> Index is functions that creates and maintains a set of indexes for Qlik Data files (QVD). These indexes are used when searching for data types across multiple qvd files this means that developers and power users select needed data using a simple command. 
---	IndexAdd Will create the QVD indexes, should be done during qvd creation.
+-	 IndexAdd Will create the QVD indexes, should be done during qvd creation.
 Call IndexAdd([‘QVD path and name’],['Index folder name'] ,['Container name'] ,['Tags'] ,['Alternative Index path'])                                                 
---  IndexLoad Loads Qlik data based on combination of index criteria’s like file name, tags, table, fiels…
+-  IndexLoad Loads Qlik data based on combination of index criteria’s like file name, tags, table, fiels…
 Call IndexLoad([‘QVD file name’],['Table Name'] ,['Index Folder Name'] ,['Tags'] ,['Fields'] ,['Index Only'] ,['Load Max Rows'] ,[ ['Alternative Index path'],[‘Load Expressions’])                                                 
---	IndexDel Delete index and optionally referring qvd file.
+-	IndexDel Delete index and optionally referring qvd file.
 Call IndexDel(‘Index file name’,['Delete associated QVD files'] ,['Index Folder Name'] ,['Alternative Index path'])
