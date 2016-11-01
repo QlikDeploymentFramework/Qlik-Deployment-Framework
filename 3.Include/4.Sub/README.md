@@ -4,7 +4,7 @@ Contains the important function library used by 1.Init.qvs during initiation. Th
 
 - 99.LoadAll.qvs --> Auto loads all sub functions during initiation (by 1.Init.qvs)
 - 1.FileExist.qvs --> Validates file(s) or folder(s) , can be used to avoid errors during script load due to missing content.
-*call vL.FileExist('$(vG.QVDPath)\*'); Variable vL.FileExist returns true or false.*
+*call vL.FileExist('$(vG.QVDPath)\filename'); Variable vL.FileExist returns true or false.*
 - 2.LoadVariableCSV.qvs --> Load variables stored in csv files into the Qlik Script. This file is used by 1.Init to load Custom Global Variables.
 *call LoadVariableCSV('[My Variable File.csv]', [‘Search Tag’], [‘Container Prefix’], [‘Comments as variables’] [‘Container Map Mode’]);*
 - 3.LoadContainerMap.qvs --> Load and validate Container Map csv file, this function is used internaly by other functions
