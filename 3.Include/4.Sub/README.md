@@ -1,5 +1,7 @@
 # 4.Sub function library
 
+Contains the important function library used by 1.Init.qvs during initiation. The library is loaded in durinn initiation and adds additional functionallity when creating load scripts in Qlik Sense/QlikView.
+
 - 99.LoadAll.qvs --> Auto loads all sub functions during initiation (by 1.Init.qvs)
 - 1.FileExist.qvs --> Validates file(s) or folder(s) , can be used to avoid errors during script load due to missing content.
 call vL.FileExist('$(vG.QVDPath)\*'); Variable vL.FileExist returns true or false.
