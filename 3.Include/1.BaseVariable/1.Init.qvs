@@ -34,7 +34,7 @@ sub GetContainerStructure;
     Script, Script, , Store for special scripts run by the publisher or scheduled tasks
     Export, Export, , "Folder used to store from QlikView exported data, probably txt or qvx"
     Import, Import, , Folder used to store import data from external systems
-    BaseVariable, BaseVariable, .Include, "Stores all the variables needed to use the framework, like paths inside the container"
+    BaseVariable, BaseVariable, Include, "Stores all the variables needed to use the framework, like paths inside the container"
     Locale, Locale, Include, "Locale for different regions, used for easy migration between regions"
     ConnString, ConnString, Include, Stores connection strings to data sources
     Sub, Sub, Include, "Store for sub routines, this is a way to reuse code between applications"
