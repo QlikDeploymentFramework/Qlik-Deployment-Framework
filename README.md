@@ -16,4 +16,5 @@ Qlik-Deployment-Framework GitHub repository contains Qlik Script code that resid
 - 3.Include/1.BaseVariable/1.Init.qvs --> Main initiation script for both Qlik Sense and QlikView (run automatically by InitLink.qvs).InitLink will validate and create global variables for the current environment.
 - 3.Include/1.BaseVariable/3.SystemVariables.qvs --> Only for QlikView, loads system variables (filepath to logs and more)
 - 3.Include/2.Locale --> contains locale files used during initiation
-- 3.Include/4.Sub/  --> contains most important function library, 
+- 3.Include/4.Sub/  --> contains the most important function library, moead more under README https://github.com/QlikDeploymentFramework/Qlik-Deployment-Framework/tree/master/3.Include/4.Sub
+
