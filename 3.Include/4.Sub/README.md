@@ -1,6 +1,6 @@
 # 4.Sub function library
 
-4.Sub folder contains the important function library used by 1.Init.qvs during initiation. This library is loaded in during initiation and adds additional functionallity when creating load scripts in Qlik Sense/QlikView. Sub function documantation is avalible on community in the QDF development guide https://community.qlik.com/docs/DOC-5306.
+4.Sub folder contains the important function library used by 1.Init.qvs during initiation. This library is loaded in during initiation (executing 99.LoadAll.qvs) and adds additional functionallity when creating load scripts in Qlik Sense/QlikView. Sub function documantation is avalible on community in the QDF development guide https://community.qlik.com/docs/DOC-5306.
 
 - 99.LoadAll.qvs --> Auto loads all sub functions during initiation (by 1.Init.qvs)
 - 1.FileExist.qvs --> Validates file(s) or folder(s) , can be used to avoid errors during script load due to missing content.
