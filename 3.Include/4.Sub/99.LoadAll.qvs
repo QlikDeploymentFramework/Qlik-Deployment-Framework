@@ -1,6 +1,6 @@
 /* 
 ### This script loads all sub functions in one single batch
-### Just include this script in the QDF initiation Tab
+### It's run automatically by 1.Init.qvs QDF during initiation
 ### $(Must_Include=$(vG.SubPath)\99.LoadAll.qvs);
 */
 $(Include=$(vG.SubPath)\1.FileExist.qvs);
