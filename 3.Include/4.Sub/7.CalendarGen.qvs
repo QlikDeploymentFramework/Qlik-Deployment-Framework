@@ -153,6 +153,7 @@ if not '$(vL.QDF.MonthsLeftFiscalDates)' = '' then
   if $(vL.QDF.MonthsLeftFiscalDates) < 0 then 
     vL.QDF.MonthsLeftFiscalDates = 12 + $(vL.QDF.MonthsLeftFiscalDates)
   endif;
+  vL.QDF.FiscalStartMonth = 13 - vL.QDF.MonthsLeftFiscalDates;
 
 Left Join ([$(vL.QDF.CalendarTableName)])
 Load [$(vL.QDF.DateFieldLinkName_new)],
@@ -163,8 +164,8 @@ Load [$(vL.QDF.DateFieldLinkName_new)],
 	Date(MonthStart(AddMonths([$(vL.QDF.DateFieldLinkName_new)],$(vL.QDF.MonthsLeftFiscalDates))),'MM-YYYY') AS [$(vL.QDF.CalendarTableName) Fiscal MonthYear], 
 	dual('Q' & Ceil(Num(Month(AddMonths([$(vL.QDF.DateFieldLinkName_new)],$(vL.QDF.MonthsLeftFiscalDates)))) / 3) & '-' & Year(AddMonths([$(vL.QDF.DateFieldLinkName_new)],$(vL.QDF.MonthsLeftFiscalDates))),
 	QuarterStart(AddMonths([$(vL.QDF.DateFieldLinkName_new)],$(vL.QDF.MonthsLeftFiscalDates)))) AS [$(vL.QDF.CalendarTableName) Fiscal QuarterYear],
-  if(YearToDate([$(vL.QDF.DateFieldLinkName_new)], 0, $(vL.QDF.MonthsLeftFiscalDates), $(vL.QDF.CalendarGenToday)),1,0) AS [$(vL.QDF.CalendarTableName) Fiscal YTD Flag],
-  if(YearToDate([$(vL.QDF.DateFieldLinkName_new)], -1, $(vL.QDF.MonthsLeftFiscalDates), $(vL.QDF.CalendarGenToday)),1,0) AS [$(vL.QDF.CalendarTableName) Fiscal PYTD Flag]
+  if(YearToDate([$(vL.QDF.DateFieldLinkName_new)], 0, $(vL.QDF.FiscalStartMonth), $(vL.QDF.CalendarGenToday)),1,0) AS [$(vL.QDF.CalendarTableName) Fiscal YTD Flag],
+  if(YearToDate([$(vL.QDF.DateFieldLinkName_new)], -1, $(vL.QDF.FiscalStartMonth), $(vL.QDF.CalendarGenToday)),1,0) AS [$(vL.QDF.CalendarTableName) Fiscal PYTD Flag]
 	// End Fiscal Dates
 Resident [$(vL.QDF.CalendarTableName)];
 
@@ -221,6 +222,7 @@ Set vL.QDF.CalendarGenMinDateOrg = ;
 Set vL.QDF.CalendarGenMaxDateOrg = ;
 SET vL.QDF.CalendarGenToday = ;
 SET vL.QDF.MonthsLeftFiscalDates = ;
+SET vL.QDF.FiscalStartMonth = ;
 SET vL.QDF.DateFormat=;
 SET vL.QDF.DateFormat_old=;
 SET vL.QDF.DateFormatOrg=;
