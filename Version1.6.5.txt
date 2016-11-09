@@ -3,6 +3,7 @@ Installer improvements, select between three container layouts: Classic, Sense a
 New container layout only for Qlik Sense Only, including extract transform load folders
 New container layout only for slimmed Down containers (fewer folders), including extract transform load folders 
 Added code to GitHub
+Minor Negative Fiscal Year fix in CalendarGen.qvs
 
 Whats new in release 1.6.0?
 New installer that can add additional containers in an active container structure (good for Qlik Sense)
