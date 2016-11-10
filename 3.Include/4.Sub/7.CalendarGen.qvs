@@ -70,8 +70,8 @@ AUTOGENERATE(1);
 
 // if Min and Max set manual
 if not '$(vL.QDF.CalendarGenMinDateOrg)' = '' and not '$(vL.QDF.CalendarGenMaxDateOrg)' = ''  then
-LET vL.QDF.CalendarGenMinDate = Num(Date(Date#('$(vL.QDF.CalendarGenMinDate)','$(vL.QDF.DateFormat)'))) ;
-LET vL.QDF.CalendarGenMaxDate = Num(Date(Date#('$(vL.QDF.CalendarGenMaxDate)','$(vL.QDF.DateFormat)'))) ;
+LET vL.QDF.CalendarGenMinDate = Num(Date(Date#('$(vL.QDF.CalendarGenMinDateOrg)','$(vL.QDF.DateFormat)'))) ;
+LET vL.QDF.CalendarGenMaxDate = Num(Date(Date#('$(vL.QDF.CalendarGenMaxDateOrg)','$(vL.QDF.DateFormat)'))) ;
 
 endif
 
