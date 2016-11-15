@@ -70,8 +70,8 @@ AUTOGENERATE(1);
 
 // if Min and Max set manual
 if not '$(vL.QDF.CalendarGenMinDateOrg)' = '' and not '$(vL.QDF.CalendarGenMaxDateOrg)' = ''  then
-LET vL.QDF.CalendarGenMinDate = Num(Date(Date#('$(vL.QDF.CalendarGenMinDate)','$(vL.QDF.DateFormat)'))) ;
-LET vL.QDF.CalendarGenMaxDate = Num(Date(Date#('$(vL.QDF.CalendarGenMaxDate)','$(vL.QDF.DateFormat)'))) ;
+LET vL.QDF.CalendarGenMinDate = Num(Date(Date#('$(vL.QDF.CalendarGenMinDateOrg)','$(vL.QDF.DateFormat)'))) ;
+LET vL.QDF.CalendarGenMaxDate = Num(Date(Date#('$(vL.QDF.CalendarGenMaxDateOrg)','$(vL.QDF.DateFormat)'))) ;
 
 endif
 
@@ -149,11 +149,15 @@ AUTOGENERATE ($(vL.QDF.CalendarGenMaxDate) - $(vL.QDF.CalendarGenMinDate)+1);
 
 
 if not '$(vL.QDF.MonthsLeftFiscalDates)' = '' then
-  /*Catch scenario where negative number of months provided rather than remaining months*/
+  /*Catch scenario where negative number of months provided rather than remaining months
+  If a negative value is provided it is possible to move the Fiscal Year to the 
+  Prefix rather than Suffix Year */
   if $(vL.QDF.MonthsLeftFiscalDates) < 0 then 
-    vL.QDF.MonthsLeftFiscalDates = 12 + $(vL.QDF.MonthsLeftFiscalDates)
-  endif;
-  vL.QDF.FiscalStartMonth = 13 - vL.QDF.MonthsLeftFiscalDates;
+    vL.QDF.FiscalStartMonth = 13 - (vL.QDF.MonthsLeftFiscalDates + 12);
+    else
+    vL.QDF.FiscalStartMonth = 13 - vL.QDF.MonthsLeftFiscalDates;
+endif;
+  
 
 Left Join ([$(vL.QDF.CalendarTableName)])
 Load [$(vL.QDF.DateFieldLinkName_new)],
