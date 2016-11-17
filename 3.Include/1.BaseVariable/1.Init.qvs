@@ -212,6 +212,7 @@ $(Include=$(vG.SubPath)\99.LoadAll.qvs);
 
 // Clean up
 // Remove local variables
+SET vG.QVCDisable=;
 SET vL.QDF.PhysicalFolderName=;
 SET vL.QDF.VariablePrefix=;
 SET vL.QDF.VariableLoop=;

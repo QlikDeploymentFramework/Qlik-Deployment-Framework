@@ -15,3 +15,18 @@ $(Include=$(vG.SubPath)\9.QVDMigration.qvs);
 $(Include=$(vG.SubPath)\10.QVDLoad.qvs);
 $(Include=$(vG.SubPath)\11.DynamicContainerLoader.qvs);
 $(Include=$(vG.SubPath)\12.Index.qvs);
+
+
+// Loading in Qlikview Components, source avalible on GitHub
+// https://github.com/RobWunderlich/Qlikview-Components
+// Qlikview Components (Qvc) is a library of script subroutines and functions.
+// Disable Qvc in the script (before QDF initiation) setting the vL.QVCDisable=true flag 
+
+if trim(lower('$(vG.QVCDisable)'))='true' then
+// This is used to disable/enable QlikView Components library (Qvc) avalible on GitHub
+	 set vG.QVCDisable='$(vG.SubPath)'; // Ndisabled will remove Qvc.qvs filename
+else
+	set vG.QVCDisable='$(vG.SubPath)Qvc.qvs'; // Not disabled will state the Qvc.qvs filename	
+endif
+
+$(Include=$(vG.QVCDisable)); 
