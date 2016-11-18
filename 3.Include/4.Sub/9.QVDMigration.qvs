@@ -164,7 +164,6 @@ SET vL.QDF.FolderPath_tmp=;
 SET vL.QDF.FormatSpec=;
 end sub
 
-// **********************************
-// Application written by Magnus Berg
-// QlikView International AB
-// **********************************
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************

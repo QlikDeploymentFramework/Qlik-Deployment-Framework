@@ -24,7 +24,7 @@ end sub;
 
 
 // **********************************
-// FileExist written by Frederik Nünning and Magnus Berg
+// Function written by Frederik Nünning and Magnus Berg
 // QlikTech GmbH
 // QlikTech International AB
 // **********************************

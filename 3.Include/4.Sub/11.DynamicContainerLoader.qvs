@@ -137,3 +137,8 @@ SUB DCGV(vL.ContanerName_tmp,vL.SingleFolder_tmp,vL.ContainerMapPath_tmp); // Al
 	SET vL.ContainerPathName_tmp=;
 	SET vL.OverridePrefix_tmp=;
 end sub
+
+
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************

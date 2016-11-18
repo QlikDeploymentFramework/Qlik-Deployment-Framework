@@ -23,3 +23,7 @@ SET vL.QDF.IncludeSubFolders=;
 set vL.QDF.NoRecords=;
 
 end sub
+
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************

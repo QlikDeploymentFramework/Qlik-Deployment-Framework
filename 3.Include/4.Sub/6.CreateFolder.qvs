@@ -29,7 +29,6 @@ SET vL.FolderName_3= ;
 SET vL.FolderIndex_tmp= ;
 end sub
 
-// **********************************
-// Application written by Magnus Berg
-// QlikView International AB
-// **********************************
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************

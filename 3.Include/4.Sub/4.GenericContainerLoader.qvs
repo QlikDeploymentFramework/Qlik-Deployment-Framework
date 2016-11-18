@@ -149,3 +149,6 @@ SUB LCGV(vL.QDF.ContainerName_tmp,vL.QDF.SingleFolder_tmp); // Alias for LoadCon
 	SET vL.QDF.SingleFolder_tmp=;
 end sub
 
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************
