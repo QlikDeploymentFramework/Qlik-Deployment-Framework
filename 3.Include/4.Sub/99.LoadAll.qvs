@@ -23,10 +23,14 @@ $(Include=$(vG.SubPath)\12.Index.qvs);
 // Disable Qvc in the script (before QDF initiation) setting the vL.QVCDisable=true flag 
 
 if trim(lower('$(vG.QVCDisable)'))='true' then
-// This is used to disable/enable QlikView Components library (Qvc) avalible on GitHub
-	 set vG.QVCDisable='$(vG.SubPath)'; // Ndisabled will remove Qvc.qvs filename
+// This is used to disable/enable QlikView Components library (Qvc)
+	 set vG.QVCDisable='$(vG.SubPath)'; // vG.QVCDisable = true removes Qvc.qvs filename
 else
 	set vG.QVCDisable='$(vG.SubPath)Qvc.qvs'; // Not disabled will state the Qvc.qvs filename	
 endif
 
 $(Include=$(vG.QVCDisable)); 
+
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************

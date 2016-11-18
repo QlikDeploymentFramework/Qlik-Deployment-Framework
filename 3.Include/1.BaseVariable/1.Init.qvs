@@ -233,3 +233,7 @@ SET vL.QDF.BasePath=;
 // Writing information in log
 trace '### DF 1.Init.qvs Finished';
 
+// **********************************
+// 1.Init.qvs written by Magnus Berg
+// QlikTech International AB
+// **********************************

@@ -22,15 +22,15 @@ $(Include=$(vG.SubPath)\8.QVFileInfo.qvs);
 
 // Migrate data to other formats then qvd
 if trim(lower('$(vL.QDF.FormatSpec)'))='txt' or  trim(lower('$(vL.QDF.FormatSpec)'))='qvx' then
-let vL.QDF.FormatSpec=trim(lower('$(vL.QDF.FormatSpec)')); //Create format-spec that will be in the Store statement
+	let vL.QDF.FormatSpec=trim(lower('$(vL.QDF.FormatSpec)')); //Create format-spec that will be in the Store statement
 else
-let vL.QDF.FormatSpec='qvd';
+	let vL.QDF.FormatSpec='qvd';
 endif
 
 if '$(vL.QDF.Store_Select)'='' or vL.QDF.Store_Select=null then // If no specific fields selected use *
-SET vL.QDF.Store_Select = '*';
+	SET vL.QDF.Store_Select = '*';
 else 
-LET vL.QDF.Store_Select=Replace(Replace(','&'$(vL.QDF.Store_Select)'&',',' ,',','),', ',',');// Adding (,) to identify fields in loop, uses (,) as field separators and remove unwanted spaces
+	LET vL.QDF.Store_Select=Replace(Replace(','&'$(vL.QDF.Store_Select)'&',',' ,',','),', ',',');// Adding (,) to identify fields in loop, uses (,) as field separators and remove unwanted spaces
 end if
 
 LET vL.QDF.Scramble_fields=','&'$(vL.QDF.Scramble_fields)'&','; // Adding (,) to identify fields in loop, uses (,) as field separators

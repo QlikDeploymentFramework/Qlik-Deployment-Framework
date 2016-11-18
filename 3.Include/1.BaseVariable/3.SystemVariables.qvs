@@ -1,8 +1,8 @@
 ﻿//  ____________________________________________________________
-// |   Deployment Framework BaseVariable 3.SystemVariables.qvs |
-// |  This Include contains system folder path for event logs, |
-// |  Publisher database and custom data source logs           |
-// |___________________________________________________________|
+// |   Deployment Framework BaseVariable 3.SystemVariables.qvs 
+// |  This Include contains system folder path for QLikView event logs, 
+// |  QLikView Publisher database and custom data source logs           
+// |___________________________________________________________
 // Writing information in log
 trace '### DF 3.SystemVariables.qvs Started';
 
@@ -32,6 +32,6 @@ trace '### DF 3.SystemVariables.qvs Finished';
 
 
 // **********************************
-// Application written by Magnus Berg
-// QlikView International AB
+// 3.SystemVariables.qvs written by Magnus Berg
+// QlikTech International AB
 // **********************************

@@ -34,6 +34,7 @@ endif;
 FOR Each vL.QDF.filelist in filelist ('$(vL.QDF.QVFile)') //when scanning multiple (*) QV files 
 
 unqualify QVType,QVFormat,QVTablesKey,FullyQualifiedName,QVTableName,QVFileTime,QVTableNbrRows,QVTableNbrFields,QVTableNbrKeyFields,QVTableComment,QVFileName,QVFieldName,QVTableCreator,QVComment,QVTableCreator;
+
 switch upper(subfield('$(vL.QDF.filelist)','.',-1));
 case 'QVW'; // Case QVW files is identified
 Let vL.QDF.QVTimeStamp =DATE(FileTime( '$(vL.QDF.filelist)' ),'YYYY-MM-DD') ;
@@ -174,3 +175,7 @@ SET vL.QDF.filelist=;
 set vL.QDF.IncompatibleQVD=;
 
 END SUB
+
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************

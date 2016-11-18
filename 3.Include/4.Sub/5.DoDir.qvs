@@ -51,10 +51,6 @@ endif
 
 LET vL.DoDirRootTmp= '$(vL.DoDirRoot)';
 
-//call vL.FileExist ('$(vL.DoDirRoot)');
-//if vL.FileExist = 'true' then  // Execute only if vL.DoDirRoot contains a path
-
-
 if index(trim('$(vL.DoDirRootTmp)'),'\\',-1)>2 then // Remove double \\ in path, except in the beginning used in UNC path
 LET vL.DoDirRootTmp=left( '$(vL.DoDirRootTmp)' , (index( '$(vL.DoDirRootTmp)', '\\', -1 )-1))&right('$(vL.DoDirRootTmp)', (len( '$(vL.DoDirRootTmp)' ) -index( '$(vL.DoDirRootTmp)', '\\', -1 )));
 endif
@@ -62,10 +58,6 @@ endif
 if lower('$(vL._FoldersOnly)')='true' then // If folders only is used (vL._FoldersOnly) execute vL.DoDirTableName to add first folder
       call vL.DoDirTableName('$(vL.DoDirRootTmp)');
 endif
-
-//if right('$(vL.DoDirRootTmp)',1)='\' then // Trim vL.DoDirRoot of space and last \
-//	let vL.DoDirRootTmp=left(trim('$(vL.DoDirRootTmp)'), len('$(vL.DoDirRootTmp)')-1);
-//endif
 
 sub vL.DoDirTmp (vL.DoDirRootTmp) // DoDir main Sub
 if not lower('$(vL._FoldersOnly)')='true' then // If folders only is used (vL._Specific_File_Type) do not execute vL.DoDirTableName
@@ -106,18 +98,12 @@ Load [$(vL._QualifyFelds)DoDirFileName],
 count([$(vL._QualifyFelds)DoDirFileName]) as [$(vL._QualifyFelds)DoDirFileNameCount]
 Resident [$(vL.DoDirTableName)] 
 group by [$(vL._QualifyFelds)DoDirFileName]; 
-//Else
-//trace '### DF Warning unable to identify table $(vL.DoDirTableName), probably no files exist or wrong function settings used';
-//endif
-
-
-
 
 else
 	trace '### DF 5.DoDir.qvs Cant find File Path $(vL.DoDirRoot)';
 endif 
 
-// SET vL.DoDirTableName =;
+SET vL.DoDirTableName =;
 SET vL.DoDirFile=;
 SET vL.DoDirRootTmp=;
 SET vL.DirTmp=;
@@ -129,4 +115,6 @@ SET vL._QualifyFelds=;
 SET vL__Filename=;
 end sub
 
-
+// *************************************
+// Functions written by Magnus Berg Qlik
+// *************************************
