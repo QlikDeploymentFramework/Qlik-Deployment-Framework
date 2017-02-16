@@ -21,7 +21,7 @@ if not '$(vL.QDF.Subfolder)'='' then
 	endif
 		for each vL.QDF.DoDir in dirlist ('$(vL.QDF.BasePath)*') //Search for a valid container under Root				
 			if right('$(vL.QDF.DoDir)',len('$(vL.QDF.PhysicalFolderName)'))='$(vL.QDF.PhysicalFolderName)' then				
-				SET vG.$(vL.ContainerPathName)$(vL.QDF.Alias)Path='$(vL.QDF.DoDir)\'; // Set Global Variable using the vL.QDF.Alias default set to vL.QDF.VariablePrefix
+				SET vG.$(vL.QDF.Alias)$(vL.QDF.VariablePrefix)Path='$(vL.QDF.DoDir)\'; // Set Global Variable using the vL.QDF.Alias default set to vL.ContainerPathName
 			endif
 		exit for when right('$(vL.QDF.DoDir)',len('$(vL.QDF.PhysicalFolderName)'))='$(vL.QDF.PhysicalFolderName)'
 		next vL.QDF.DoDir
@@ -73,6 +73,10 @@ if vL.FileExist = 'false' then
     SET vG.$(vL.ContainerPathName)BasePath = ;
 else
 
+if '$(vL.QDF.Alias)'='' then // If manual added alias exists use VariablePrefix found in container map
+	let vL.QDF.Alias= '$(vL.ContainerPathName)';
+endif
+
 // Writing information in log
 trace '### DF Info, found $(vL.ContainerPathName) Container' ;
 	if not '$(vL.Comment)' = '' then
@@ -86,10 +90,6 @@ FOR vL.QDF.VariableLoop = 0 to NoOfRows('vL.ContainerStructure')-1;
 	let vL.QDF.PhysicalFolderName = Peek(FieldName(1,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
 	let vL.QDF.VariablePrefix = Peek(FieldName(2,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
 	let vL.QDF.Subfolder = Peek(FieldName(3,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
-
-if '$(vL.QDF.Alias)'='' then // If no aditional alias exists use VariablePrefix found in container map
-	let vL.QDF.Alias= '$(vL.QDF.VariablePrefix)';
-endif
 
 	// If vL.QDF.SingleFolder mode not used add all path
 	if '$(vL.QDF.SingleFolder)'='' then 
