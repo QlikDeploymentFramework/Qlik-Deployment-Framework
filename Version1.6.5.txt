@@ -6,6 +6,7 @@ Added documentation extracts change depending on selected container layout
 Added code to GitHub
 Added Negative Fiscal Year in CalendarGen.qvs
 Added support for Qlikview Components into 99.LoadAll.qvs
+Added Alias switch in LCGV, uses the added alias name instead of prefix in the generated global variables 
 Changed Sub Function library loaded from shared folders if exist
 
 

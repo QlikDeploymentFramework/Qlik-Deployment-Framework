@@ -11,13 +11,13 @@ SUB LoadContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.QDF
 
 sub vL.QDF.FindFolders;
 if not '$(vL.QDF.Subfolder)'='' then
-		for each vL.QDF.DoDir in dirlist ('$(vG.$(vL.ContainerPathName)BasePath)$(vL.PhysicalFolderName)*')
+		for each vL.QDF.DoDir in dirlist ('$(vG.$(vL.QDF.Alias)BasePath)$(vL.PhysicalFolderName)*')
 			if right('$(vL.QDF.DoDir)',len('$(vL.QDF.Subfolder)'))='$(vL.QDF.Subfolder)' then
 				LET vL.QDF.BasePath='$(vL.QDF.DoDir)\';
 			endif
 		next vL.QDF.DoDir
 	else
-		LET vL.QDF.BasePath='$(vG.$(vL.ContainerPathName)BasePath)$(vL.PhysicalFolderName)';	
+		LET vL.QDF.BasePath='$(vG.$(vL.QDF.Alias)BasePath)$(vL.PhysicalFolderName)';	
 	endif
 		for each vL.QDF.DoDir in dirlist ('$(vL.QDF.BasePath)*') //Search for a valid container under Root				
 			if right('$(vL.QDF.DoDir)',len('$(vL.QDF.PhysicalFolderName)'))='$(vL.QDF.PhysicalFolderName)' then				
@@ -54,31 +54,30 @@ if '$(vL.ContainerPathName)' = '' and FileSize('$(vG.SharedBaseVariablePath)\Con
 	let vL.QDF.ContainerMapPath = '$(vG.SharedBaseVariablePath)\ContainerMap.csv';
 	call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContainerName)');
 endif 
-	if not '$(vL.ContainerPathName)' = '' then 
-		// Base Search Path $(vG.BasePath) for this container
-		SET vG.$(vL.ContainerPathName)BasePath = '$(vL.RootPath)$(vL.ContainerFolderName)\';
-	endif
 
 endif
 
 if not '$(vL.ContainerPathName)' = '' then
 
+if '$(vL.QDF.Alias)'='' then // If manual added alias exists use VariablePrefix found in container map
+	let vL.QDF.Alias= '$(vL.ContainerPathName)'; // this Alias replaces the prefix as global variable name
+	trace '### DF Info, Alias: $(vL.QDF.Alias) found, will replace: $(vL.ContainerPathName) prefix name' ;
+endif
+
+// Base Search Path $(vG.BasePath) for this container
+SET vG.$(vL.QDF.Alias)BasePath = '$(vL.RootPath)$(vL.ContainerFolderName)\';
+
 // Validates the connected folder path
 // call function to check if the folder exists
 $(Include=$(vG.SubPath)\1.FileExist.qvs);
-call vL.FileExist ('$(vG.$(vL.ContainerPathName)BasePath)*');
+call vL.FileExist ('$(vG.$(vL.QDF.Alias)BasePath)*');
 	// If file exists continue
 if vL.FileExist = 'false' then
-	trace '### DF Error, vG.$(vL.ContainerPathName)BasePath missing';
-    SET vG.$(vL.ContainerPathName)BasePath = ;
+	trace '### DF Error, vG.$(vL.QDF.Alias)BasePath missing';
+    SET vG.$(vL.QDF.Alias)BasePath = ;
 else
-
-if '$(vL.QDF.Alias)'='' then // If manual added alias exists use VariablePrefix found in container map
-	let vL.QDF.Alias= '$(vL.ContainerPathName)';
-endif
-
-// Writing information in log
-trace '### DF Info, found $(vL.ContainerPathName) Container' ;
+	// Writing information in log
+	trace '### DF Info, found $(vL.ContainerPathName) container, mounting as vG.$(vL.QDF.Alias)BasePath' ;
 	if not '$(vL.Comment)' = '' then
 		trace '### DF Info $(vL.Comment)'; 
 	endif
@@ -108,13 +107,13 @@ Next vL.QDF.VariableLoop
 // Dropping ContainerStructure table when Base Global Variables are read into QlikView
 drop table vL.ContainerStructure ;
 
-// If vL.QDF.SingleFolder mode is used remove vG.$(vL.ContainerPathName)BasePath (if not BasePath exlicitly been selected)
+// If vL.QDF.SingleFolder mode is used remove vG.$(vL.QDF.Alias)BasePath (if not BasePath exlicitly been selected)
 	if not '$(vL.QDF.SingleFolder)'='' and not trim('$(vL.QDF.SingleFolder)') = 'BasePath' then
-		SET vG.$(vL.ContainerPathName)BasePath = ;	
+		SET vG.$(vL.QDF.Alias)BasePath = ;	
 	endif
 
 // Writing information in log
-trace '### DF $(vL.ContainerPathName) Finished';
+trace '### DF $(vL.QDF.Alias) Finished';
 	
 else
 	trace '### DF Could not find $(vL.QDF.ContainerName) container in Container Map';
