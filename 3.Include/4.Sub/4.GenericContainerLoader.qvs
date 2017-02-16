@@ -7,7 +7,7 @@
 // This script should only be accessed from QlikView via the LoadContainerGlobalVariables function
 // SUB LoadContainerGlobalVariables (‘Container Path Name’,['Optional Single Folder']);
 // Example: call LoadContainerGlobalVariables('1.AcmeStore');
-SUB LoadContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder);
+SUB LoadContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.QDF.Alias);
 
 sub vL.QDF.FindFolders;
 if not '$(vL.QDF.Subfolder)'='' then
@@ -21,7 +21,7 @@ if not '$(vL.QDF.Subfolder)'='' then
 	endif
 		for each vL.QDF.DoDir in dirlist ('$(vL.QDF.BasePath)*') //Search for a valid container under Root				
 			if right('$(vL.QDF.DoDir)',len('$(vL.QDF.PhysicalFolderName)'))='$(vL.QDF.PhysicalFolderName)' then				
-				SET vG.$(vL.ContainerPathName)$(vL.QDF.VariablePrefix)Path='$(vL.QDF.DoDir)\'; // Set Global Variable
+				SET vG.$(vL.ContainerPathName)$(vL.QDF.Alias)Path='$(vL.QDF.DoDir)\'; // Set Global Variable using the vL.QDF.Alias default set to vL.QDF.VariablePrefix
 			endif
 		exit for when right('$(vL.QDF.DoDir)',len('$(vL.QDF.PhysicalFolderName)'))='$(vL.QDF.PhysicalFolderName)'
 		next vL.QDF.DoDir
@@ -86,12 +86,14 @@ FOR vL.QDF.VariableLoop = 0 to NoOfRows('vL.ContainerStructure')-1;
 	let vL.QDF.PhysicalFolderName = Peek(FieldName(1,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
 	let vL.QDF.VariablePrefix = Peek(FieldName(2,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
 	let vL.QDF.Subfolder = Peek(FieldName(3,'vL.ContainerStructure'),$(vL.QDF.VariableLoop), vL.ContainerStructure);
-	
+
+if '$(vL.QDF.Alias)'='' then // If no aditional alias exists use VariablePrefix found in container map
+	let vL.QDF.Alias= '$(vL.QDF.VariablePrefix)';
+endif
+
 	// If vL.QDF.SingleFolder mode not used add all path
 	if '$(vL.QDF.SingleFolder)'='' then 
 		call vL.QDF.FindFolders ;
-	// If vL.QDF.SingleFolder mode is used add specified path, also check if folder exists 	
-	// if not IsNull(Filesize('$(vG.$(vL.ContainerPathName)BasePath)$(vL.QDF.PhysicalFolderName)')) = -1 then
 	else
 		LET vL.QDF.SubStringSplitt=';'&'$(vL.QDF.SingleFolder)'&';'; // Creating a variable used for easy substring splitt
 		for vL.QDF.SubString=1 to substringcount ('$(vL.QDF.SubStringSplitt)',';') -1 // loop as many times there are folders defined (separated by ;)
@@ -141,12 +143,14 @@ SET vL.Comment =;
 SET vL.QDF.SingleFolder=;
 SET vL.QDF.SubStringSplitt=;
 SET vL.QDF.SubString=;
+SET vL.QDF.Alias=;
 end sub
 
-SUB LCGV(vL.QDF.ContainerName_tmp,vL.QDF.SingleFolder_tmp); // Alias for LoadContainerGlobalVariables
-	call LoadContainerGlobalVariables('$(vL.QDF.ContainerName_tmp)','$(vL.QDF.SingleFolder_tmp)');
+SUB LCGV(vL.QDF.ContainerName_tmp,vL.QDF.SingleFolder_tmp,vL.QDF.Alias_tmp); // Alias for LoadContainerGlobalVariables
+	call LoadContainerGlobalVariables('$(vL.QDF.ContainerName_tmp)','$(vL.QDF.SingleFolder_tmp)','$(vL.QDF.Alias_tmp)');
 	SET vL.QDF.ContainerName_tmp=;
 	SET vL.QDF.SingleFolder_tmp=;
+	SET vL.QDF.Alias_tmp=;
 end sub
 
 // *************************************

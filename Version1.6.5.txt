@@ -1,10 +1,13 @@
 Whats new in release 1.6.5?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
-New container layout only for Qlik Sense Only, including extract transform load folders
-New container layout only for slimmed Down containers (fewer folders), including extract transform load folders 
+New container layout, Qlik Sense Only, including extract transform load folders
+New container layout, slimmed Down containers, including extract, transform load folders
+Added documentation extracts change depending on selected container layout
 Added code to GitHub
-Minor Negative Fiscal Year fix in CalendarGen.qvs
+Added Negative Fiscal Year in CalendarGen.qvs
 Added support for Qlikview Components into 99.LoadAll.qvs
+Changed Sub Function library loaded from shared folders if exist
+
 
 Whats new in release 1.6.0?
 New installer that can add additional containers in an active container structure (good for Qlik Sense)
