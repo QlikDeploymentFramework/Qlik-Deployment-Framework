@@ -4,7 +4,7 @@
 // |  All global path are based on vG.BasePath that is identified first                        
 // |___________________________________________________________
 // Writing information in QlikView application log
-trace '### DF 1.Init.qvs Started';
+trace '### QDF Info, Initiation Started';
 
 // To link Shared_Folders directly into 1.init.qvs set vL.QDF.LinkShared_Folders = 'Shared' (link name)
 // Leave vL.QDF.LinkShared_Folders blank to skip linking to shared folders
@@ -50,48 +50,51 @@ end sub;
 // Cleanup, Removing old Path Value
 SET vG.TemplatePath =;
 
-if '$(vL.QDF.BaseVariablePath)' = '' then // if initiation done via Initlink skip this step
 
+if '$(vL.QDF.BaseVariablePath)' = '' then // if initiation done via Initlink skip this step
+LET vL.QDF.RootPath_tmp='$(vG.RootPath)'; // vL.QDF.RootPath_tmp is used to identify global variable cache
+LET vL.QDF.BasePath_tmp='$(vG.BasePath)'; // vL.QDF.BasePath_tmp is used to identify global variable cache
 SET vG.RootPath=;
+SET vG.BasePath=;
 
 //***************** Initiation for Qlik Sense and QlikView **********************************
 // Qlik Sense additions Validating if LIB root exists if yes then add this as vG.RootPath
 // Validate Separate LIB mounts
 if not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then	
 	LET vG.BasePath= 'lib://$(vG.HomeContainer)/';	
-	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 elseif not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then
 	LET vG.BasePath= '$(vG.HomeContainer)/';
-	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 elseif not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://Home/';
-	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 elseif not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://home/';
-	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 else // Validate single LIB mount
 	if not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
 		LET vG.RootPath= 'lib://$(vG.RootContainer)/';
-		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		trace '### QDF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 		SET vG.RootContainer = ;
 	elseif not IsNull(filesize('lib://Root/*')) = -1 then 
 		LET vG.RootPath= 'lib://Root/';
-		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		trace '### QDF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 	elseif not IsNull(filesize('lib://root/*')) = -1 then
 		LET vG.RootPath= 'lib://root/';
-		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		trace '### QDF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 	endif
 
 	// Validate fixed root url	
 	if not '$(vG.HomeContainer)'='' and not IsNull(filesize('$(vG.RootPath)$(vG.HomeContainer)\Initlink.qvs')) = -1 then
 		LET vG.BasePath= '$(vG.RootPath)$(vG.HomeContainer)\';
-		trace '### DF Info, identified Sense home container  $(vG.BasePath)';
+		trace '### QDF Info, identified Sense home container  $(vG.BasePath)';
 	
 	elseif not '$(vG.RootPath)' ='' then //Search for a valid container under Root
 		for each vL.QDF.DoDir in dirlist ('$(vG.RootPath)*') 
 		if filesize('$(vL.QDF.DoDir)\Initlink.qvs') > 1 then
 			LET vG.BasePath= '$(vL.QDF.DoDir)\';
-			trace '### DF Info, identified Sense home container $(vG.BasePath)';
+			trace '### QDF Info, identified Sense home container $(vG.BasePath)';
 		endif
 		exit for when not '$(vG.BasePath)'='';	
 		next vL.QDF.DoDir
@@ -117,6 +120,7 @@ endif
 SET vG.HomeContainer = ;
 SET vG.RootContainer = ;
 //***************** Initiation for Qlik Sense and QlikView done **********************************
+endif
 
 // Check if vG.BasePath variable exists, else exit the script
 If '$(vG.BasePath)'= '' then
@@ -124,10 +128,8 @@ If '$(vG.BasePath)'= '' then
 		trace '### DF Warning, if using Qlik Sense add SET vG.HomeContainer=container name before InitLink.qvs';
 		LET vG.BasePath=;
 		exit script;
-endif
+elseif not '$(vL.QDF.BasePath_tmp)'='$(vG.BasePath)' then //Validate if BasePath is same as last itteration, if true will use cache
 
-
-endif
 
 
 // Open vL.ContainerStructure include table
@@ -165,7 +167,6 @@ SET vL.QDF.DoDir=;
 // Dropping vL.ContainerStructure table when the Base Global Variables are read into QlikView
 drop table vL.ContainerStructure ;
 
-
 // Special check, Qlik Sense is using LIB's and do not need a root folder
 if '$(vG.RootPath)'='' and not lower(left(trim('$(vG.BasePath)'),6))='lib://' then
 	$(Include=$(vG.SubPath)\3.LoadContainerMap.qvs);
@@ -173,17 +174,22 @@ if '$(vG.RootPath)'='' and not lower(left(trim('$(vG.BasePath)'),6))='lib://' th
 	call LoadContainerMap('$(vG.BaseVariablePath)\ContainerMap.csv','','$(vG.BasePath)');
 endif
 
-// Load Include for LoadContainerGlobalVariables function
-// This function is to be used inside the Qlik scripts to link between containers 
+else
+	trace '### QDF Info, global variable initiation using cache';
+	LET vG.RootPath='$(vL.QDF.RootPath_tmp)'; // Set RootPath to cache value 
+endif
+
 
 // Shared_Folders Initiation
 if not trim('$(vL.QDF.LinkShared_Folders)') = '' then
 	$(Include=$(vG.SubPath)\4.GenericContainerLoader.qvs);
+	// Load Include for LoadContainerGlobalVariables function
+	// This function is to be used inside the Qlik scripts to link between containers 
 	CALL LoadContainerGlobalVariables('$(vL.QDF.LinkShared_Folders)');
 
 	if IsNull(filesize('$(vG.$(vL.QDF.LinkShared_Folders)BasePath)\Initlink.qvs'))=-1 then 
 		set vL.QDF.LinkShared_Folders =; // If no shared container found remove link
-		trace '### DF Info, Shared container is missing';
+		trace '### QDF Info, Shared container is missing';
 	endif 
 endif;
 
@@ -228,10 +234,12 @@ SET vL.QDF.IncludeFolder=;
 SET vL.QDF.BaseVariableFolder=;
 SET vL.QDF.Subfolder=;
 SET vL.QDF.BasePath=;
+SET vL.QDF.BasePath_tmp=;
+SET vL.QDF.RootPath_tmp=;
 
 
 // Writing information in log
-trace '### DF 1.Init.qvs Finished';
+trace '### QDF Info, 1.Init.qvs Finished';
 
 // **********************************
 // 1.Init.qvs written by Magnus Berg

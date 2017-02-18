@@ -4,7 +4,7 @@
    | InitLink is used as "sling shot" to 1.Init.qvs for QlikView and Qlik Sense               
    |____________________________________________________________________________________
    Writing information in log */
-trace '### DF InitLink Started, trying to link to 1.Init.qvs script';
+trace '### QDF Info, InitLink trying to link to initiation script';
 
 // Run Container initiation
 
@@ -12,12 +12,15 @@ trace '### DF InitLink Started, trying to link to 1.Init.qvs script';
 LET vL.QDF.IncludeFolder='Include';
 
 // Modify setting if the default .BaseVariable folder is changed, usually leve as is
-LET vL.QDF.BaseVariableFolder='BaseVariable';
+SET vL.QDF.BaseVariableFolder='BaseVariable';
+
+LET vL.QDF.RootPath_tmp='$(vG.RootPath)'; // vL.QDF.RootPath_tmp is used to identify global variable cache
+LET vL.QDF.BasePath_tmp='$(vG.BasePath)'; // vL.QDF.BasePath_tmp is used to identify global variable cache
 
 // Cleanup, Removing old values
-LET vG.BasePath=;
-LET vL.QDF.BaseVariablePath=;
-LET vG.RootPath=;
+SET vG.BasePath=;
+SET vL.QDF.BaseVariablePath=;
+SET vG.RootPath=;
 
 //***************** Initiation for Qlik Sense and QlikView **********************************
 // Qlik Sense additions Validating if LIB root exists if yes then add this as vG.RootPath
@@ -79,17 +82,16 @@ else // Validate single LIB mount
 	endif
 endif
 
-SET vG.HomeContainer = ;
-SET vG.RootContainer = ;
-//***************** Initiation for Qlik Sense and QlikView done **********************************
-
-
 if '$(vG.BasePath)'= '' then // validate initiation
-		trace '### DF Warning, could not identify any valid container path, will exit';
-		trace '### DF Warning, if using Qlik Sense add SET vG.HomeContainer=container name before InitLink.qvs';
+		trace '### QDF Warning, could not identify any valid container path, will exit';
+		trace '### QDF Warning, if using Qlik Sense add SET vG.HomeContainer=container name before InitLink.qvs';
 		LET vG.BasePath=;		
 		exit script;
 endif
+
+SET vG.HomeContainer = ;
+SET vG.RootContainer = ;
+//***************** Initiation for Qlik Sense and QlikView done **********************************
 
 	//Identify BaseVariablePath location during initiation
 	for each vL.QDF.DoDir in dirlist ('$(vG.BasePath)*') //Search for a valid container under Root
