@@ -102,7 +102,7 @@ LOAD
       QvdNoOfFields('$(vL.QDF.filelist)')  as QVTableNbrFields,
     null()  as QVTableNbrKeyFields, // not used by QVD
     null()  as QVTableComment, // not used, QVD incompatibility
-    subfield('$(vL.QDF.filelist)','\',-1) as QVFileName,
+    subfield(replace('$(vL.QDF.filelist)','/','\'),'\',-1) as QVFileName,
     null()  as QVTableCreator // not used, QVD incompatibility
     AUTOGENERATE(1);
 
@@ -126,7 +126,7 @@ LOAD
       QvdNoOfFields('$(vL.QDF.filelist)')  as QVTableNbrFields,
     null()  as QVTableNbrKeyFields, // not used by QVD
     [Comment] as QVTableComment,
-    subfield('$(vL.QDF.filelist)','\',-1) as QVFileName,
+    subfield(replace('$(vL.QDF.filelist)','/','\'),'\',-1) as QVFileName,
     [CreatorDoc] as QVTableCreator
     FROM [$(vL.QDF.filelist)] (XmlSimple, Table is [QvdTableHeader]);	
 

@@ -45,7 +45,7 @@ if vL.FileExist = 'true' then // Only run Index if QVD exist
 
 if not '$(vL.QDF.AltIndexPath)' = '' then // set alternative Index path
   call vL.FileExist ('$(vL.QDF.AltIndexPath)');
-  if '$(vL.FileExist)'='true'
+  if '$(vL.FileExist)'='true' then
     Let vL.QDF.SharedConfigPath= '$(vL.QDF.AltIndexPath)';
     //--- Create Index base folder ---- 
   endif
@@ -71,6 +71,7 @@ let vL.QDF.QVTableName =  peek('QVTableName',0,'__TMP_Fields');
 Let vL.QDF.QVTableCreator = peek('QVTableCreator',0,'__TMP_Fields'); // Get QVTableCreator
 let vL.QDF.QVNoRows =  peek('QVTableNbrRows',0,'__TMP_Fields');
 let vL.QDF.QVNofields =  peek('QVTableNbrFields',0,'__TMP_Fields');
+let vL.QDF.QVDFileName =  peek('QVFileName',0,'__TMP_Fields');
 
 
 for vL.QDF.LoopFrom = 0 to vL.QDF.LoopTo
@@ -93,7 +94,7 @@ If '$(vL.QDF.ContainerPathName)' = '' then // If ContainerName blank identify co
   call LoadContainerMap('$(vG.BaseVariablePath)\ContainerMap.csv','','$(vL.QDF.IndexQVD)');    // Call LoadContainerMap function to get current container prefix Name (vL.ContainerPathName)
 endif
 
-let vL.QDF.FolderName=replace('$(vL.RelativePath)','\','_'); //Replace backslash (\) with underscore (_)
+let vL.QDF.FolderName=replace(replace('$(vL.RelativePath)','/','\'),'\','_'); //Replace backslash (\) with underscore (_)
 
 //--- Create Index folders or filenames if using Qlik Sense---- 
 if '$(vL.QDF.IndexFolderName)' = '' then  //If no customized Index folder name is used
@@ -121,7 +122,7 @@ store * from [___vL.tmpTable] into '$(vL.QDF.ConfigPath)' (txt,delimiter is ';' 
 drop table [___vL.tmpTable];
 
 else 
-trace '### DF Info IndexAdd Cant find any data in $(vL.QDF.IndexQVD)';
+trace '### QDF Info, IndexAdd Cant find any data in $(vL.QDF.IndexQVD)';
 endif
 
 endif
@@ -370,7 +371,7 @@ if not '$(vL.QDF.LoadSwich)' = '' then // Validate if load is possible
     [$(vL.QDF.LoadPath)] (qvd);
 
     let vL.QDF.QVDNbrRecordsTotal=$(vL.QDF.QVDNbrRecordsTotal)+$(vL.QDF.QVDNbrRecords);
-    Trace '### DF Info loading: $(vL.QDF.QVTableName), Total amount of records: $(vL.QDF.QVDNbrRecordsTotal)';
+    Trace '### QDF Info, loading: $(vL.QDF.QVTableName), Total amount of records: $(vL.QDF.QVDNbrRecordsTotal)';
 
     // Run LoadVariableCSV to check if corresponding expression tags are avalible
     if lower('$(vL.QDF.LoadExp)')='true' and not '$(vL.QDF.TAG)' ='' then 
@@ -380,7 +381,7 @@ if not '$(vL.QDF.LoadSwich)' = '' then // Validate if load is possible
     endif
 
   else
-    Trace '### DF Info, did not load: $(vL.QDF.QVDFileName) $(vL.QDF.Reason)';
+    Trace '### QDF Info, did not load: $(vL.QDF.QVDFileName) $(vL.QDF.Reason)';
   endif
   
   
@@ -398,7 +399,7 @@ endif
 
 else
 
-Trace '### DF Warning Could load Index table, probably no index exists';
+Trace '### QDF Warning, Could load Index table, probably no index exists';
 endif
 
 // Cleanup
@@ -516,10 +517,10 @@ LET vL.QDF.QVDIndexStorageName = peek('QVDIndexStorageName',$(vL.QDF.LoopFromDoD
 
 //----------------------- Delete Index --------------------------------
     if FileSize('$(vL.QDF.SharedConfigPath)\$(vL.QDF.QVDIndexStorageName)$(vL.QDF.QVDFileName).Index') >0 then
-      Trace '### DF Info, delete Index $(vL.QDF.SharedConfigPath)\$(vL.QDF.QVDIndexStorageName)$(vL.QDF.QVDFileName).Index';
+      Trace '### QDF Info, delete Index $(vL.QDF.SharedConfigPath)\$(vL.QDF.QVDIndexStorageName)$(vL.QDF.QVDFileName).Index';
       execute cmd.exe /Q /C pushd ^"$(vL.QDF.SharedConfigPath)\^" & Del ^"$(vL.QDF.QVDIndexStorageName)$(vL.QDF.QVDFileName).Index^" & popd;
     else 
-      Trace '### DF Warning Could not find $(vL.QDF.SharedConfigPath)\$(vL.QDF.QVDIndexStorageName)$(vL.QDF.QVDFileName).Index';
+      Trace '### QDF Warning, Could not find $(vL.QDF.SharedConfigPath)\$(vL.QDF.QVDIndexStorageName)$(vL.QDF.QVDFileName).Index';
     endif
 
     //----------------------- Delete QVD --------------------------------
@@ -533,12 +534,12 @@ LET vL.QDF.QVDIndexStorageName = peek('QVDIndexStorageName',$(vL.QDF.LoopFromDoD
    
       if filesize('$(vG.$(vL.QDF.QVDContainer)BasePath)$(vL.QDF.QVDRelativePath)') > 0 then // validating path      
         execute cmd.exe /Q /C pushd ^"$(vG.$(vL.QDF.QVDContainer)BasePath)^" & Del ^"$(vL.QDF.QVDRelativePath)^" & popd;
-        Trace '### DF Info, delete QVD $(vG.$(vL.QDF.QVDContainer)BasePath)\$(vL.QDF.QVDRelativePath)';
+        Trace '### QDF Info, delete QVD $(vG.$(vL.QDF.QVDContainer)BasePath)\$(vL.QDF.QVDRelativePath)';
       elseif filesize('$(vL.QDF.QVDSourcePath)\$(vL.QDF.QVDFileName)') > 0 then    
         execute cmd.exe /Q /C pushd ^"$(vL.QDF.QVDSourcePath)^" & Del ^"$(vL.QDF.QVDFileName)^" & popd;
-        Trace '### DF Info, delete QVD $(vL.QDF.QVDSourcePath)\$(vL.QDF.QVDFileName)';
+        Trace '### QDF Info, delete QVD $(vL.QDF.QVDSourcePath)\$(vL.QDF.QVDFileName)';
       else    
-          Trace '### DF Warning Could not find $(vL.QDF.QVDSourcePath)\$(vL.QDF.QVDFileName)';
+          Trace '### QDF Warning, Could not find $(vL.QDF.QVDSourcePath)\$(vL.QDF.QVDFileName)';
       endif
 
     endif
@@ -547,7 +548,7 @@ LET vL.QDF.QVDIndexStorageName = peek('QVDIndexStorageName',$(vL.QDF.LoopFromDoD
 next
 
 else
-trace '### DF Info, Found no index to delete';
+trace '### QDF Info, Found no index to delete';
 endif
 
 

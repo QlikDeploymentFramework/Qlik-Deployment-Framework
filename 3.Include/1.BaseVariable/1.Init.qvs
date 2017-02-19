@@ -54,6 +54,8 @@ SET vG.TemplatePath =;
 if '$(vL.QDF.BaseVariablePath)' = '' then // if initiation done via Initlink skip this step
 LET vL.QDF.RootPath_tmp='$(vG.RootPath)'; // vL.QDF.RootPath_tmp is used to identify global variable cache
 LET vL.QDF.BasePath_tmp='$(vG.BasePath)'; // vL.QDF.BasePath_tmp is used to identify global variable cache
+LET vL.QDF.SharedPath_tmp='$(vG.$(vL.QDF.LinkShared_Folders)BasePath)'; // vL.QDF.SharedBasePath_tmp is used to identify global variable cache
+
 SET vG.RootPath=;
 SET vG.BasePath=;
 
@@ -236,7 +238,7 @@ SET vL.QDF.Subfolder=;
 SET vL.QDF.BasePath=;
 SET vL.QDF.BasePath_tmp=;
 SET vL.QDF.RootPath_tmp=;
-
+SET vL.QDF.SharedPath_tmp=;
 
 // Writing information in log
 trace '### QDF Info, 1.Init.qvs Finished';

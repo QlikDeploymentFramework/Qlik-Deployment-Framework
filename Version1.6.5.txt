@@ -8,6 +8,7 @@ Added Negative Fiscal Year in CalendarGen.qvs
 Added support for Qlikview Components into 99.LoadAll.qvs
 Added Alias switch in LCGV, uses the added alias name instead of prefix in the generated global variables 
 Changed Sub Function library loaded from shared folders if exist
+Updates due to Qlik Sense file format changes (returnes / instead of \)
 
 
 Whats new in release 1.6.0?

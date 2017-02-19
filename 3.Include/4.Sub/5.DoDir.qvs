@@ -31,8 +31,8 @@ sub vL.DoDirTableName(vL.DoDirFile); //DoDir table generate sub
  	Load '$(vL.DoDirFile)' as '$(vL._QualifyFelds)FullyQualifiedName', 
 	FileSize( '$(vL.DoDirFile)' ) as '$(vL._QualifyFelds)DoDirFileSize',
 	timestamp(FileTime( '$(vL.DoDirFile)' ),'$(TimestampFormat)') as '$(vL._QualifyFelds)DoDirFileTime',
-	subfield('$(vL.DoDirFile)','\',-1) as '$(vL._QualifyFelds)DoDirFileName',
-	replace(subfield('$(vL.DoDirFile)','$(vL.DoDirRoot)',-1),'\\','\') as '$(vL._QualifyFelds)DoDirContainerPath',
+	subfield(replace('$(vL.DoDirFile)','/','\'),'\',-1) as '$(vL._QualifyFelds)DoDirFileName',
+	replace(subfield(replace('$(vL.DoDirFile),'/','\'),'$(vL.DoDirRoot)',-1),'\\','\') as '$(vL._QualifyFelds)DoDirContainerPath',
 	if( lower('$(vL._FoldersOnly)')='true', '' , upper(subfield('$(vL.DoDirFile)','.',-1))) as '$(vL._QualifyFelds)DoDirFileExtension'
 	autogenerate 1;
 end sub
