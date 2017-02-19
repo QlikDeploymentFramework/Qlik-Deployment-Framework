@@ -54,7 +54,6 @@ SET vG.TemplatePath =;
 if '$(vL.QDF.BaseVariablePath)' = '' then // if initiation done via Initlink skip this step
 LET vL.QDF.RootPath_tmp='$(vG.RootPath)'; // vL.QDF.RootPath_tmp is used to identify global variable cache
 LET vL.QDF.BasePath_tmp='$(vG.BasePath)'; // vL.QDF.BasePath_tmp is used to identify global variable cache
-LET vL.QDF.SharedPath_tmp='$(vG.$(vL.QDF.LinkShared_Folders)BasePath)'; // vL.QDF.SharedBasePath_tmp is used to identify global variable cache
 
 SET vG.RootPath=;
 SET vG.BasePath=;
@@ -177,17 +176,19 @@ if '$(vG.RootPath)'='' and not lower(left(trim('$(vG.BasePath)'),6))='lib://' th
 endif
 
 else
-	trace '### QDF Info, global variable initiation using cache';
+	trace '### QDF Info, Global Variables using cache';
 	LET vG.RootPath='$(vL.QDF.RootPath_tmp)'; // Set RootPath to cache value 
 endif
 
 
 // Shared_Folders Initiation
-if not trim('$(vL.QDF.LinkShared_Folders)') = '' then
+if not IsNull(filesize('$(vG.$(vL.QDF.LinkShared_Folders)BasePath)\Initlink.qvs'))=-1 then
+	trace '### QDF Info, $(vL.QDF.LinkShared_Folders) Global Variables using cache';
+elseif not trim('$(vL.QDF.LinkShared_Folders)') = '' then
 	$(Include=$(vG.SubPath)\4.GenericContainerLoader.qvs);
-	// Load Include for LoadContainerGlobalVariables function
+	// Load Include for LCGV function
 	// This function is to be used inside the Qlik scripts to link between containers 
-	CALL LoadContainerGlobalVariables('$(vL.QDF.LinkShared_Folders)');
+	CALL LCGV('$(vL.QDF.LinkShared_Folders)');
 
 	if IsNull(filesize('$(vG.$(vL.QDF.LinkShared_Folders)BasePath)\Initlink.qvs'))=-1 then 
 		set vL.QDF.LinkShared_Folders =; // If no shared container found remove link
