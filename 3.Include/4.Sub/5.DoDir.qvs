@@ -32,9 +32,9 @@ sub vL.DoDirTableName(vL.DoDirFile); //DoDir table generate sub
 	FileSize( '$(vL.DoDirFile)' ) as '$(vL._QualifyFelds)DoDirFileSize',
 	timestamp(FileTime( '$(vL.DoDirFile)' ),'$(TimestampFormat)') as '$(vL._QualifyFelds)DoDirFileTime',
 	subfield(replace('$(vL.DoDirFile)','/','\'),'\',-1) as '$(vL._QualifyFelds)DoDirFileName',
-	replace(subfield(replace('$(vL.DoDirFile),'/','\'),'$(vL.DoDirRoot)',-1),'\\','\') as '$(vL._QualifyFelds)DoDirContainerPath',
+	replace(subfield(replace('$(vL.DoDirFile)','/','\'),'$(vL.DoDirRoot)',-1),'\\','\') as '$(vL._QualifyFelds)DoDirContainerPath',
 	if( lower('$(vL._FoldersOnly)')='true', '' , upper(subfield('$(vL.DoDirFile)','.',-1))) as '$(vL._QualifyFelds)DoDirFileExtension'
-	autogenerate 1;
+autogenerate 1;
 end sub
 
 // Check if a specific File Extension is used, separate out extension and filename Also special for Qlik Sense lib folders
