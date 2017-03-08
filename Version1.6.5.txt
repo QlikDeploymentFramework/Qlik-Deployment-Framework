@@ -10,6 +10,7 @@ Added Alias switch in LCGV, uses the added alias name instead of prefix in the g
 Changed Sub Function library loaded from shared folders if exist
 Minor updates due to Qlik Sense file format changes (returnes / instead of \)
 Added Global Variabe cache during initiation, to speed up init
+Added support for Qlik Sense in CreateFolder() function
 
 Whats new in release 1.6.0?
 New installer that can add additional containers in an active container structure (good for Qlik Sense)
