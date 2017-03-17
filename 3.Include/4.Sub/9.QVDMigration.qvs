@@ -1,4 +1,3 @@
-
 /* ___________________________________________________________________________
   |   Deployment Framework QVDMigration sub function 9.QVDMigration.qvs 
   |
@@ -82,7 +81,7 @@ LET vL.QDF.TempField_new = ','&'$(vL.QDF.TempField)'&','; // used to identify fi
 
 	switch '$(vL.QDF.TempField_new)' //Change scramble field based on vL.SubString
 	case mid('$(vL.QDF.Scramble_fields)', index('$(vL.QDF.Scramble_fields)' , '$(vL.QDF.TempField_new)'), len('$(vL.QDF.TempField_new)'));
-		LET vL.QDF.Store_Select_new='$(vL.QDF.Store_Select_new)' & ' If(IsNum([$(vL.QDF.TempField)]),autonumberhash128([$(vL.QDF.TempField)]), Left(hash128(['&'$(vL.QDF.TempField)'&'],$(vL.NoOfRows_Loop_tmp)),Len($(vL.QDF.TempField)))) as ['&'$(vL.QDF.TempField)], '; // concat query, FPN
+		LET vL.QDF.Store_Select_new='$(vL.QDF.Store_Select_new)' & ' If(IsNum([$(vL.QDF.TempField)]),Left(autonumberhash128([$(vL.QDF.TempField)])*Len($(vL.QDF.TempField))*ceil(rand()*10,2),Len($(vL.QDF.TempField))), Left(hash128(['&'$(vL.QDF.TempField)'&'],$(vL.NoOfRows_Loop_tmp)),Len($(vL.QDF.TempField)))) as ['&'$(vL.QDF.TempField)], '; // concat query, FPN
 
 	case mid('$(vL.QDF.Store_Select)', index('$(vL.QDF.Store_Select)' , '$(vL.QDF.TempField_new)'), len('$(vL.QDF.TempField_new)'));
 		LET vL.QDF.Store_Select_new='$(vL.QDF.Store_Select_new)' & '[$(vL.QDF.TempField)],';  // Concatenated statement

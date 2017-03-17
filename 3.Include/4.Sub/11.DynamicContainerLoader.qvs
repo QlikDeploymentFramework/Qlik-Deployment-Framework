@@ -1,4 +1,4 @@
-/* __________________________________________________________________________
+  /* __________________________________________________________________________
  | Deployment Framework BaseVariable 11.DynamicContainerGlobalVariables.qvs  |
  |  All path are based on vG.BasePath                        				 |
  |  This script is used to dynamic connect to container folders     		 |
@@ -45,7 +45,7 @@ endif;
 
 if not '$(vL.ContainerFolderName)'='' then // Execute only if container found
 
-if not '$(vL.OverridePrefix)'='' then // If OverridePrefix switsh is used set the prefix
+if not '$(vL.OverridePrefix)'='' then // If OverridePrefix swish is used set the prefix
 	LET vL.ContainerPathName='$(vL.OverridePrefix)';
 	trace '### DF Info Override Prefix switsh $(vL.OverridePrefix) used';
 endif;

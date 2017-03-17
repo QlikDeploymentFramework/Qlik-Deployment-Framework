@@ -5,12 +5,13 @@ New container layout, slimmed Down containers, including extract, transform load
 Added documentation extracts change depending on selected container layout
 Added code to GitHub
 Added Negative Fiscal Year in CalendarGen.qvs
-Added support for Qlikview Components into 99.LoadAll.qvs
+Added support for QlikView Components into 99.LoadAll.qvs
 Added Alias switch in LCGV, uses the added alias name instead of prefix in the generated global variables 
 Changed Sub Function library loaded from shared folders if exist
-Minor updates due to Qlik Sense file format changes (returnes / instead of \)
-Added Global Variabe cache during initiation, to speed up init
+Minor updates due to Qlik Sense file format changes (returned / instead of \)
+Added Global Variable cache during initiation, to speed up init
 Added support for Qlik Sense in CreateFolder() function
+Enhanced scramble of num in QVDMigration function
 
 Whats new in release 1.6.0?
 New installer that can add additional containers in an active container structure (good for Qlik Sense)
@@ -19,8 +20,8 @@ General improvements, CalendarGen.qvs Qlik Sense auto calendar
 
 Whats new in release 1.5.2?
 Added Qlik Sense initiation without need of a shared container
-Changed IndexAdd behaviour, files are created directly under Index, no subfolders created anymore
-Changed IndexDel behaviour, delete index and qvd based on the new index structure
+Changed IndexAdd behavior, files are created directly under Index, no sub folders created anymore
+Changed IndexDel behavior, delete index and qvd based on the new index structure
 Added QVDMigration.qvs and QVDLoad.qvs optional row limitation setting
 Added QVDMigration.qvs transfer tags from source qvd files + add suffix as tag
 Added support for multiple date fields and formats in the CalendarGen function
