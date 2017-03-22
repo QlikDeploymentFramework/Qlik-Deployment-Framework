@@ -38,6 +38,7 @@ if '$(vL.QDF.Alias)'='' then // If manual added alias exists use VariablePrefix 
 	let vL.QDF.Alias= '$(vL.QDF.ContainerName)'; // this Alias replaces the prefix as global variable name
 else
 	let vL.QDF.Alias= PurgeChar(trim('$(vL.QDF.Alias)'),'=;,- '&chr(39));
+	trace '### DF Info, Alias: $(vL.QDF.Alias) found, will replace: $(vL.QDF.ContainerName) prefix name' ;
 endif
 
 // Qlik Sense folder repository validation
