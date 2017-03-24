@@ -12,7 +12,6 @@
  
 
 sub QVDLoad(vL.QDF.MigrationSource,vL.QDF.Store_Select,vL.QDF.Scramble_fields,vL.QDF.QVTableName_Suffix,vL.QDF.IncludeSubFolders,vL.QDF.NoRecords)
-$(Include=$(vG.SubPath)\9.QVDMigration.qvs);
 call QVDMigration ('$(vL.QDF.MigrationSource)','','$(vL.QDF.Store_Select)','$(vL.QDF.Scramble_fields)','$(vL.QDF.QVTableName_Suffix)','$(vL.QDF.IncludeSubFolders)','','$(vL.QDF.NoRecords)');
 
 SET vL.QDF.QVTableName_Suffix=;

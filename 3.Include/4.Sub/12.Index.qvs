@@ -21,10 +21,6 @@ Comment Table [$(vL.TableName)] with 'Level2,SalesAgg';
 */
 
 SUB IndexAdd(vL.QDF.IndexQVD,vL.QDF.IndexFolderName,vL.QDF.ContainerPathName,vL.QDF.TAG,vL.QDF.AltIndexPath);
-$(Include=$(vG.SubPath)\5.DoDir.qvs);
-$(Include=$(vG.SubPath)\8.QVFileInfo.qvs);
-$(Include=$(vG.SubPath)\1.FileExist.qvs);
-$(Include=$(vG.SubPath)\3.LoadContainerMap.qvs);
 
 if not right( trim('$(vL.QDF.IndexQVD)') , 4)= '.qvd'  then // add .qvd if needed
   let vL.QDF.IndexQVD ='$(vL.QDF.IndexQVD)*.qvd';
@@ -185,8 +181,6 @@ Convert timestamp to date : Let vL.Date = timestamp(42031.554270833,'$(DateForma
 */
 
 SUB IndexLoad(vL.QDF.IndexQVD,vL.QDF.Table,vL.QDF.IndexFolderName,vL.QDF.TAG,vL.QDF.InFields,vL.QDF.LoadIndexOnly,vL.QDF.LoadMaxRows,vL.QDF.AltIndexPath,vL.QDF.LoadExp);
-$(Include=$(vG.SubPath)\5.DoDir.qvs);
-$(Include=$(vG.SubPath)\1.FileExist.qvs);
 
 call vL.FileExist ('$(vL.QDF.AltIndexPath)');
 if not '$(vL.QDF.AltIndexPath)' = '' and vL.FileExist = 'true' then // validate and select Index path
@@ -456,9 +450,6 @@ Call IndexDel(‘2011-12*’,’true’);  Will delete all index and associated 
 
 
 SUB IndexDel(vL.QDF.IndexQVD,vL._DeleteQVD,vL.QDF.IndexFolderName,vL.QDF.AltIndexPath);
-$(Include=$(vG.SubPath)\5.DoDir.qvs);
-$(Include=$(vG.SubPath)\1.FileExist.qvs);
-
 
 call vL.FileExist ('$(vL.QDF.AltIndexPath)');
 if not '$(vL.QDF.AltIndexPath)' = '' and vL.FileExist = 'true' then // validate and select Index path

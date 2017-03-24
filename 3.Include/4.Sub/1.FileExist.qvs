@@ -6,25 +6,25 @@
 // example usage:
 // if vL.FileExist = 'false' then; trace '### DF Did not find file, exit script'; exit script; endif;
 
-sub vL.FileExist (vL._Root)
+sub vL.FileExist (vL.QDF.Root)
 	
 	// Remove backslash in end
-	do while right( '$(vL._Root)' , 1 ) ='\'
-		let vL._Root =left('$(vL._Root)', Len('$(vL._Root)')-1);
-		exit do unless right( '$(vL._Root)' , 1 ) ='\';
+	do while right( '$(vL.QDF.Root)' , 1 ) ='\'
+		let vL.QDF.Root =left('$(vL.QDF.Root)', Len('$(vL.QDF.Root)')-1);
+		exit do unless right( '$(vL.QDF.Root)' , 1 ) ='\';
 	loop 
 	
-	if IsNull(filesize('$(vL._Root)')) = -1  then
+	if IsNull(filesize('$(vL.QDF.Root)')) = -1  then
 		SET vL.FileExist='false';
    	else   
 		SET vL.FileExist='true';
 	endif
-	set vL._Root=;
+	set vL.QDF.Root=;
 end sub;
 
 
 // **********************************
-// Function written by Frederik Nünning and Magnus Berg
+// Function written by Frederik Nï¿½nning and Magnus Berg
 // QlikTech GmbH
 // QlikTech International
 // **********************************
