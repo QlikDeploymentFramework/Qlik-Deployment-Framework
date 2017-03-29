@@ -17,7 +17,6 @@ $RECYCLE.BIN/
 *.qvf
 *.qvw
 *.log
-*.logs
 
 # Windows shortcuts
 *.lnk
