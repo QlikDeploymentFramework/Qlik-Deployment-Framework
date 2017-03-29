@@ -15,7 +15,7 @@ loop ;
 
 call vL.FileExist ('$(vL.QDF.FolderName_1)'); // Only execute on non-existing folder
 
-if vL.FileExist = 'false' then // If Folder do not exist it will be created
+if vL.FileExist = 'false' then // If Folder do not exist it will be created. 
 
 if left(trim('$(vG.BasePath)'),6)='lib://' then //validate if Qlik Senes is executing
 vL.QVF.CreateFolder:

@@ -40,7 +40,6 @@ elseif not 'vL.QDF.CVSTableName'='' then // If vL.QDF.ContainerName missing use 
 
 endif
 
-
 if not vL.FileExist = 'false' then
 
 if index('$(vL.QDF.CVSTableName)','.csv')=0 then // Add csv if missing	

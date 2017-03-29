@@ -131,8 +131,6 @@ If '$(vG.BasePath)'= '' then
 		exit script;
 elseif not '$(vL.QDF.BasePath_tmp)'='$(vG.BasePath)' then //Validate if BasePath is same as last itteration, if true will use cache
 
-
-
 // Open vL.ContainerStructure include table
 Call GetContainerStructure ;
 
