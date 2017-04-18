@@ -1,4 +1,4 @@
-Whats new in release 1.6.5?
+Whats new in release 1.7.0?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
 New container layout, Qlik Sense Only, including extract transform load folders
 New container layout, slimmed Down containers, including extract, transform load folders
