@@ -11,11 +11,11 @@ QDF is based on a resource container architecture, arrange containers (building 
 ## Qlik-Deployment-Framework GitHub repository
 Qlik-Deployment-Framework GitHub repository contains Qlik Script code that resides inside each QDF container, not the complete container.
 ## Qlik-Deployment-Framework GitHub content:
-- /Bin Contains Deploy Tool executable + Read Me
-- Version1.7.0.txt --> File containing version number and code modifications
-- InitLink.qvs --> Initiation script that links Qlik Sense/QlikView to 1.Init.qvs
-- 3.Include/1.BaseVariable/1.Init.qvs --> Main initiation script for both Qlik Sense and QlikView (run automatically by InitLink.qvs) 1.Init.qvs will validate and create global variables for the current environment.
-- 3.Include/1.BaseVariable/3.SystemVariables.qvs --> Only for QlikView, loads system variables (filepath to logs and more)
-- 3.Include/2.Locale --> contains locale files used during initiation
-- 3.Include/4.Sub/  --> contains the most important function library, read more under README https://github.com/QlikDeploymentFramework/Qlik-Deployment-Framework/tree/master/3.Include/4.Sub
+- **/Bin** --> Contains Deploy Tool executable + Read Me
+- **Version1.7.0.txt** --> File containing version number and code modifications
+- **InitLink.qvs** --> Initiation script that links Qlik Sense/QlikView to 1.Init.qvs
+- **3.Include/1.BaseVariable/1.Init.qvs** --> Main initiation script for both Qlik Sense and QlikView (run automatically by InitLink.qvs) 1.Init.qvs will validate and create global variables for the current environment.
+- **3.Include/1.BaseVariable/3.SystemVariables.qvs** --> Only for QlikView, loads system variables (filepath to logs and more)
+- **3.Include/2.Locale** --> contains locale files used during initiation
+- **3.Include/4.Sub/**  --> contains the most important function library, read more under README https://github.com/QlikDeploymentFramework/Qlik-Deployment-Framework/tree/master/3.Include/4.Sub
 
