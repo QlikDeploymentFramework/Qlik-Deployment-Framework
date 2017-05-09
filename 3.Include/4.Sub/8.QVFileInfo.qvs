@@ -26,7 +26,6 @@ LET vL.QDF.QVFile=left( '$(vL.QDF.QVFile)' , (index( '$(vL.QDF.QVFile)', '\\', -
 endif
 
 
-
 if '$(vL.QDF.QVTableName)'='' then // If No TableName Exists Use QVFileInfo
 	SET vL.QDF.QVTableName = 'QVFileInfo';
 endif;
