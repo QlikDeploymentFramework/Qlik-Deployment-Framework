@@ -122,7 +122,7 @@ SET vG.HomeContainer = ;
 SET vG.RootContainer = ;
 //***************** Initiation for Qlik Sense and QlikView done **********************************
 endif
-
+// comment
 // Check if vG.BasePath variable exists, else exit the script
 If '$(vG.BasePath)'= '' then
 		trace '### DF Warning, could not identify any valid container path, will exit';
