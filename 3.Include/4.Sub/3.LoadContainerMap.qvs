@@ -17,9 +17,7 @@ if not '$(vL.QDF.GetRootPath)'='' then // If GetRootPath switsh activated find i
 		LET vL.QDF.GetRootPath=left( '$(vL.QDF.GetRootPath)' , (index( '$(vL.QDF.GetRootPath)', '\\', -1 )-1))&right('$(vL.QDF.GetRootPath)', (len( '$(vL.QDF.GetRootPath)' ) -index( '$(vL.QDF.GetRootPath)', '\\', -1 )));
 	endif
 
-let vL.QDF.To_Loop = substringcount ('$(vL.QDF.GetRootPath)' , '\'); // Number of sub-folders 
-
-let vL.QDF.To_Loop = $(vL.QDF.To_Loop) + substringcount ('$(vL.QDF.GetRootPath)' , '/'); // Do a second search for Qlik Sense LIB folders
+let vL.QDF.To_Loop = substringcount ('$(vL.QDF.GetRootPath)' , '\') + substringcount ('$(vL.QDF.GetRootPath)' , '/'); // Count sub-folders for QlikView and Qlik Sense LIB folders
 
 	for vL.QDF.From_Loop = vL.QDF.To_Loop to 1 step -1
 
