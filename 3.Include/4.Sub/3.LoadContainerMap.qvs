@@ -90,7 +90,7 @@ let vL.QDF.To_Loop = NoOfRows('vL.temp_table_map');
 		
 	// Special Switch to find vG.RootPath used by 1.Init during initiation process
 	// Will also identify current container (vL.ContainerPathName)
-	if not '$(vL.QDF.ValidatedBasePath)'='' and substringcount(lower('$(vL.QDF.ValidatedBasePath)'),lower('$(vL.RootPath)$(vL.QDF.ContainerName)')) >0 then
+	if not '$(vL.QDF.ValidatedBasePath)'='' and substringcount(lower(left('$(vL.QDF.ValidatedBasePath)',len('$(vL.QDF.ValidatedBasePath)')-1)),lower(left('$(vL.RootPath)$(vL.QDF.ContainerName)',len('$(vL.RootPath)$(vL.QDF.ContainerName)')-1))) >0 then
 
    	LET vL.RootPath= left('$(vL.QDF.ValidatedBasePath)',len('$(vL.QDF.ValidatedBasePath)')-(len('$(vL.QDF.ContainerName)')));
   	$(Include=$(vG.SubPath)\1.FileExist.qvs);
