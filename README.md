@@ -8,7 +8,7 @@ Qlik-Deployment-Framework content is avalibla under https://community.qlik.com/g
 ## Qlik Deployment Framework resource containers
 QDF is based on a resource container architecture, arrange containers (building blocks and security separators) to fit the current needs, when demand changes its easy to reorganize and add additional containers. QlikView and/or Qlik Sense applications are hooked into the containers in which all needed resources are resided.
 
-## Qlik Deployment Framework Deploy Tool binary Releases
+## Qlik Deployment Framework Deploy Tool binary releases
 Avalible under releases tab: https://github.com/QlikDeploymentFramework/Qlik-Deployment-Framework/releases
 
 ## Qlik-Deployment-Framework GitHub repository
