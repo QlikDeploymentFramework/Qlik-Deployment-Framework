@@ -8,7 +8,7 @@
 // SUB DynamicContainerGlobalVariables ('Container Path Name',['Optional Single Folder'], ['Optional use alternative Container Map']);
 // Example: call DynamicContainerGlobalVariables('1.AcmeStore');
 // Example: call DCGV('1.AcmeStore');
-SUB DynamicContainerGlobalVariables(vL.QDF.ContanerName,vL.QDF.SingleFolder,vL.QDF.OverridePrefix,vL.QDF.ContainerMapPath);
+SUB DynamicContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.QDF.OverridePrefix,vL.QDF.ContainerMapPath);
 
 // Writing information in log
 trace '### QDF DynamicContainerGlobalVariables Started';
@@ -24,7 +24,7 @@ end if
 // Load container mapping table and variables by using LoadContainerMap function
 
 // If no container specified use home container
-if '$(vL.QDF.ContanerName)' = '' then 
+if '$(vL.QDF.ContainerName)' = '' then 
 	SET vL.QDF.BasePath = '$(vG.BasePath)';
 	SET vL.ContainerPathName=;
 	set vL.QDF.Comment='Loading vG.BasePath Global Path Variables'; 
@@ -33,17 +33,17 @@ if '$(vL.QDF.ContanerName)' = '' then
 // Qlik Sense optional separate LIB mount folder validation
 elseif filesize('lib://$(vL.QDF.ContainerName)/Initlink.qvs') > 1 then
 	trace '### QDF Info, Qlik Sense folder repository (Separate LIB mount)';
-	SET vL.QDF.BasePath = 'lib://$(vL.QDF.ContanerName)/';
-	SET vL.ContainerPathName='$(vL.QDF.ContanerName)';	
+	SET vL.QDF.BasePath = 'lib://$(vL.QDF.ContainerName)/';
+	SET vL.ContainerPathName='$(vL.QDF.ContainerName)';	
 
 //Search container map for containername
 else
-	call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContanerName)'); // Using LoadContainerMap with special switches the Container links will be populated automatically
-	if trim('$(vL.ContainerPathName)')= '$(vL.QDF.ContanerName)' then // If container found by LoadContainerMap sub function
+	call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContainerName)'); // Using LoadContainerMap with special switches the Container links will be populated automatically
+	if trim('$(vL.ContainerPathName)')= '$(vL.QDF.ContainerName)' then // If container found by LoadContainerMap sub function
 		SET vL.QDF.BasePath  = '$(vL.RootPath)$(vL.ContainerFolderName)\';
 		
-	elseif not IsNull(filesize('$(vL.QDF.ContanerName)')) = -1 then // If container not found it could be a folder path instead of a Map reference
-		SET vL.QDF.BasePath  = '$(vL.QDF.ContanerName)\';
+	elseif not IsNull(filesize('$(vL.QDF.ContainerName)')) = -1 then // If container not found it could be a folder path instead of a Map reference
+		SET vL.QDF.BasePath  = '$(vL.QDF.ContainerName)\';
 		SET vL.ContainerFolderName = 'No folder found, Custom path used';
 	endif;
 endif;
@@ -110,7 +110,7 @@ endif;
 // Clean Variables
 SET vL.QDF.ttttt = ;
 SET vL.QDF.xxxxx = ;
-SET vL.QDF.ContanerName=;
+SET vL.QDF.ContainerName=;
 SET vL.QDF.ContainerMapPath=;
 SET vL.QDF.SingleFolder=;
 SET vL.QDF.BasePath=;
@@ -128,11 +128,11 @@ SET vL.QDF.OverridePrefix=;
 endsub
 
 // Sub Function short name for DynamicContainerGlobalVariables = DCGV
-SUB DCGV(vL.QDF.ContanerName_tmp,vL.QDF.SingleFolder_tmp,vL.QDF.ContainerMapPath_tmp); // Alias for LoadContainerGlobalVariables
-	call DynamicContainerGlobalVariables('$(vL.QDF.ContanerName_tmp)','$(vL.QDF.SingleFolder_tmp)','$(vL.QDF.OverridePrefix_tmp)','$(vL.QDF.ContainerMapPath_tmp)');
+SUB DCGV(vL.QDF.ContainerName_tmp,vL.QDF.SingleFolder_tmp,vL.QDF.ContainerMapPath_tmp); // Alias for LoadContainerGlobalVariables
+	call DynamicContainerGlobalVariables('$(vL.QDF.ContainerName_tmp)','$(vL.QDF.SingleFolder_tmp)','$(vL.QDF.OverridePrefix_tmp)','$(vL.QDF.ContainerMapPath_tmp)');
 	
 	// Clean Variables
-	SET vL.QDF.ContanerName_tmp=;
+	SET vL.QDF.ContainerName_tmp=;
 	SET vL.QDF.SingleFolder_tmp=;
 	SET vL.QDF.ContainerPathName_tmp=;
 	SET vL.QDF.OverridePrefix_tmp=;
