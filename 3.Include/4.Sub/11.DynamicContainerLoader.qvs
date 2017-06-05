@@ -11,7 +11,7 @@
 SUB DynamicContainerGlobalVariables(vL.QDF.ContanerName,vL.QDF.SingleFolder,vL.QDF.OverridePrefix,vL.QDF.ContainerMapPath);
 
 // Writing information in log
-trace '### DF DynamicContainerGlobalVariables Started';
+trace '### QDF DynamicContainerGlobalVariables Started';
 SET vL.ContainerFolderName = ; // Reset variable 
 
 if '$(vL.QDF.ContainerMapPath)' = '' then // If null use default ContainerMap else Shared ContainerMap is used
@@ -35,6 +35,7 @@ elseif filesize('lib://$(vL.QDF.ContainerName)/Initlink.qvs') > 1 then
 	trace '### QDF Info, Qlik Sense folder repository (Separate LIB mount)';
 	SET vL.QDF.BasePath = 'lib://$(vL.QDF.ContanerName)/';
 	SET vL.ContainerPathName='$(vL.QDF.ContanerName)';	
+
 //Search container map for containername
 else vL.ContainerPathName
 	call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContanerName)'); // Using LoadContainerMap with special switches the Container links will be populated automatically
