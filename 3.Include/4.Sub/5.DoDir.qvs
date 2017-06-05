@@ -75,7 +75,7 @@ for each vL.QDF.DirTmp in dirlist ('$(vL.QDF.DoDirRootTmp)*' ) // Index folders
 		call vL.DoDirTmp ('$(vL.QDF.DirTmp)\')
 		
     // If vL.QDF.Template_Exeptions is true validate and ignore 0. or # on folders (used for Templates and examples) 
-	elseif num(subfield(right('$(vL.QDF.DirTmp)',(len('$(vL.QDF.DirTmp)')-len('$(vL.QDF.DoDirRootTmp)')-1)), '.'  , 1 )) >0 and substringcount (right('$(vL.QDF.DirTmp)',(len('$(vL.QDF.DirTmp)')-(len('$(vL.QDF.DoDirRootTmp)')+1))),'#') = 0 then
+	elseif num(subfield(right('$(vL.QDF.DirTmp)',(len('$(vL.QDF.DirTmp)')-len('$(vL.QDF.DoDirRootTmp)'))), '.'  , 1 )) >0 and substringcount (right('$(vL.QDF.DirTmp)',(len('$(vL.QDF.DirTmp)')-(len('$(vL.QDF.DoDirRootTmp)')+1))),'#') = 0 then
 		if lower('$(vL.QDF.FoldersOnly)')='true' then // If folders only is used (vL.QDF.FoldersOnly) execute vL.QDF.DoDirTableName
 			call vL.QDF.DoDirTableName('$(vL.QDF.DirTmp)');
 		endif
