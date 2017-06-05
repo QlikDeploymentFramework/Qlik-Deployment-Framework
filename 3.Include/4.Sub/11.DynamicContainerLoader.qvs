@@ -5,14 +5,14 @@
  |____________________________________________________________________________*/
 
 // This script should only be accessed from QlikView via the LoadContainerGlobalVariables function
-// SUB DynamicContainerGlobalVariables (‘Container Path Name’,['Optional Single Folder'], [’Optional use alternative Container Map’]);
+// SUB DynamicContainerGlobalVariables ('Container Path Name',['Optional Single Folder'], ['Optional use alternative Container Map']);
 // Example: call DynamicContainerGlobalVariables('1.AcmeStore');
 // Example: call DCGV('1.AcmeStore');
 SUB DynamicContainerGlobalVariables(vL.QDF.ContanerName,vL.QDF.SingleFolder,vL.QDF.OverridePrefix,vL.QDF.ContainerMapPath);
 
 // Writing information in log
 trace '### DF DynamicContainerGlobalVariables Started';
-SET vL.QDF.ContainerFolderName = ; // Reset variable 
+SET vL.ContainerFolderName = ; // Reset variable 
 
 if '$(vL.QDF.ContainerMapPath)' = '' then // If null use default ContainerMap else Shared ContainerMap is used
 	let vL.QDF.ContainerMapPath = '$(vG.BaseVariablePath)\ContainerMap.csv';
@@ -28,20 +28,20 @@ if '$(vL.QDF.ContanerName)' = '' then // If no container specified populating my
 SET vL.QDF.BasePath = '$(vG.BasePath)';
 SET vL.ContainerPathName=;
 set vL.QDF.Comment='Loading vG.BasePath Global Path Variables'; 
-SET vL.QDF.ContainerFolderName='BasePath';
+SET vL.ContainerFolderName='BasePath';
 
-else
+else vL.ContainerPathName
 	call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContanerName)'); // Using LoadContainerMap with special switches the Container links will be populated automatically
 	if trim('$(vL.ContainerPathName)')= '$(vL.QDF.ContanerName)' then // If container found by LoadContainerMap sub function
-		SET vL.QDF.BasePath  = '$(vL.RootPath)$(vL.QDF.ContainerFolderName)\';
+		SET vL.QDF.BasePath  = '$(vL.RootPath)$(vL.ContainerFolderName)\';
 		
 	elseif not IsNull(filesize('$(vL.QDF.ContanerName)')) = -1 then // If container not found it could be a folder path instead of a Map reference
 		SET vL.QDF.BasePath  = '$(vL.QDF.ContanerName)\';
-		SET vL.QDF.ContainerFolderName = 'No folder found, Custom path used';
+		SET vL.ContainerFolderName = 'No folder found, Custom path used';
 	endif;
 endif;
 
-if not '$(vL.QDF.ContainerFolderName)'='' then // Execute only if container found
+if not '$(vL.ContainerFolderName)'='' then // Execute only if container found
 
 if not '$(vL.QDF.OverridePrefix)'='' then // If OverridePrefix swish is used set the prefix
 	LET vL.ContainerPathName='$(vL.QDF.OverridePrefix)';
@@ -49,7 +49,7 @@ if not '$(vL.QDF.OverridePrefix)'='' then // If OverridePrefix swish is used set
 endif;
 
 // Writing information in log
-trace '### DF $(vL.QDF.ContainerFolderName) Comments: $(vL.QDF.Comment)';
+trace '### DF $(vL.ContainerFolderName) Comments: $(vL.QDF.Comment)';
 
 Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
 
@@ -108,7 +108,7 @@ SET vL.QDF.ContanerName=;
 SET vL.QDF.ContainerMapPath=;
 SET vL.QDF.SingleFolder=;
 SET vL.QDF.BasePath=;
-SET vL.QDF.ContainerFolderName=;
+SET vL.ContainerFolderName=;
 SET vL.QDF.PhysicalFolderName=;
 SET vL.QDF.VariablePrefix=;
 SET vL.ContainerPathName=;
