@@ -85,7 +85,6 @@ for vL.QDF.ttttt = 0 to vL.QDF.xxxxx-1
 next vL.QDF.ttttt
 
 
-
 // Trim pace and last \
 if right('$(vL.QDF.BasePath)',1)='\' then
 	let vL.QDF.BasePath=left(trim('$(vL.QDF.BasePath)'), len('$(vL.QDF.BasePath)')-1);
@@ -105,8 +104,6 @@ endif
 else
 	trace '### QDF Info, Could not find $(vL.ContainerPathName) container in Container Map';
 endif;
-
-
 
 // Clean Variables
 SET vL.QDF.ttttt = ;
