@@ -59,7 +59,7 @@ endif;
 // Writing information in log
 trace '### QDF Info, found $(vL.ContainerPathName) Comments: $(vL.QDF.Comment)';
 
-Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
+Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true','true'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
 
 if NoOfFields('vL.DoDir_Tmp_Table') > 0 then // Validate if DoDir table exists
 
