@@ -12,7 +12,8 @@ SUB DynamicContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.
 
 // Writing information in log
 trace '### QDF DynamicContainerGlobalVariables Started';
-SET vL.ContainerFolderName = ; // Reset variable 
+SET vL.ContainerFolderName = ; // Reset variable
+SET vL.QDF.BasePath = ; // Reset variable
 
 if '$(vL.QDF.ContainerMapPath)' = '' then // If null use default ContainerMap else Shared ContainerMap is used
 	let vL.QDF.ContainerMapPath = '$(vG.SharedBaseVariablePath)\ContainerMap.csv';
@@ -44,11 +45,11 @@ else
 		
 	elseif not IsNull(filesize('$(vL.QDF.ContainerName)')) = -1 then // If container not found it could be a folder path instead of a Map reference
 		SET vL.QDF.BasePath  = '$(vL.QDF.ContainerName)\';
-		SET vL.ContainerFolderName = 'No folder found, Custom path used';
+		// SET vL.ContainerFolderName = 'No folder found, Custom path used';
 	endif;
 endif;
 
-if not '$(vL.ContainerFolderName)'='' then // Execute only if container found
+if not '$(vL.QDF.BasePath)'='' then // Execute only if container found
 
 if not '$(vL.QDF.OverridePrefix)'='' then // If OverridePrefix swish is used set the prefix
 	LET vL.ContainerPathName='$(vL.QDF.OverridePrefix)';
@@ -56,7 +57,7 @@ if not '$(vL.QDF.OverridePrefix)'='' then // If OverridePrefix swish is used set
 endif;
 
 // Writing information in log
-trace '### QDF Info, found $(vL.ContainerFolderName) Comments: $(vL.QDF.Comment)';
+trace '### QDF Info, found $(vL.ContainerPathName) Comments: $(vL.QDF.Comment)';
 
 Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
 
