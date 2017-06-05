@@ -30,7 +30,7 @@ endsub
 
 
 // Writing information in log
-trace '### DF 2.GenericContainerLoader.qvs  Started';
+trace '### QDF Info, 2.GenericContainerLoader.qvs  Started';
 
 LET vL.QDF.ContainerName=trim('$(vL.QDF.ContainerName)'); // Trim vL.QDF.ContainerName from white spaces
 
@@ -38,12 +38,12 @@ if '$(vL.QDF.Alias)'='' then // If manual added alias exists use VariablePrefix 
 	let vL.QDF.Alias= '$(vL.QDF.ContainerName)'; // this Alias replaces the prefix as global variable name
 else
 	let vL.QDF.Alias= PurgeChar(trim('$(vL.QDF.Alias)'),'=;,- '&chr(39));
-	trace '### DF Info, Alias: $(vL.QDF.Alias) found, will replace: $(vL.QDF.ContainerName) prefix name' ;
+	trace '### QDF Info, Alias: $(vL.QDF.Alias) found, will replace: $(vL.QDF.ContainerName) prefix name' ;
 endif
 
 // Qlik Sense folder repository validation
 if filesize('lib://$(vL.QDF.ContainerName)/Initlink.qvs') > 1 then
-	trace '### DF Info, Qlik Sense folder repository (Separate LIB mount)';
+	trace '### QDF Info, Qlik Sense folder repository (Separate LIB mount)';
 	SET vG.$(vL.QDF.Alias)BasePath = 'lib://$(vL.QDF.ContainerName)/';
 	SET vL.ContainerPathName='$(vL.QDF.ContainerName)';	
 else
@@ -73,11 +73,11 @@ $(Include=$(vG.SubPath)\1.FileExist.qvs);
 call vL.FileExist ('$(vG.$(vL.QDF.Alias)BasePath)*');
 	// If file exists continue
 if vL.FileExist = 'false' then
-	trace '### DF Error, vG.$(vL.QDF.Alias)BasePath missing';
+	trace '### QDF Warning, vG.$(vL.QDF.Alias)BasePath missing';
     SET vG.$(vL.QDF.Alias)BasePath = ;
 else
 	// Writing information in log
-	trace '### DF Info, found $(vL.ContainerPathName) container, mounting as vG.$(vL.QDF.Alias)BasePath' ;
+	trace '### QDF Info, found $(vL.ContainerPathName) container, mounting as vG.$(vL.QDF.Alias)BasePath' ;
 	if not '$(vL.Comment)' = '' then
 		trace '### DF Info $(vL.Comment)'; 
 	endif
@@ -113,13 +113,13 @@ drop table vL.ContainerStructure ;
 	endif
 
 // Writing information in log
-trace '### DF $(vL.QDF.Alias) Finished';
+trace '### QDF Info, $(vL.QDF.Alias) Finished';
 	
 else
-	trace '### DF Could not find $(vL.QDF.ContainerName) container in Container Map';
+	trace '### QDF Warning, Could not find $(vL.QDF.ContainerName) container in Container Map';
 endif;
 else
-	trace '### DF Could not find $(vL.QDF.ContainerName) container in Container Map';
+	trace '### QDF Warning, Could not find $(vL.QDF.ContainerName) container in Container Map';
 endif;
 
 
