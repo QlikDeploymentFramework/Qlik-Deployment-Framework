@@ -72,9 +72,9 @@ let vL.QDF.To_Loop = NoOfRows('vL.temp_table_map');
 	
 	// Correct \ if not exist 
 		if not right( '$(vL.ContainerFolderName)' , 1 ) ='\' then 
-			let vL.QDF.ContainerName ='$(vL.ContainerFolderName)'&'\';
-			else
-			let vL.QDF.ContainerName ='$(vL.ContainerFolderName)';
+			let vL.QDF.ContainerName_tmp ='$(vL.ContainerFolderName)'&'\';
+		else
+			let vL.QDF.ContainerName_tmp ='$(vL.ContainerFolderName)';
 		endif;
 
 		if left(trim('$(vL.RootPath)'),2) ='\\' or index('$(vL.RootPath)', ':')>0  then // If vL.AltRootPath have a valid path
@@ -88,11 +88,11 @@ let vL.QDF.To_Loop = NoOfRows('vL.temp_table_map');
 		
 	// Special Switch to find vG.RootPath used by 1.Init during initiation process
 	// Will also identify current container (vL.ContainerPathName)
-	if not '$(vL.QDF.ValidatedBasePath)'='' and substringcount(lower(left('$(vL.QDF.ValidatedBasePath)',len('$(vL.QDF.ValidatedBasePath)')-1)),lower(left('$(vL.RootPath)$(vL.QDF.ContainerName)',len('$(vL.RootPath)$(vL.QDF.ContainerName)')-1))) >0 then
+	if not '$(vL.QDF.ValidatedBasePath)'='' and substringcount(lower(left('$(vL.QDF.ValidatedBasePath)',len('$(vL.QDF.ValidatedBasePath)')-1)),lower(left('$(vL.RootPath)$(vL.QDF.ContainerName_tmp)',len('$(vL.RootPath)$(vL.QDF.ContainerName_tmp)')-1))) >0 then
 
-   	LET vL.RootPath= left('$(vL.QDF.ValidatedBasePath)',len('$(vL.QDF.ValidatedBasePath)')-(len('$(vL.QDF.ContainerName)')));
+   	LET vL.RootPath= left('$(vL.QDF.ValidatedBasePath)',len('$(vL.QDF.ValidatedBasePath)')-(len('$(vL.QDF.ContainerName_tmp)')));
   	$(Include=$(vG.SubPath)\1.FileExist.qvs);
-		call vL.FileExist ('$(vL.RootPath)$(vL.QDF.ContainerName)'); //validate that rootpath is correct
+		call vL.FileExist ('$(vL.RootPath)$(vL.QDF.ContainerName_tmp)'); //validate that rootpath is correct
       if vL.FileExist = 'true' then
 				LET vG.RootPath= '$(vL.RootPath)'; // Set new vG.RootPath
 				Trace '### DF Creating vG.RootPath based on Container Map';
@@ -132,7 +132,7 @@ SET vL.QDF.CVSTableName = ;
 SET vL.QDF.SpecificVariable = ;
 SET vL.QDF.GetRootPath = ;
 SET vL.QDF.Exit= ;
-SET vL.QDF.ContainerName= ;
+SET vL.QDF.ContainerName_tmp= ;
 SET vL.QDF.ContainerPathNameCount= ;
 SET vL.QDF.ValidatedBasePath=;
 SET vL.QDF.ContainerMapPath=;
