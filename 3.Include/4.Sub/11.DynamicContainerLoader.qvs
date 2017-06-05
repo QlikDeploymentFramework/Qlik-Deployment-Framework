@@ -78,7 +78,7 @@ for vL.QDF.ttttt = 0 to vL.QDF.xxxxx-1
 					trace '### QDF Warning, please fix the duplication error else there might be issues';
 				endif
 				LET vG.$(vL.ContainerPathName)$(vL.QDF.VariablePrefix)Path='$(vL.QDF.PhysicalFolderName)\';
-				trace '### QDF Info, created Global Variable vG.$(vL.ContainerPathName)$(vL.QDF.VariablePrefix)Path;
+				trace '### QDF Info, created Global Variable vG.$(vL.ContainerPathName)$(vL.QDF.VariablePrefix)Path';
 			endif	
 		next vL.QDF.SubString;
 next vL.QDF.ttttt
