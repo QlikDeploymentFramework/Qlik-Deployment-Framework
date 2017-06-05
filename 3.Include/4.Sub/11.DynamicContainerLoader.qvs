@@ -23,21 +23,21 @@ end if
 
 // Load container mapping table and variables by using LoadContainerMap function
 
-if '$(vL.QDF.ContanerName)' = '' then // If no container specified populating my home container
+// If no container specified use home container
+if '$(vL.QDF.ContanerName)' = '' then 
+	SET vL.QDF.BasePath = '$(vG.BasePath)';
+	SET vL.ContainerPathName=;
+	set vL.QDF.Comment='Loading vG.BasePath Global Path Variables'; 
+	SET vL.ContainerFolderName='BasePath';
 
-SET vL.QDF.BasePath = '$(vG.BasePath)';
-SET vL.ContainerPathName=;
-set vL.QDF.Comment='Loading vG.BasePath Global Path Variables'; 
-SET vL.ContainerFolderName='BasePath';
-
-// Qlik Sense folder repository validation
+// Qlik Sense optional separate LIB mount folder validation
 elseif filesize('lib://$(vL.QDF.ContainerName)/Initlink.qvs') > 1 then
 	trace '### QDF Info, Qlik Sense folder repository (Separate LIB mount)';
 	SET vL.QDF.BasePath = 'lib://$(vL.QDF.ContanerName)/';
 	SET vL.ContainerPathName='$(vL.QDF.ContanerName)';	
 
 //Search container map for containername
-else vL.ContainerPathName
+else
 	call LoadContainerMap('$(vL.QDF.ContainerMapPath)','$(vL.QDF.ContanerName)'); // Using LoadContainerMap with special switches the Container links will be populated automatically
 	if trim('$(vL.ContainerPathName)')= '$(vL.QDF.ContanerName)' then // If container found by LoadContainerMap sub function
 		SET vL.QDF.BasePath  = '$(vL.RootPath)$(vL.ContainerFolderName)\';
