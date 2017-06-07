@@ -34,13 +34,13 @@ if '$(vL.QDF.ContainerName)' = '' then
 
 // Use folder or lib path is specified instead of a ontainer
 elseif SubstringCount('$(vL.QDF.ContainerName)','\') > 0  or SubstringCount('$(vL.QDF.ContainerName)','/') > 0 then 
-	SET vL.QDF.BasePath = '$(vL.QDF.ContainerName)';
+	SET vL.QDF.BasePath = '$(vL.QDF.ContainerName)\';
 	SET vL.ContainerPathName=;
 	set vL.Comment='Loading vG.BasePath Global Path Variables'; 
 	SET vL.ContainerFolderName='BasePath';
 	// If specifying a path and folders dissable special folder syntax
 	if not '$(vL.QDF.SingleFolder)'='' then
-		set vL.HideQDFTemplates =; //Dissable qualified folders
+		set vL.HideQDFTemplates =; //Revoke qualified folders if path is specified
 	endif
 
 // Qlik Sense optional separate LIB mount folder validation
