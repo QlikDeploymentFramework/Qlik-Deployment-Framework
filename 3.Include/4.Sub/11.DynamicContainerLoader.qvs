@@ -8,14 +8,14 @@
 // SUB DynamicContainerGlobalVariables ('Container Path Name',['Optional Single Folder'], ['Optional use alternative Container Map']);
 // Example: call DynamicContainerGlobalVariables('1.AcmeStore');
 // Example: call DCGV('1.AcmeStore');
-SUB DynamicContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.QDF.OverridePrefix,vL.QDF.ContainerMapPath);
+SUB DynamicContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.QDF.OverridePrefix);
 
 // Writing information in log
 trace '### QDF DynamicContainerGlobalVariables Started';
 SET vL.ContainerFolderName = ; // Reset variable
 SET vL.QDF.BasePath = ; // Reset variable
 
-if '$(vL.QDF.ContainerMapPath)' = '' then // If null use default ContainerMap else Shared ContainerMap is used
+if filesize('$(vG.SharedBaseVariablePath)\ContainerMap.csv' >0 then // If null use default ContainerMap else Shared ContainerMap is used
 	let vL.QDF.ContainerMapPath = '$(vG.SharedBaseVariablePath)\ContainerMap.csv';
 else
 	let vL.QDF.ContainerMapPath = '$(vG.BaseVariablePath)\ContainerMap.csv';	
@@ -28,7 +28,14 @@ end if
 if '$(vL.QDF.ContainerName)' = '' then 
 	SET vL.QDF.BasePath = '$(vG.BasePath)';
 	SET vL.ContainerPathName=;
-	set vL.QDF.Comment='Loading vG.BasePath Global Path Variables'; 
+	set vL.Comment='Loading vG.BasePath Global Path Variables'; 
+	SET vL.ContainerFolderName='BasePath';
+
+// If a folder or lib path is specified instead of a ontainer use that one
+elseif SubstringCount('$(vL.QDF.ContainerName)','\') > 0  or SubstringCount('$(vL.QDF.ContainerName)','/') > 0 then 
+	SET vL.QDF.BasePath = '$(vL.QDF.ContainerName)';
+	SET vL.ContainerPathName=;
+	set vL.Comment='Loading vG.BasePath Global Path Variables'; 
 	SET vL.ContainerFolderName='BasePath';
 
 // Qlik Sense optional separate LIB mount folder validation
@@ -57,7 +64,7 @@ if not '$(vL.QDF.OverridePrefix)'='' then // If OverridePrefix swish is used set
 endif;
 
 // Writing information in log
-trace '### QDF Info, found $(vL.ContainerPathName) Comments: $(vL.QDF.Comment)';
+trace '### QDF Info, found $(vL.ContainerPathName) Comments: $(vL.Comment)';
 
 Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true','true'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
 
@@ -117,7 +124,7 @@ SET vL.QDF.PhysicalFolderName=;
 SET vL.QDF.VariablePrefix=;
 SET vL.ContainerPathName=;
 SET vL.RootPath=;
-SET vL.QDF.Comment=;
+SET vL.Comment=;
 SET vL.QDF.SingleFolder=;
 SET vL.QDF.SubStringSplitt=;
 SET vL.QDF.SubString=;
