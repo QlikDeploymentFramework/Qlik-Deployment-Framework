@@ -68,9 +68,6 @@ if not '$(vL.QDF.OverridePrefix)'='' then // If OverridePrefix swish is used set
 	trace '### QDF Info, Override Prefix switsh $(vL.QDF.OverridePrefix) used';
 endif;
 
-// Writing information in log
-trace '### QDF Info, found $(vL.ContainerPathName) Comments: $(vL.Comment)';
-
 Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true','$(vL.HideQDFTemplates)'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
 
 if NoOfFields('vL.DoDir_Tmp_Table') > 0 then // Validate if DoDir table exists
@@ -91,6 +88,7 @@ for vL.QDF.ttttt = 0 to vL.QDF.xxxxx-1
 					trace '### QDF Warning, Please fix the duplication error else there might be issues';
 				endif
 				LET vG.$(vL.ContainerPathName)$(vL.QDF.VariablePrefix)Path='$(vL.QDF.PhysicalFolderName)\';
+				// Writing information in log
 				trace '### QDF Info, Created Global Variable vG.$(vL.ContainerPathName)$(vL.QDF.VariablePrefix)Path';
 			endif	
 		next vL.QDF.SubString;
