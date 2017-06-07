@@ -14,8 +14,9 @@ SUB DynamicContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.
 trace '### QDF DynamicContainerGlobalVariables Started';
 SET vL.ContainerFolderName = ; // Reset variable
 SET vL.QDF.BasePath = ; // Reset variable
+set vL.HideQDFTemplates ='true'; //Default use qualified folders and hide QDF templates
 
-if filesize('$(vG.SharedBaseVariablePath)\ContainerMap.csv' >0 then // If null use default ContainerMap else Shared ContainerMap is used
+if filesize('$(vG.SharedBaseVariablePath)\ContainerMap.csv') >0 then // If null use default ContainerMap else Shared ContainerMap is used
 	let vL.QDF.ContainerMapPath = '$(vG.SharedBaseVariablePath)\ContainerMap.csv';
 else
 	let vL.QDF.ContainerMapPath = '$(vG.BaseVariablePath)\ContainerMap.csv';	
@@ -37,6 +38,10 @@ elseif SubstringCount('$(vL.QDF.ContainerName)','\') > 0  or SubstringCount('$(v
 	SET vL.ContainerPathName=;
 	set vL.Comment='Loading vG.BasePath Global Path Variables'; 
 	SET vL.ContainerFolderName='BasePath';
+	// If specifying a path and folders dissable special folder syntax
+	if not '$(vL.QDF.SingleFolder)'='' then
+		set vL.HideQDFTemplates =; //Dissable qualified folders
+	endif
 
 // Qlik Sense optional separate LIB mount folder validation
 elseif filesize('lib://$(vL.QDF.ContainerName)/Initlink.qvs') > 1 then
@@ -66,7 +71,7 @@ endif;
 // Writing information in log
 trace '### QDF Info, found $(vL.ContainerPathName) Comments: $(vL.Comment)';
 
-Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true','true'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
+Call DoDir ('$(vL.QDF.BasePath)','vL.DoDir_Tmp_Table','true','','true','$(vL.HideQDFTemplates)'); // Creates DoDir Table 'vL.DoDir_Tmp_Table' on folders only from vL.QDF.BasePath path
 
 if NoOfFields('vL.DoDir_Tmp_Table') > 0 then // Validate if DoDir table exists
 
