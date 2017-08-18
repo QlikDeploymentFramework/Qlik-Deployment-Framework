@@ -173,6 +173,9 @@ if '$(vG.RootPath)'='' and not lower(left(trim('$(vG.BasePath)'),6))='lib://' th
 	call LoadContainerMap('$(vG.BaseVariablePath)\ContainerMap.csv','','$(vG.BasePath)');
 endif
 
+//Remove variable to disable shared cache
+set vG.$(vL.QDF.LinkShared_Folders)BasePath=;
+
 else
 	trace '### QDF Info, Global Variables using cache';
 	LET vG.RootPath='$(vL.QDF.RootPath_tmp)'; // Set RootPath to cache value 
@@ -182,7 +185,7 @@ endif
 // Shared_Folders Initiation
 if not IsNull(filesize('$(vG.$(vL.QDF.LinkShared_Folders)BasePath)\Initlink.qvs'))=-1 then
 	trace '### QDF Info, $(vL.QDF.LinkShared_Folders) Global Variables using cache';
-elseif not trim('$(vL.QDF.LinkShared_Folders)') = '' then
+else
 	$(Include=$(vG.SubPath)\4.GenericContainerLoader.qvs);
 	// Load Include for LCGV function
 	// This function is to be used inside the Qlik scripts to link between containers 
