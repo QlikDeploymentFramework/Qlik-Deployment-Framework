@@ -3,6 +3,7 @@ Fixed Shared Global Variable cache behavior, vG.BasePath is now controling cache
 Updated Deploy Tool making it easier to jumb between multiple QDF environments
 Updated Deploy Tool sorting Container Map
 Updated Deploy Tool removes blanks in Container Map
+Updated Deploy Tool it�s now possible to stretch out deploy tool.
 
 Whats new in release 1.7.0?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
@@ -145,7 +146,6 @@ Better check if Variable prefix is duplecated
 Remove Copy SystemVariables to all containers function in Variable Editor Settings
 Container map is now replicated to containers by use of Store into function  
 
-
 Whats new in release 1.2?
 Bug found (thanks Clemens) regarding CustomVariables.csv not updating properly
 Container Map Editor will not copy csv files if date and time the same (less popup boxes)
@@ -165,7 +165,7 @@ Added CalendarGen Function
 Added CalendarGen example application
 Changed back to UTF8 after compability issiues
 Added Robocopy fallback if Container creation fails (see ContainerCreation.log if it's created)
-load several Global Container Variables at once by use of ; as separator:
+load several Global Container Variables at once by use of ; as separator:
 call LoadContainerGlobalVariables('SAP','QVD;Include;Application'); 
 
 
