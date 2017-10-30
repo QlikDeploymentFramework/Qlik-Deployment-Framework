@@ -1,5 +1,5 @@
 Whats new in release 1.7.1?
-Fixed Shared Global Variable cache behavior, vG.BasePath is now controling cache validation alone
+Fixed Shared Global Variable cache behavior, vG.BasePath is now controlling cache validation alone
 Updated Deploy Tool making it easier to jumb between multiple QDF environments
 Updated Deploy Tool sorting Container Map
 Updated Deploy Tool removes blanks in Container Map
