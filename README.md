@@ -1,5 +1,5 @@
 # Qlik-Deployment-Framework (QDF)
-**QDF version 1.7.0**
+**QDF version 1.7.1**
 
 ## QDF is a set of Qlik scripts and utilities that enables: 
 Resource Sharing, Reuse, Organization, Structure and Standards providing an effective and efficient Qlik deployment.
@@ -14,7 +14,7 @@ Avalible under releases tab: https://github.com/QlikDeploymentFramework/Qlik-Dep
 ## Qlik-Deployment-Framework GitHub repository
 Qlik-Deployment-Framework GitHub repository contains Qlik Script code that resides inside each QDF container, not the complete container.
 ## Qlik-Deployment-Framework GitHub content:
-- **Version1.7.0.txt** --> File containing version number and code modifications
+- **Version1.7.1.txt** --> File containing version number and code modifications
 - **InitLink.qvs** --> Initiation script that links Qlik Sense/QlikView to 1.Init.qvs
 - **3.Include/1.BaseVariable/1.Init.qvs** --> Main initiation script for both Qlik Sense and QlikView (run automatically by InitLink.qvs) 1.Init.qvs will validate and create global variables for the current environment.
 - **3.Include/1.BaseVariable/3.SystemVariables.qvs** --> Only for QlikView, loads system variables (filepath to logs and more)
