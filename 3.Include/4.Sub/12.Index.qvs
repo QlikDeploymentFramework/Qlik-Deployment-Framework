@@ -468,7 +468,7 @@ let vL.QDF.IndexQVD ='$(vL.QDF.IndexQVD).index'; // Add index prefix
 
 
 //-----------------Load in Index section---------------------------
-Call DoDir ('$(vL.QDF.SharedConfigPath)\$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)', '_tmp_DoDir', '', '','true'); //Dir of vL.QDF.IndexQVD file or directory
+Call DoDir ('$(vL.QDF.SharedConfigPath)\*$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)', '_tmp_DoDir', '', '','true'); //Dir of vL.QDF.IndexQVD file or directory
 
 if NoOfFields('_tmp_DoDir') >0 then // Validate if DoDir Table Exists
 
