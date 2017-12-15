@@ -22,7 +22,7 @@ $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\12.Index.qvs);
 // Disable Qvc in the script (before QDF initiation) setting the vG.QVCDisable=true flag 
 
 
-/* Section below is when integrating QVC and is dissabled default. Enable QVC in Deploy Tool to activate this section
+/* Section below is when integrating QVC and is disabled default. Enable QVC in Deploy Tool to activate this section
 if trim(lower('$(vG.QVCDisable)'))='true' then // This is used to disable/enable QlikView Components library (Qvc)
 
 	 set vG.QVCDisable='$(vG.$(vL.QDF.LinkShared_Folders)SubPath)'; // vG.QVCDisable = true removes Qvc.qvs filename
