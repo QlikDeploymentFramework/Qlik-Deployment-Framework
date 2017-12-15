@@ -21,14 +21,17 @@ $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\12.Index.qvs);
 // Qlikview Components (Qvc) is a library of script subroutines and functions.
 // Disable Qvc in the script (before QDF initiation) setting the vG.QVCDisable=true flag 
 
-if trim(lower('$(vG.QVCDisable)'))='true' then
-// This is used to disable/enable QlikView Components library (Qvc)
+
+/* Section below is when integrating QVC and is dissabled default. Enable QVC in Deploy Tool to activate this section
+if trim(lower('$(vG.QVCDisable)'))='true' then // This is used to disable/enable QlikView Components library (Qvc)
+
 	 set vG.QVCDisable='$(vG.$(vL.QDF.LinkShared_Folders)SubPath)'; // vG.QVCDisable = true removes Qvc.qvs filename
 else
 	set vG.QVCDisable='$(vG.$(vL.QDF.LinkShared_Folders)SubPath)Qvc.qvs'; // Not disabled will state the Qvc.qvs filename	
 endif
 
 $(Include=$(vG.QVCDisable)); 
+*/
 
 // *************************************
 // Functions written by Magnus Berg Qlik
