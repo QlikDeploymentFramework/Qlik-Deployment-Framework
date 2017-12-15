@@ -4,6 +4,7 @@ Updated Deploy Tool making it easier to jumb between multiple QDF environments
 Updated Deploy Tool sorting Container Map
 Updated Deploy Tool removes blanks in Container Map
 Updated Deploy Tool it’s now possible to stretch out deploy tool.
+Minor IndexDel fix
 
 Whats new in release 1.7.0?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
