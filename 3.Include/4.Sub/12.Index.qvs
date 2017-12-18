@@ -461,7 +461,7 @@ endif
 If '$(vL.QDF.IndexFolderName)' = '' then //Select specific Index to use
   let vL.QDF.IndexFolderName='*' ; //Add wildedcard as Index folder name
 else
-  let vL.QDF.IndexFolderName='$(vL.QDF.IndexFolderName)*' ; //Add wildedcard as Index folder name
+  let vL.QDF.IndexFolderName='*$(vL.QDF.IndexFolderName)*' ; //Add wildedcard as Index folder name
 endif
 
 let vL.QDF.IndexQVD ='$(vL.QDF.IndexQVD).index'; // Add index prefix
@@ -498,7 +498,7 @@ let vL.QDF.DoDir = NoOfRows('vL._QVDIndex');
 
 for vL.QDF.LoopFromDoDir = 0 to vL.QDF.DoDir -1 // Retrieving index data
 LET vL.QDF.QVDFileName = peek('QVDFileName',$(vL.QDF.LoopFromDoDir),'vL._QVDIndex'); //Filename
-LET vL.QDF.QVDSourcePath = peek('QVDSourcePath',$(vL.QDF.LoopFromDoDir),'$(vL.QDF.QVDIndexTable)'); //Hard coded qvd Source path, only used as backup
+LET vL.QDF.QVDSourcePath = peek('QVDSourcePath',$(vL.QDF.LoopFromDoDir),'vL._QVDIndex'); //Hard coded qvd Source path, only used as backup
 LET vL.QDF.QVDContainer = peek('QVDSourceContainerName',$(vL.QDF.LoopFromDoDir),'vL._QVDIndex'); //ContainerName
 LET vL.QDF.QVDRelativePath = peek('RelativePath',$(vL.QDF.LoopFromDoDir),'vL._QVDIndex'); //RelativePath
 LET vL.QDF.QVDIndexStorageName = peek('QVDIndexStorageName',$(vL.QDF.LoopFromDoDir),'vL._QVDIndex'); //Index storage folder name
