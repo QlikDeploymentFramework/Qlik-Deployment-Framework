@@ -31,10 +31,13 @@ if not '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://$(vG.HomeContai
 elseif not '$(vG.HomeContainer)' = '' and not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= '$(vG.HomeContainer)/';
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
+elseif not '$(vG.HomeContainer)' = ''  then
+	trace '### DF Warning, could not find home container with name $(vG.HomeContainer)';
+	set vG.HomeContainer =;
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://Home/';
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://home/';
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 else // Validate single LIB mount
