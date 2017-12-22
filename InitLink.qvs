@@ -45,6 +45,9 @@ else // Validate single LIB mount
 		LET vG.RootPath= 'lib://$(vG.RootContainer)/';
 		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 		SET vG.RootContainer = ;
+	elseif not '$(vG.RootContainer)' = '' then
+		trace '### DF Warning, could not find root container with name $(vG.RootContainer)';
+		SET vG.RootContainer = ;
 	elseif not IsNull(filesize('lib://Root/*')) = -1 then 
 		LET vG.RootPath= 'lib://Root/';
 		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
