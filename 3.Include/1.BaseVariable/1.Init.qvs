@@ -61,41 +61,47 @@ SET vG.BasePath=;
 //***************** Initiation for Qlik Sense and QlikView **********************************
 // Qlik Sense additions Validating if LIB root exists if yes then add this as vG.RootPath
 // Validate Separate LIB mounts
-if not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then	
+if not '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://$(vG.HomeContainer)/';	
-	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif not '$(vG.HomeContainer)' = '' and not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= '$(vG.HomeContainer)/';
-	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif not '$(vG.HomeContainer)' = ''  then
+	trace '### DF Warning, could not find home container with name $(vG.HomeContainer)';
+	set vG.HomeContainer =;
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://Home/';
-	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://home/';
-	trace '### QDF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 else // Validate single LIB mount
-	if not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
+	if not '$(vG.RootContainer)' = '' and not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
 		LET vG.RootPath= 'lib://$(vG.RootContainer)/';
-		trace '### QDF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		SET vG.RootContainer = ;
+	elseif not '$(vG.RootContainer)' = '' then
+		trace '### DF Warning, could not find root container with name $(vG.RootContainer)';
 		SET vG.RootContainer = ;
 	elseif not IsNull(filesize('lib://Root/*')) = -1 then 
 		LET vG.RootPath= 'lib://Root/';
-		trace '### QDF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 	elseif not IsNull(filesize('lib://root/*')) = -1 then
 		LET vG.RootPath= 'lib://root/';
-		trace '### QDF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 	endif
 
-	// Validate fixed root url	
+	// Validate fixed root url
 	if not '$(vG.HomeContainer)'='' and not IsNull(filesize('$(vG.RootPath)$(vG.HomeContainer)\Initlink.qvs')) = -1 then
 		LET vG.BasePath= '$(vG.RootPath)$(vG.HomeContainer)\';
-		trace '### QDF Info, identified Sense home container  $(vG.BasePath)';
+		trace '### DF Info, identified Sense home container  $(vG.BasePath)';
 	
-	elseif not '$(vG.RootPath)' ='' then //Search for a valid container under Root
+	elseif not '$(vG.RootPath)' ='' then // Search for Initlink.qvs in a valid container under Root
 		for each vL.QDF.DoDir in dirlist ('$(vG.RootPath)*') 
 		if filesize('$(vL.QDF.DoDir)\Initlink.qvs') > 1 then
 			LET vG.BasePath= '$(vL.QDF.DoDir)\';
-			trace '### QDF Info, identified Sense home container $(vG.BasePath)';
+			trace '### DF Info, identified Sense home container $(vG.BasePath)';
 		endif
 		exit for when not '$(vG.BasePath)'='';	
 		next vL.QDF.DoDir
