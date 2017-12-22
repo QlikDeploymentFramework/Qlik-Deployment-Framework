@@ -25,10 +25,10 @@ SET vG.RootPath=;
 //***************** Initiation for Qlik Sense and QlikView **********************************
 // Qlik Sense additions Validating if LIB root exists if yes then add this as vG.RootPath
 // Validate Separate LIB mounts
-if not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then	
+if not '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://$(vG.HomeContainer)/';	
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then
+elseif not '$(vG.HomeContainer)' = '' and not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= '$(vG.HomeContainer)/';
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 elseif not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
@@ -38,7 +38,7 @@ elseif not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://home/';
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
 else // Validate single LIB mount
-	if not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
+	if not '$(vG.RootContainer)' = '' and not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
 		LET vG.RootPath= 'lib://$(vG.RootContainer)/';
 		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 		SET vG.RootContainer = ;
