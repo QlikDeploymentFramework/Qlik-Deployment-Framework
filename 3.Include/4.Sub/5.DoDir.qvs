@@ -43,7 +43,7 @@ if index('$(vL.QDF.DoDirRoot)','*')>0 and FindOneOf('$(vL.QDF.DoDirRoot)','\')>0
   if FindOneOf('$(vL.QDF.Specific_File_Type)','\')>0 then // If filetype contains \ it's probably a folder
     LET vL.QDF.Specific_File_Type=''; // remove filetype
   endif
-  let vL.QDF.Filename=left(right('$(vL.QDF.DoDirRoot)',len('$(vL.QDF.DoDirRoot)')-index('$(vL.QDF.DoDirRoot)','\',-1)),len(right('$(vL.QDF.DoDirRoot)',len('$(vL.QDF.DoDirRoot)')-index('$(vL.QDF.DoDirRoot)','\',-1)))-len('$(vL.QDF.Specific_File_Type)')-1);
+  let vL.QDF.Filename=left(right('$(vL.QDF.DoDirRoot)',len('$(vL.QDF.DoDirRoot)')-index('$(vL.QDF.DoDirRoot)','\',-1)),len(right('$(vL.QDF.DoDirRoot)',len('$(vL.QDF.DoDirRoot)')-index('$(vL.QDF.DoDirRoot)','\',-1)))-len('$(vL.QDF.Specific_File_Type)'));
   LET vL.QDF.DoDirRoot= left ('$(vL.QDF.DoDirRoot)',index('$(vL.QDF.DoDirRoot)','\',-1)); // Remove filename from path
 else 
 	LET vL.QDF.Specific_File_Type= '*';
