@@ -537,7 +537,9 @@ LET vL.QDF.QVDIndexStorageName = peek('QVDIndexStorageName',$(vL.QDF.LoopFromDoD
   endif
 
 next
-
+if vL.QDF.DoDir > 0 then
+	drop table vL._QVDIndex;
+endif
 else
 trace '### QDF Info, Found no index to delete';
 endif
