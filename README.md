@@ -3,13 +3,13 @@
 
 ## QDF is a set of Qlik scripts and utilities that enables: 
 Resource Sharing, Reuse, Organization, Structure and Standards providing an effective and efficient Qlik deployment.
-Qlik-Deployment-Framework content is avalibla under https://community.qlik.com/groups/qlikview-deployment-framework
+Qlik-Deployment-Framework content is available at https://community.qlik.com/groups/qlikview-deployment-framework
 
 ## Qlik Deployment Framework resource containers
-QDF is based on a resource container architecture, arrange containers (building blocks and security separators) to fit the current needs, when demand changes its easy to reorganize and add additional containers. QlikView and/or Qlik Sense applications are hooked into the containers in which all needed resources are resided.
+QDF is based on a resource container architecture. Arrange containers (building blocks and security separators) to fit the current needs, when demand changes its easy to reorganize and add additional containers. QlikView and/or Qlik Sense applications are hooked into the containers in which all needed resources reside.
 
 ## Qlik Deployment Framework Deploy Tool binary releases
-Avalible under releases tab: https://github.com/QlikDeploymentFramework/Qlik-Deployment-Framework/releases
+Available under releases tab: https://github.com/QlikDeploymentFramework/Qlik-Deployment-Framework/releases
 
 ## Qlik-Deployment-Framework GitHub repository
 Qlik-Deployment-Framework GitHub repository contains Qlik Script code that resides inside each QDF container, not the complete container.
