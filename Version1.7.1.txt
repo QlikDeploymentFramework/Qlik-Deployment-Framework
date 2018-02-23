@@ -7,6 +7,7 @@ Updated Deploy Tool it’s now possible to stretch out deploy tool.
 Minor IndexDel fix
 Minor change that removes QVC dependencies (when dissabled) in a better way
 Minor fixes to compencate for engine error (CFXFileSize::EvalDual)
+During Qlik Sense initiation Search for shared_folders and use as home container
 
 Whats new in release 1.7.0?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down

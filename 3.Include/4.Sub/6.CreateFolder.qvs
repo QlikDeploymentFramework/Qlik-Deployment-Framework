@@ -18,10 +18,10 @@ call vL.FileExist ('$(vL.QDF.FolderName_1)'); // Only execute on non-existing fo
 if vL.FileExist = 'false' then // If Folder do not exist it will be created. 
 
 if left(trim('$(vG.BasePath)'),6)='lib://' then //validate if Qlik Senes is executing
-vL.QVF.CreateFolder:
+vL.QDF.CreateFolder:
 	REPLACE LOAD * INLINE [//This file is created under QDF CreateFolder() function created folders];
-    store * from [vL.QVF.CreateFolder] into '$(vL.QDF.FolderName_1)\Info.txt' (txt,delimiter is ';' );
-    drop table [vL.QVF.CreateFolder];
+    store * from [vL.QDF.CreateFolder] into '$(vL.QDF.FolderName_1)\Info.txt' (txt,delimiter is ';' );
+    drop table [vL.QDF.CreateFolder];
 else //QlikView is executing
 	Let vL.QDF.FolderIndex_tmp=index('$(vL.QDF.FolderName_1)','\',-1);
 	let vL.QDF.FolderName_2=left('$(vL.QDF.FolderName_1)',vL.QDF.FolderIndex_tmp-1); // Identifying folder path
