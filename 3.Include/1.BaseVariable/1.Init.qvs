@@ -67,6 +67,12 @@ if not '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://$(vG.HomeContai
 elseif not '$(vG.HomeContainer)' = '' and not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= '$(vG.HomeContainer)/';
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://Shared/*')) = -1 then
+	LET vG.BasePath= 'lib://Shared/';
+	trace '### DF Info, identified Sense Shared home container (Separate LIB mounts)';
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://shared/*')) = -1 then
+	LET vG.BasePath= 'lib://shared/';
+	trace '### DF Info, identified Sense shared home container (Separate LIB mounts)';
 else // Validate single LIB mount
 	if not '$(vG.RootContainer)' = '' and not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
 		LET vG.RootPath= 'lib://$(vG.RootContainer)/';
@@ -75,10 +81,10 @@ else // Validate single LIB mount
 	elseif not '$(vG.RootContainer)' = '' then
 		trace '### DF Warning, could not find root container with name $(vG.RootContainer)';
 		SET vG.RootContainer = ;
-	elseif not '$(vG.RootPath)' = '' and not IsNull(filesize('lib://Root/*')) = -1 then 
+	elseif not IsNull(filesize('lib://Root/*')) = -1 then 
 		LET vG.RootPath= 'lib://Root/';
 		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
-	elseif  not '$(vG.RootPath)' = '' and not IsNull(filesize('lib://root/*')) = -1 then
+	elseif not IsNull(filesize('lib://root/*')) = -1 then
 		LET vG.RootPath= 'lib://root/';
 		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
 	endif
@@ -87,6 +93,9 @@ else // Validate single LIB mount
 	if not '$(vG.HomeContainer)'='' and not IsNull(filesize('$(vG.RootPath)$(vG.HomeContainer)\Initlink.qvs')) = -1 then
 		LET vG.BasePath= '$(vG.RootPath)$(vG.HomeContainer)\';
 		trace '### DF Info, identified Sense home container  $(vG.BasePath)';
+	elseif not '$(vG.RootPath)' = '' and not IsNull(filesize('$(vG.RootPath)99.Shared_Folders/*')) = -1 then
+		LET vG.BasePath= '$(vG.RootPath)99.Shared_Folders/';
+		trace '### DF Info, identified Sense home container $(vG.BasePath)';
 	
 	elseif not '$(vG.RootPath)' ='' then // Search for Initlink.qvs in a valid container under Root
 		for each vL.QDF.DoDir in dirlist ('$(vG.RootPath)*') 
