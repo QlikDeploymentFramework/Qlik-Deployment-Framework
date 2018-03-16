@@ -1,0 +1,24 @@
+// This Sub enables prettified output of text to the reload progress window of Qlik Sense.
+// Use it to get timestamped trace messages, that also have a prefix that makes them easier
+// to spot in the reload progress windows and reload logs.
+//
+// Usage example:
+// call vL.NiceTrace ('This is a debug message, including a variable $(vL.MetaDataQVDPath)\SOE.QVD')
+
+
+
+sub vL.NiceTrace (vL.QDF.Msg)
+
+    let vNow = Now(1);
+    trace >>> $(vNow): $(vL.QDF.Msg);
+
+    // Remove local variables before exiting
+    set vNow=;
+    set vL.QDF.Msg=;
+
+end sub;
+
+
+// **********************************
+// Function written by Göran Sander
+// **********************************
