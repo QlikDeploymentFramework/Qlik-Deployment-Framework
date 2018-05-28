@@ -24,6 +24,7 @@
   ];
 
   STORE $(vL.QDF.File) into [$(vL.QDF.Path)$(vL.QDF.File)];
+  DROP Table $(vL.QDF.File);
 
 END SUB;
 
