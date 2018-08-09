@@ -179,12 +179,12 @@ if '$(vG.RootPath)'='' and not lower(left(trim('$(vG.BasePath)'),6))='lib://' th
 	call LoadContainerMap('$(vG.BaseVariablePath)\ContainerMap.csv','','$(vG.BasePath)');
 endif
 
-//Remove variable to disable shared cache
+//Remove vG.SharedBasePath variable, this will clear shared cache
 set vG.$(vL.QDF.LinkShared_Folders)BasePath=;
 
 else
 	trace '### QDF Info, Global Variables using cache';
-	LET vG.RootPath='$(vL.QDF.RootPath_tmp)'; // Set RootPath to cache value 
+	LET vG.RootPath='$(vL.QDF.RootPath_tmp)'; // Set RootPath to cached value 
 endif
 
 
@@ -217,14 +217,14 @@ $(Include=$(vG.SubPath)\2.LoadVariableCSV.qvs);
 	call LoadVariableCSV('$(vG.BaseVariablePath)\$(vL.QDF.LoadCustomVG)');
 endif;
 
-// Initiation of 4.Custom from shared
+// Initiation of 4.Custom from Shared or (home container if Shared is missing)
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)BaseVariablePath)\4.Custom.qvs);
 
 // Initiation of 4.Custom within home container
 $(Include=$(vG.BaseVariablePath)\4.Custom.qvs); // Loading 4.Custom from current container
 
 // 99.LoadAll.qvs is loaded up last, this will pre-load all QDF functions, for easy access
-$(Include=$(vG.SubPath)\99.LoadAll.qvs); 
+$(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\99.LoadAll.qvs); 
 
 // Clean up
 // Remove local variables
