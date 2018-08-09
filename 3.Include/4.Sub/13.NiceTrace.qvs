@@ -9,11 +9,11 @@
 
 sub vL.NiceTrace (vL.QDF.Msg)
 
-    let vNow = Now(1);
-    trace >>> $(vNow): $(vL.QDF.Msg);
+    let vL.vNow = Now(1);
+    trace >>> $(vL.vNow): $(vL.QDF.Msg);
 
     // Remove local variables before exiting
-    set vNow=;
+    set vL.vNow=;
     set vL.QDF.Msg=;
 
 end sub;
