@@ -1,9 +1,14 @@
+Whats new in release 1.7.2?
+Minor bug fixes in 5.DoDir.qvs /thx walteryiphk
+Minor bug fixes in 12.Index.qvs /thx walteryiphk
+Added 13.NceTrace.qvs function to prettify output of text to the reload window /thx GÃ¶ran Sander
+
 Whats new in release 1.7.1?
 Fixed Shared Global Variable cache behavior, vG.BasePath is now controlling cache validation alone
 Updated Deploy Tool making it easier to jumb between multiple QDF environments
 Updated Deploy Tool sorting Container Map
 Updated Deploy Tool removes blanks in Container Map
-Updated Deploy Tool it’s now possible to stretch out deploy tool.
+Updated Deploy Tool itï¿½s now possible to stretch out deploy tool.
 Minor IndexDel fix
 Minor change that removes QVC dependencies (when dissabled) in a better way
 Minor fixes to compencate for engine error (CFXFileSize::EvalDual)
