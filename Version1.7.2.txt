@@ -1,6 +1,6 @@
 Whats new in release 1.7.2?
 Minor bug fixes in 5.DoDir.qvs /thx walteryiphk
-Minor bug fixes in 12.Index.qvs /thx walteryiphk
+Fixing stability issues in 12.Index.qvs
 Added 13.NceTrace.qvs function to prettify output of text to the reload window /thx Göran Sander
 
 Whats new in release 1.7.1?
