@@ -95,7 +95,7 @@ let vL.QDF.To_Loop = NoOfRows('vL.temp_table_map');
 		call vL.FileExist ('$(vL.RootPath)$(vL.QDF.ContainerName_tmp)'); //validate that rootpath is correct
       if vL.FileExist = 'true' then
 				LET vG.RootPath= '$(vL.RootPath)'; // Set new vG.RootPath
-				Trace '### DF Creating vG.RootPath based on Container Map';
+				Trace '### QDF Info, Creating vG.RootPath based on Container Map';
 				SET vL.QDF.Exit='True'; // When root path is set exit script 
 			endif
 	elseif not '$(vL.QDF.ValidatedBasePath)'='' and lower('$(vL.QDF.ValidatedBasePath)')=lower('lib://$(vL.ContainerPathName)/') then //Current Container validation for Qlik Sense
@@ -111,7 +111,7 @@ let vL.QDF.To_Loop = NoOfRows('vL.temp_table_map');
 			SET vL.QDF.Exit= 'True'; // Exit For Loop
 				
 		else // Several container Path exists, send error message
-			Trace '### DF Warning! more than one $(vL.ContainerPathName) exists, please identify and fix.';
+			Trace '### QDF Warning, found duplication of $(vL.ContainerPathName), please correct';
 				//Reset vL.LoadContainerMapCount variable used to identify if two or more identical Variable Prefix exist
 			SET vL.LoadContainerMapCount='$(vL.ContainerPathName)';
 			Sleep 5000; SET 5000=; // Remove variable 5000 created when running sleep!?
