@@ -2,6 +2,7 @@ Whats new in release 1.7.2?
 Minor bug fixes in 5.DoDir.qvs /thx walteryiphk
 Fixing stability issues in 12.Index.qvs
 Added 13.NceTrace.qvs function to prettify output of text to the reload window /thx Göran Sander
+Added 14.QVDReduce.qvs function that provides the ability to reduce the size of temporary QVD files /thx Damian Waldron Qlik
 Loading in sub-functions earlier within 1.Init.qvs
 Minor cleanup in custom.qvs and LoadVariableCSV.qvs
 
