@@ -11,7 +11,7 @@
 
 
 // Uncomment to Write information log
-trace '### QDF Info, 4.Custom.qvs Started';
+trace '### QDF Info, executing 4.Custom.qvs';
 
 
 
