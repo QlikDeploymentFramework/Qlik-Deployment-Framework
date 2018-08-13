@@ -9,8 +9,6 @@
   | call DoDir ('$(vG.BasePath),Table Name)'); //Change Table name 
 */
 sub DoDir (vL.QDF.DoDirRoot,vL.QDF.DoDirTableName,vL.QDF.FoldersOnly,vL.QDF.SingleFolder,vL.QDF.QualifyFelds,vL.QDF.Template_Exeptions)
-$(Include=$(vG.SubPath)\1.FileExist.qvs);
-
 
 let vL.QDF.DoDirRoot=trim('$(vL.QDF.DoDirRoot)'); // Trim vL.QDF.DoDirRoot
 let vL.QDF.Filename=; // remove variable (if exists)
@@ -100,7 +98,7 @@ Resident [$(vL.QDF.DoDirTableName)]
 group by [$(vL.QDF.QualifyFelds)DoDirFileName]; 
 
 else
-	trace '### DF 5.DoDir.qvs Cant find File Path $(vL.QDF.DoDirRoot)';
+	trace '### QDF Info, DoDir cant find file/path $(vL.QDF.DoDirRoot)';
 endif 
 
 SET vL.QDF.DoDirTableName =;
