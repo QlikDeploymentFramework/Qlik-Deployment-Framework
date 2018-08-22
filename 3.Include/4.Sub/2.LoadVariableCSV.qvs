@@ -12,7 +12,8 @@
 
 
 SUB LoadVariableCSV(vL.QDF.CVSTableName,vL.QDF.SpecificVariable,vL.QDF.ContainerName,vL.QDF.CommentsAsVariables,vL.QDF.ContainerMapMode);
-$(Include=$(vG.SubPath)\1.FileExist.qvs);
+//$(Include=$(vG.SubPath)\1.FileExist.qvs);
+//$(Include=$(vG.SubPath)\5.DoDir.qvs);
 
  // Loading CSV table based on vL.QDF.CVSTableName variables.
 if not '$(vL.QDF.ContainerName)'='' and not 'vL.QDF.CVSTableName'='' then //If a container entry is used find this in the container map
@@ -46,7 +47,6 @@ if index('$(vL.QDF.CVSTableName)','.csv')=0 then // Add csv if missing
 		Let vL.QDF.CVSTableName='$(vL.QDF.CVSTableName)*Variables.csv';
 endif
 
-$(Include=$(vG.SubPath)\5.DoDir.qvs);
 call DoDir('$(vL.QDF.CVSTableName)','QDF.DoDir_Tmp_Tbl','','true','true');
 
 let vL.QDF.DoDir_Tmp_Tbl = NoOfRows('QDF.DoDir_Tmp_Tbl');
@@ -57,7 +57,7 @@ LET vL.QDF.CVSTableName = peek('QDF.DoDir_Tmp_Tbl.FullyQualifiedName',$(vL.QDF.D
 
 if 	index(lower('$(vL.QDF.CVSTableName)'),'_backup')=0 then // Do not load if it's a _Backup file 
 
-trace '### DF Starting LoadVariableCSV';
+//trace '### QDF Starting LoadVariableCSV';
 
 [vL.temp_table]:
 
@@ -190,9 +190,9 @@ SET vL.QDF.filelist_tmp = ;
 
 
 // Writing information in log
-trace '### DF Ending LoadVariableCSV';
+trace '### QDF Info, LoadVariableCSV done';
 else
-trace '### DF Error Did not find $(vL.QDF.CVSTableName), ending LoadVariableCSV';
+trace '### QDF Error, Did not find $(vL.QDF.CVSTableName), exit LoadVariableCSV';
 endif;
 SET vL.FileExist = ;
 end sub

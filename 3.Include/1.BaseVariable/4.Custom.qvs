@@ -1,0 +1,27 @@
+﻿//  ____________________________________________________________
+// |      Deployment Framework BaseVariable 4.Custom.qvs       |
+// |  This Include contains Custom path like QVD Sub folders   |
+// |  If possible path should be based on Variables created     |
+// |  by the framework like $(vG.QVDPath) and $(vG.BasePath)   |
+// |___________________________________________________________|
+
+// Used to add custom Global Variables (vG.)
+// Recommendation is to use Deployment Framework Global Variable Editor (VariableEditor.qvw) instead of this file
+
+
+
+// Uncomment to Write information log
+trace '### QDF Info, executing 4.Custom.qvs';
+
+
+
+// This example will create global variables for the additional folders 1.Extract 2.Transform 3.Load 
+// Call DCGV('','Extract;Transform;Load');
+// The function will be executed by all qvw files if the modified 4.custom.qvs is stored in shared container
+// The function will be executed by all qvw files in the container that stores the modified 4.custom.qvs 
+
+
+
+
+// Uncomment to Write information log
+// trace '### QDF Info, 4.Custom.qvs Finished';

@@ -1,0 +1,36 @@
+/* ___________________________________________________________________________
+  |   Deployment Framework QVDReduce  sub function 14.QVDReduce.qvs 
+  |
+  | As part of ETL process it is often required to create temporary QVD files.
+  | These files often result in a more efficient (faster) processing time, rather
+  | than the alternative leveraging Resident load.
+  |
+  | Qlik Sense does not support the ability to delete files from the operating system.
+  | This sub-routine provides the ability to reduce the size of these temporary QVD files.
+  | Therefore ensuring that disk space is not consumed by temporary files.
+  |
+  | Use the function QVDReduce to execute. examples:
+  | Call reduceQVD('$(vL.QVDStagePath)','stageIVRData2.QVD');
+*/
+
+ SUB reduceQVD (vL.QDF.Path, vL.QDF.File)
+  // Trace $(vL.QDF.Path);
+  // Trace $(vL.QDF.File);
+
+  NoConcatenate
+  $(vL.QDF.File):
+  LOAD * Inline [
+    EMPTY
+  ];
+
+  STORE $(vL.QDF.File) into [$(vL.QDF.Path)$(vL.QDF.File)];
+  DROP Table $(vL.QDF.File);
+
+  SET vL.QDF.Path=;
+  SET vL.QDF.File=;
+
+END SUB;
+
+// ****************************************
+// Functions written by Damian Waldron Qlik
+// ****************************************

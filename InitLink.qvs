@@ -25,22 +25,25 @@ SET vG.RootPath=;
 //***************** Initiation for Qlik Sense and QlikView **********************************
 // Qlik Sense additions Validating if LIB root exists if yes then add this as vG.RootPath
 // Validate Separate LIB mounts
-if not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then	
+if not '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= 'lib://$(vG.HomeContainer)/';	
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 and not '$(vG.HomeContainer)' = '' then
+elseif not '$(vG.HomeContainer)' = '' and not IsNull(filesize('$(vG.HomeContainer)/Initlink.qvs')) = -1 then
 	LET vG.BasePath= '$(vG.HomeContainer)/';
 	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('lib://Home/Initlink.qvs')) = -1 then
-	LET vG.BasePath= 'lib://Home/';
-	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
-elseif not IsNull(filesize('lib://home/Initlink.qvs')) = -1 then
-	LET vG.BasePath= 'lib://home/';
-	trace '### DF Info, identified Sense home container $(vG.BasePath) (Separate LIB mounts)';
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://Shared/*')) = -1 then
+	LET vG.BasePath= 'lib://Shared/';
+	trace '### DF Info, identified Sense Shared home container (Separate LIB mounts)';
+elseif '$(vG.HomeContainer)' = '' and not IsNull(filesize('lib://shared/*')) = -1 then
+	LET vG.BasePath= 'lib://shared/';
+	trace '### DF Info, identified Sense shared home container (Separate LIB mounts)';
 else // Validate single LIB mount
-	if not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
+	if not '$(vG.RootContainer)' = '' and not IsNull(filesize('lib://$(vG.RootContainer)/*')) = -1 then	
 		LET vG.RootPath= 'lib://$(vG.RootContainer)/';
 		trace '### DF Info, identified Sense root path $(vG.RootPath) (single LIB mount)';
+		SET vG.RootContainer = ;
+	elseif not '$(vG.RootContainer)' = '' then
+		trace '### DF Warning, could not find root container with name $(vG.RootContainer)';
 		SET vG.RootContainer = ;
 	elseif not IsNull(filesize('lib://Root/*')) = -1 then 
 		LET vG.RootPath= 'lib://Root/';
@@ -54,8 +57,10 @@ else // Validate single LIB mount
 	if not '$(vG.HomeContainer)'='' and not IsNull(filesize('$(vG.RootPath)$(vG.HomeContainer)\Initlink.qvs')) = -1 then
 		LET vG.BasePath= '$(vG.RootPath)$(vG.HomeContainer)\';
 		trace '### DF Info, identified Sense home container  $(vG.BasePath)';
-	
-	elseif not '$(vG.RootPath)' ='' then // Search for Initlink.qvs in a valid container under Root
+	elseif not '$(vG.RootPath)' = '' and not IsNull(filesize('$(vG.RootPath)99.Shared_Folders/*')) = -1 then
+		LET vG.BasePath= '$(vG.RootPath)99.Shared_Folders/';
+		trace '### DF Info, identified Sense home container $(vG.BasePath)';
+	elseif not '$(vG.RootPath)' = '' then // Search for Initlink.qvs in a valid container under Root
 		for each vL.QDF.DoDir in dirlist ('$(vG.RootPath)*') 
 		if filesize('$(vL.QDF.DoDir)\Initlink.qvs') > 1 then
 			LET vG.BasePath= '$(vL.QDF.DoDir)\';

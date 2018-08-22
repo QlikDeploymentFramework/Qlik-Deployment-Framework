@@ -30,14 +30,12 @@ Call DoDir ('$(vL.QDF.IndexQVD)', '_tmp_DoDir','','','true'); //Dir of QVD sourc
 
 let vL.QDF.DoDir = NoOfRows('_tmp_DoDir'); //No of rows in DoDir table
 
-for vL.QDF.LoopFromDoDir = 0 to vL.QDF.DoDir
+//Validate vL.QDF.DoDir
+if vL.QDF.DoDir > 0  then 
+
+for vL.QDF.LoopFromDoDir = 0 to vL.QDF.DoDir-1
     LET vL.QDF.IndexQVD = peek('_tmp_DoDir.FullyQualifiedName',$(vL.QDF.LoopFromDoDir),'_tmp_DoDir'); // Get QVD filename
     LET vL.QDF.QVDFileName= peek('_tmp_DoDir.DoDirFileName',$(vL.QDF.LoopFromDoDir),'_tmp_DoDir'); // Get Qvd FileName
-
-call vL.FileExist ('$(vL.QDF.IndexQVD)'); // Validates if QVD file exists, if not skip function
-
-if vL.FileExist = 'true' then // Only run Index if QVD exist
-
 
 if not '$(vL.QDF.AltIndexPath)' = '' then // set alternative Index path
   call vL.FileExist ('$(vL.QDF.AltIndexPath)');
@@ -51,37 +49,38 @@ endif
 
 //---------------------------- Collect Meta Data using QVFileInfo ---------------
 
-call QVFileInfo('$(vL.QDF.IndexQVD)','__TMP_Fields'); // Get Meta information regarding the QVD file
-  
+call QVFileInfo('$(vL.QDF.IndexQVD)','vL.__TMP_Table'); // Get Meta information regarding the QVD file and stor in vL.__TMP_Table
+
+let vL.QDF.LoopTo = NoOfRows('vL.__TMP_Table_Fields');
+if vL.QDF.LoopTo > 0 then //Add metadata only if vL.__TMP_Table_Fields exist 
+
 if '$(vL.QDF.TAG)' = '' then // If comment field's blank identify fields automatically
     
-    Let vL.QDF.TAG=peek('QVTableComment',0,'__TMP_Fields');
+    Let vL.QDF.TAG=peek('QVTableComment',0,'vL.__TMP_Table');
 endif
-Let vL.QDF.FQFN = peek('FullyQualifiedName',0,'__TMP_Fields');
+Let vL.QDF.FQFN = peek('FullyQualifiedName',0,'vL.__TMP_Table');
 
-let vL.QDF.LoopTo = NoOfRows('__TMP_Fields_Fields');
-if not '$(vL.QDF.LoopTo)' ='' then
 
-Let vL.QDF.FileTime = num(timestamp(peek('QVFileTime',0,'__TMP_Fields'),'$(DateFormat)')); //Get Time and Date
-let vL.QDF.QVTableName =  peek('QVTableName',0,'__TMP_Fields');
-Let vL.QDF.QVTableCreator = peek('QVTableCreator',0,'__TMP_Fields'); // Get QVTableCreator
-let vL.QDF.QVNoRows =  peek('QVTableNbrRows',0,'__TMP_Fields');
-let vL.QDF.QVNofields =  peek('QVTableNbrFields',0,'__TMP_Fields');
-let vL.QDF.QVDFileName =  peek('QVFileName',0,'__TMP_Fields');
+Let vL.QDF.FileTime = num(timestamp(peek('QVFileTime',0,'vL.__TMP_Table'),'$(DateFormat)')); //Get Time and Date
+let vL.QDF.QVTableName =  peek('QVTableName',0,'vL.__TMP_Table');
+Let vL.QDF.QVTableCreator = peek('QVTableCreator',0,'vL.__TMP_Table'); // Get QVTableCreator
+let vL.QDF.QVNoRows =  peek('QVTableNbrRows',0,'vL.__TMP_Table');
+let vL.QDF.QVNofields =  peek('QVTableNbrFields',0,'vL.__TMP_Table');
+let vL.QDF.QVDFileName =  peek('QVFileName',0,'vL.__TMP_Table');
 
 
 for vL.QDF.LoopFrom = 0 to vL.QDF.LoopTo
-    LET vL.QDF.Fields = '$(vL.QDF.Fields)'&','& peek('QVFieldName',$(vL.QDF.LoopFrom),'__TMP_Fields_Fields'); // concatenate fields using ; as separator
-    LET vL.QDF.QVType = '$(vL.QDF.QVType)'&','& peek('QVType',$(vL.QDF.LoopFrom),'__TMP_Fields_Fields'); // concatenate fields using ; as separator
-    if peek('QVType',$(vL.QDF.LoopFrom),'__TMP_Fields_Fields')='D' or peek('QVType',$(vL.QDF.LoopFrom),'__TMP_Fields_Fields')='R'  or peek('QVType',$(vL.QDF.LoopFrom),'__TMP_Fields_Fields')='F' then  // only add format if date type
-      LET vL.QDF.QVFormat = '$(vL.QDF.QVFormat)'&','& peek('QVFormat',$(vL.QDF.LoopFrom),'__TMP_Fields_Fields');
+    LET vL.QDF.Fields = '$(vL.QDF.Fields)'&','& peek('QVFieldName',$(vL.QDF.LoopFrom),'vL.__TMP_Table_Fields'); // concatenate fields using ; as separator
+    LET vL.QDF.QVType = '$(vL.QDF.QVType)'&','& peek('QVType',$(vL.QDF.LoopFrom),'vL.__TMP_Table_Fields'); // concatenate fields using ; as separator
+    if peek('QVType',$(vL.QDF.LoopFrom),'vL.__TMP_Table_Fields')='D' or peek('QVType',$(vL.QDF.LoopFrom),'vL.__TMP_Table_Fields')='R'  or peek('QVType',$(vL.QDF.LoopFrom),'vL.__TMP_Table_Fields')='F' then  // only add format if date type
+      LET vL.QDF.QVFormat = '$(vL.QDF.QVFormat)'&','& peek('QVFormat',$(vL.QDF.LoopFrom),'vL.__TMP_Table_Fields');
     else
       LET vL.QDF.QVFormat = '$(vL.QDF.QVFormat)'&','; // blank line
     endif
 Next vL.QDF.LoopFrom
 
-drop table __TMP_Fields ;
-drop table __TMP_Fields_Fields ;
+drop table vL.__TMP_Table ;
+drop table vL.__TMP_Table_Fields ;
 //---------------------------- Collect Meta Data done---------------
 
 let vL.QDF.IndexQVD=left('$(vL.QDF.FQFN)',len('$(vL.QDF.FQFN)')-len('$(vL.QDF.QVDFileName)')); // Create folder path only
@@ -121,7 +120,6 @@ else
 trace '### QDF Info, IndexAdd Cant find any data in $(vL.QDF.IndexQVD)';
 endif
 
-endif
 
 // Cleanup inside loop
 set vL.QDF.QVNofields = ;
@@ -146,8 +144,12 @@ Set vL.ContainerPathName = ;
 set vL.RelativePath=;
 Next vL.QDF.LoopFromDoDir
 
-// Cleanup
 drop table _tmp_DoDir ;
+
+endif
+
+// Cleanup
+
 Set vL.QDF.AltIndexPath = ;
 Set vL.QDF.IndexQVD = ;
 set vL.QDF.DoDir=;
@@ -468,7 +470,7 @@ let vL.QDF.IndexQVD ='$(vL.QDF.IndexQVD).index'; // Add index prefix
 
 
 //-----------------Load in Index section---------------------------
-Call DoDir ('$(vL.QDF.SharedConfigPath)\*$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)', '_tmp_DoDir', '', '','true'); //Dir of vL.QDF.IndexQVD file or directory
+Call DoDir ('$(vL.QDF.SharedConfigPath)\$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)', '_tmp_DoDir', '', '','true'); //Dir of vL.QDF.IndexQVD file or directory
 
 if NoOfFields('_tmp_DoDir') >0 then // Validate if DoDir Table Exists
 
@@ -537,7 +539,9 @@ LET vL.QDF.QVDIndexStorageName = peek('QVDIndexStorageName',$(vL.QDF.LoopFromDoD
   endif
 
 next
-
+if vL.QDF.DoDir > 0 then
+	drop table vL._QVDIndex;
+endif
 else
 trace '### QDF Info, Found no index to delete';
 endif

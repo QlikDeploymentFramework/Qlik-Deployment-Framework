@@ -1,11 +1,21 @@
+Whats new in release 1.7.2?
+Minor bug fixes in 5.DoDir.qvs /thx walteryiphk
+Fixing stability issues in 12.Index.qvs
+Added 13.NceTrace.qvs function to prettify output of text to the reload window /thx GÃ¶ran Sander
+Added 14.QVDReduce.qvs function that provides the ability to reduce the size of temporary QVD files /thx Damian Waldron Qlik
+Loading in sub-functions earlier within 1.Init.qvs
+Minor cleanup in custom.qvs and LoadVariableCSV.qvs
+
 Whats new in release 1.7.1?
 Fixed Shared Global Variable cache behavior, vG.BasePath is now controlling cache validation alone
 Updated Deploy Tool making it easier to jumb between multiple QDF environments
 Updated Deploy Tool sorting Container Map
 Updated Deploy Tool removes blanks in Container Map
-Updated Deploy Tool it’s now possible to stretch out deploy tool.
+Updated Deploy Tool itï¿½s now possible to stretch out deploy tool.
 Minor IndexDel fix
-Minor change that removes QVC dependencies (when dissabled) in a better way 
+Minor change that removes QVC dependencies (when dissabled) in a better way
+Minor fixes to compencate for engine error (CFXFileSize::EvalDual)
+During Qlik Sense initiation Search for shared_folders and use as home container
 
 Whats new in release 1.7.0?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
