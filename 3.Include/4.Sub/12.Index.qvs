@@ -219,7 +219,7 @@ for vL.QDF.LoopFromDoDir = 0 to vL.QDF.DoDir -1
 
 LET vL.QDF.IndexFile = peek('_tmp_DoDir.FullyQualifiedName',$(vL.QDF.LoopFromDoDir),'_tmp_DoDir'); 
 
-if filesize('$(vL.QDF.IndexFile)\$(vL.QDF.IndexQVD)') >0 then
+if filesize('$(vL.QDF.IndexFile)\$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)') >0 then
 
 unqualify QVDFileName,QVTableName,QVDSourcePath,QVDSourceContainerName,RelativePath,QVDTag,QVDFields,QVDNbrRecords;
 
@@ -242,13 +242,13 @@ $(vL.QDF.QVDIndexTable):
      QVDFields, 
      QVDNbrRecords
   FROM
-  [$(vL.QDF.IndexFile)\$(vL.QDF.IndexQVD)] (txt, utf8, embedded labels, delimiter is ';', msq);;
+  [$(vL.QDF.IndexFile)\$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)] (txt, utf8, embedded labels, delimiter is ';', msq);;
 
 else // load more if only the index should be loaded
 $(vL.QDF.QVDIndexTable): 
   LOAD *
   FROM
-  [$(vL.QDF.IndexFile)\$(vL.QDF.IndexQVD)] (txt, utf8, embedded labels, delimiter is ';', msq);;
+  [$(vL.QDF.IndexFile)\$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)] (txt, utf8, embedded labels, delimiter is ';', msq);;
 endif
 
 endif
