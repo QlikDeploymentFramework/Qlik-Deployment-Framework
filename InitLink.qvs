@@ -1,10 +1,11 @@
-/*  ____________________________________________________________________________________
-   |      Deployment Framework InitLink.qvs    
+;
+/*  ___________________________________________________________________________
+   | Qlik Deployment Framework InitLink.qvs    
    | InitLink.qvs is the container identifier                                      
    | InitLink is used as "sling shot" to 1.Init.qvs for QlikView and Qlik Sense               
-   |____________________________________________________________________________________
-   Writing information in log */
-trace '### QDF Info, InitLink trying to link to initiation script';
+   |___________________________________________________________________________*/
+   
+trace '### QDF Info, InitLink trying to link to initiation script'; //Writing information in log 
 
 // Run Container initiation
 

@@ -1,15 +1,15 @@
-//  ____________________________________________________________________________
-// |   Deployment Framework SUBVariable 2.LoadVariableCSV.qvs    
-// | SUB routine used for loading variables stored in csv files into the QlikView Script
-// | Execute (Call) the Sub in the script, by first include the script in the beginning:
-// | $(Include=$(vG.SubPath)\2.LoadVariableCSV.qvs);
-// | and then use:
-// | call LoadVariableCSV('CSV_My Tables.csv', ,Optional vL.SpecificVariable or Tag, Optional vL.QDF.ContainerMapMode, Optional Use Comments as Variables, Optional Specify table name, will keep the table after load);
-// | Mandatory switch is csv path and file 'CSV_My Tables.csv'
-// | By using vL.QDF.ContainerMapMode the csv will be treated as an ContainerMap.csv file
-// | And Container base Variables will be loaded based on ContainerMap.csv
-
-
+;
+/* ____________________________________________________________________________
+ |   Qlik Deployment Framework SUBVariable 2.LoadVariableCSV.qvs    
+ | SUB routine used for loading variables stored in csv files into the QlikView Script
+ | Execute (Call) the Sub in the script, by first include the script in the beginning:
+ | $(Include=$(vG.SubPath)\2.LoadVariableCSV.qvs);
+ | and then use:
+ | call LoadVariableCSV('CSV_My Tables.csv', ,Optional vL.SpecificVariable or Tag, Optional vL.QDF.ContainerMapMode, Optional Use Comments as Variables, Optional Specify table name, will keep the table after load);
+ | Mandatory switch is csv path and file 'CSV_My Tables.csv'
+ | By using vL.QDF.ContainerMapMode the csv will be treated as an ContainerMap.csv file
+ | And Container base Variables will be loaded based on ContainerMap.csv
+*/
 
 SUB LoadVariableCSV(vL.QDF.CVSTableName,vL.QDF.SpecificVariable,vL.QDF.ContainerName,vL.QDF.CommentsAsVariables,vL.QDF.ContainerMapMode);
 //$(Include=$(vG.SubPath)\1.FileExist.qvs);

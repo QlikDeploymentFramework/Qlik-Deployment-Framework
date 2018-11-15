@@ -1,3 +1,4 @@
+;
 /* ___________________________________________________________________________
   |   Deployment Framework QVDMigration sub function 9.QVDMigration.qvs 
   |
@@ -7,8 +8,6 @@
   | call QVDMigration (vL.QDF.MigrationSource,vL.QDF.MigrationDestination, vL.QDF.Store_Select); //Simple Example
   | call QVDMigration ('$(vG.QVDPath)\Customer.qvd','$(vG.SharedQVDPath)\Customer.qvd', 'CustomerID,CompanyName');
 */
-
- 
 
 sub QVDMigration (vL.QDF.MigrationSource,vL.QDF.MigrationDestination,vL.QDF.Store_Select,vL.QDF.Scramble_fields,vL.QDF.QVTableName_Suffix,vL.QDF.IncludeSubFolders,vL.QDF.FormatSpec,vL.QDF.NoRecords)
 

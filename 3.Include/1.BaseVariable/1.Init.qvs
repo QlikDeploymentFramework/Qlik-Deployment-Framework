@@ -1,10 +1,11 @@
-//  ___________________________________________________________
-// |      Deployment Framework BaseVariable 1.Init.qvs         
-// |  This Include populates global variables            
-// |  All global path are based on vG.BasePath that is identified first                        
-// |___________________________________________________________
-// Writing information in QlikView application log
-trace '### QDF Info, Initiation Started';
+;
+/*___________________________________________________________
+ |  Qlik Deployment Framework BaseVariable 1.Init.qvs         
+ |  This Include populates global variables            
+ |  All global path are based on vG.BasePath that is identified first                        
+ |___________________________________________________________ */
+
+trace '### QDF Info, Initiation Started'; // Writing information in QlikView application log
 
 // To link Shared_Folders directly into 1.init.qvs set vL.QDF.LinkShared_Folders = 'Shared' (link name)
 // Leave vL.QDF.LinkShared_Folders blank to skip linking to shared folders

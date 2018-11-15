@@ -1,9 +1,11 @@
-// SUB routine loading csv Container Map into a QlikView Script, is primarily used by 4.GenericContainerLoader.qvs
-// Execute (Call) the Sub in the script by first include the script in the beginning and then use:
-// call LoadContainerMap('container map csv', 'Name of Container to link'[,'Optional, retrive Root Path by typing current container name']);
-// Container base Variables will be loaded based on ContainerMap.csv
-// will return vL.ContainerPathName vL.ContainerFolderName vL.Comment vL.RootPath 
-
+;
+/* ____________________________________________________________________________
+ | SUB routine loading csv Container Map into a QlikView Script, is primarily used by 4.GenericContainerLoader.qvs
+ | Execute (Call) the Sub in the script by first include the script in the beginning and then use:
+ | call LoadContainerMap('container map csv', 'Name of Container to link'[,'Optional, retrive Root Path by typing current container name']);
+ | Container base Variables will be loaded based on ContainerMap.csv
+ | will return vL.ContainerPathName vL.ContainerFolderName vL.Comment vL.RootPath 
+*/
 
 SUB LoadContainerMap(vL.QDF.CVSTableName,vL.QDF.SpecificVariable,vL.QDF.GetRootPath);
 

@@ -1,3 +1,4 @@
+;
 // This Sub enables prettified output of text to the reload progress window of Qlik Sense.
 // Use it to get timestamped trace messages, that also have a prefix that makes them easier
 // to spot in the reload progress windows and reload logs.

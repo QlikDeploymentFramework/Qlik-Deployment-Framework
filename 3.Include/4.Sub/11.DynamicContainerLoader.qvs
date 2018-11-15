@@ -1,13 +1,14 @@
+  ;
   /* __________________________________________________________________________
- | Deployment Framework BaseVariable 11.DynamicContainerGlobalVariables.qvs  |
- |  All path are based on vG.BasePath                        				 |
- |  This script is used to dynamic connect to container folders     		 |
+ | Qlik Deployment Framework BaseVariable 11.DynamicContainerGlobalVariables.qvs  
+ | All path are based on vG.BasePath                        				 
+ | This script is used to dynamic connect to container folders     		 
+ | This script should only be accessed from QlikView via the LoadContainerGlobalVariables function
+ | SUB DynamicContainerGlobalVariables ('Container Path Name',['Optional Single Folder'], ['Optional use alternative Container Map']);
+ | Example: call DynamicContainerGlobalVariables('1.AcmeStore');
+ |  Example: call DCGV('1.AcmeStore');
  |____________________________________________________________________________*/
 
-// This script should only be accessed from QlikView via the LoadContainerGlobalVariables function
-// SUB DynamicContainerGlobalVariables ('Container Path Name',['Optional Single Folder'], ['Optional use alternative Container Map']);
-// Example: call DynamicContainerGlobalVariables('1.AcmeStore');
-// Example: call DCGV('1.AcmeStore');
 SUB DynamicContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.QDF.OverridePrefix);
 
 // Writing information in log

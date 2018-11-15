@@ -1,7 +1,8 @@
+;
 /* 
-### This script loads all sub functions in one single batch
-### It's run automatically by 1.Init.qvs QDF during initiation
-### $(Must_Include=$(vG.SubPath)\99.LoadAll.qvs);
+ | This script loads all sub functions in one single batch
+ | It's run automatically by 1.Init.qvs QDF during initiation
+ | $(Must_Include=$(vG.SubPath)\99.LoadAll.qvs);
 */
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\1.FileExist.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\2.LoadVariableCSV.qvs);

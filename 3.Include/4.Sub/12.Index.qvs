@@ -1,4 +1,5 @@
-/*=================================================================================================
+;
+/*____________________________________________________________________________
 IndexAdd creates a QVD index. The index is based on meta-data and tags collected from the QVD header. The index can thereby be recreated if need be. The index default location is $(vG.SharedConfigPath)/Index location can be modified if needed. Execute IndexAdd sub function inside the script:
 Call IndexAdd(‘QVD path and name’,['Index folder name'] ,['Container name'] ,['Tags'] ,['Alternative Index path'])
 
@@ -18,6 +19,7 @@ Store [$(vL.TableName)] into '$(vG.QVDPath)\Folder\$(vL.TableName).qvd';
 Call IndexAdd('$(vG.QVDPath)\Folder\$(vL.TableName).qvd');
 Several tags can be added using comma (,) as separator as shown below:
 Comment Table [$(vL.TableName)] with 'Level2,SalesAgg';
+____________________________________________________________________________
 */
 
 SUB IndexAdd(vL.QDF.IndexQVD,vL.QDF.IndexFolderName,vL.QDF.ContainerPathName,vL.QDF.TAG,vL.QDF.AltIndexPath);
