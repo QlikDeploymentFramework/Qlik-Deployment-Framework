@@ -1,14 +1,12 @@
-;
-/* ___________________________________________________________________________
-  |  Qlik  Deployment FrameworkvL.FileExist sub function 1.FileExist 
-  | This Sub will check if a file or folder exists
-  |  Use before load to avoid errors during script load 
-  |  Syntax example in the script:
-  |  call vL.FileExist ('$(vL.MetaDataQVDPath)\SOE.QVD')
-  |  Local Variable vL.FileExist returns false or true
-  | example usage:
-  |  if vL.FileExist = 'false' then; trace '### DF Did not find file, exit script'; exit script; endif;
-*/
+// ___________________________________________________________________________
+  //  Qlik  Deployment FrameworkvL.FileExist sub function 1.FileExist 
+  // This Sub will check if a file or folder exists
+  //  Use before load to avoid errors during script load 
+  //  Syntax example in the script:
+  //  call vL.FileExist ('$(vL.MetaDataQVDPath)\SOE.QVD')
+  //  Local Variable vL.FileExist returns false or true
+  // example usage:
+  //  if vL.FileExist = 'false' then; trace '### DF Did not find file, exit script'; exit script; endif;
 
 sub vL.FileExist (vL.QDF.Root)
 	

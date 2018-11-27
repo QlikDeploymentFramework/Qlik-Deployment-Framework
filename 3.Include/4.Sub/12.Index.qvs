@@ -1,26 +1,25 @@
 ;
-/*____________________________________________________________________________
-IndexAdd creates a QVD index. The index is based on meta-data and tags collected from the QVD header. The index can thereby be recreated if need be. The index default location is $(vG.SharedConfigPath)/Index location can be modified if needed. Execute IndexAdd sub function inside the script:
-Call IndexAdd(‘QVD path and name’,['Index folder name'] ,['Container name'] ,['Tags'] ,['Alternative Index path'])
+//____________________________________________________________________________
+// IndexAdd creates a QVD index. The index is based on meta-data and tags collected from the QVD header. The index can thereby be recreated if need be. The index default location is $(vG.SharedConfigPath)/Index location can be modified if needed. Execute IndexAdd sub function inside the script:
+// Call IndexAdd(‘QVD path and name’,['Index folder name'] ,['Container name'] ,['Tags'] ,['Alternative Index path'])
+// 
+// • QVD path and name Path and name of QVD file to Index, wild card (*.qvd) is supported
+// • Index folder name (Optional) create a custom Index name, default is qvd path
+// • Container name (Optional) Specify the QVD files container name, this is usually identified automatically 
+// • Tags (Optional) Add index tag, recommendation is to use the comment table function instead as this will be more persistent.
+// • Alternative Index path (Optional) will change the default Index path ($(vG.SharedConfigPath)/Index) This is not recommended as all functions would need the alternative path specified
+// Examples:
+// Call IndexAdd(‘vG.QVDPath\Customers.qvd’); Will add an index for Customers.qvd file
+// Call IndexAdd(‘vG.QVDPath\*.qvd’); Will add an index for all qvd files in vG.QVDPath path
 
-• QVD path and name Path and name of QVD file to Index, wild card (*.qvd) is supported
-• Index folder name (Optional) create a custom Index name, default is qvd path
-• Container name (Optional) Specify the QVD files container name, this is usually identified automatically 
-• Tags (Optional) Add index tag, recommendation is to use the comment table function instead as this will be more persistent.
-• Alternative Index path (Optional) will change the default Index path ($(vG.SharedConfigPath)/Index) This is not recommended as all functions would need the alternative path specified
-Examples:
-Call IndexAdd(‘vG.QVDPath\Customers.qvd’); Will add an index for Customers.qvd file
-Call IndexAdd(‘vG.QVDPath\*.qvd’); Will add an index for all qvd files in vG.QVDPath path
-
-Using Comment field to tag QVD data
-It is strongly recommended to add tags into your qvd data files, these tags will identify what data to load. For example if we create an aggregated QVD data layer it could be tagged -for example- as Level2 (where level 1 is un-aggregated). This is done by adding tag (or tags) into the qvd using the Comment Table function. This should be done before storing the QVD, creating the index using IndexAdd should be done after Store, as shown in this example:
-Comment Table [$(vL.TableName)] with 'Level2'; 
-Store [$(vL.TableName)] into '$(vG.QVDPath)\Folder\$(vL.TableName).qvd';
-Call IndexAdd('$(vG.QVDPath)\Folder\$(vL.TableName).qvd');
-Several tags can be added using comma (,) as separator as shown below:
-Comment Table [$(vL.TableName)] with 'Level2,SalesAgg';
-____________________________________________________________________________
-*/
+// Using Comment field to tag QVD data
+// It is strongly recommended to add tags into your qvd data files, these tags will identify what data to load. For example if we create an aggregated QVD data layer it could be tagged -for example- as Level2 (where level 1 is un-aggregated). This is done by adding tag (or tags) into the qvd using the Comment Table function. This should be done before storing the QVD, creating the index using IndexAdd should be done after Store, as shown in this example:
+// Comment Table [$(vL.TableName)] with 'Level2'; 
+// Store [$(vL.TableName)] into '$(vG.QVDPath)\Folder\$(vL.TableName).qvd';
+// Call IndexAdd('$(vG.QVDPath)\Folder\$(vL.TableName).qvd');
+// Several tags can be added using comma (,) as separator as shown below:
+// Comment Table [$(vL.TableName)] with 'Level2,SalesAgg';
+// ____________________________________________________________________________
 
 SUB IndexAdd(vL.QDF.IndexQVD,vL.QDF.IndexFolderName,vL.QDF.ContainerPathName,vL.QDF.TAG,vL.QDF.AltIndexPath);
 

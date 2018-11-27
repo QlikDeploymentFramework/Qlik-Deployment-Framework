@@ -1,9 +1,8 @@
-;
-/*___________________________________________________________
- |  Qlik Deployment Framework BaseVariable 1.Init.qvs         
- |  This Include populates global variables            
- |  All global path are based on vG.BasePath that is identified first                        
- |___________________________________________________________ */
+// __________________________________________________________
+//  Qlik Deployment Framework BaseVariable 1.Init.qvs         
+//  This Include populates global variables            
+//  All global path are based on vG.BasePath that is identified first                        
+//  ___________________________________________________________
 
 trace '### QDF Info, Initiation Started'; // Writing information in QlikView application log
 

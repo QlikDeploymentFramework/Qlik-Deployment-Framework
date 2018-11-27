@@ -1,11 +1,10 @@
-;
-/*
-  | Create Folder function will create folder (if non existing) or folder structure. 
-  | First include the script: $(Include=$(vG.SubPath)\6.CreateFolder.qvs);
-  |  After execute (call) the Sub CreateFolder inside the script.
-  |  sub CreateFolder (vL.FolderName) vL.FolderName Is the folder name or folder structure to create
-  |  Example: call CreateFolder ('$(vG.QVDPath)\NorthWind'); // Will create NorthWind folder under vG.QVDPath
-*/
+
+  // Create Folder function will create folder (if non existing) or folder structure. 
+  // First include the script: $(Include=$(vG.SubPath)\6.CreateFolder.qvs);
+  //  After execute (call) the Sub CreateFolder inside the script.
+  //  sub CreateFolder (vL.FolderName) vL.FolderName Is the folder name or folder structure to create
+  //  Example: call CreateFolder ('$(vG.QVDPath)\NorthWind'); // Will create NorthWind folder under vG.QVDPath
+
 
 SUB CreateFolder (vL.QDF.FolderName_1);
 $(Include=$(vG.SubPath)\1.FileExist.qvs);

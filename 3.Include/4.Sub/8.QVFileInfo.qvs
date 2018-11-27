@@ -1,20 +1,18 @@
-;
-/* ___________________________________________________________________________
-  |   Deployment Framework QVFileInfo sub function 8.QVFileInfo.qvs    
-  |   
-  |  This script will collect the tables and fields from the QVW and QVD files
-  |  Fully Qualified file Name is the path and name of qvd or qvw file
-  |  Table Name (Optional) is name of the table returning the result
-  |  default table name is QVFileInfo linked with QVFileInfo_field (field details table)
-  |  First include the QVFileInfo Function $(Include=$(vG.SubPath)\8.QVFileInfo.qvs);
-  |  Usage QVFileInfo( 'Fully Qualified file Name',['Table Name'])
-  |  Example: QVFileInfo('$(vG.QVDPath)\Customer.qvd')
-  |  Example: QVFileInfo('$(vG.QVDPath)\Customer.qvd','QVFileTable')
-  |  
-  |  QVFileInfo works together with 5.DoDir.qvs 
-  |  the field FullyQualifiedName will automatically link with DoDir result table
-  ___________________________________________________________________________
-*/
+// ___________________________________________________________________________
+  //   Deployment Framework QVFileInfo sub function 8.QVFileInfo.qvs    
+  //   
+  //  This script will collect the tables and fields from the QVW and QVD files
+  //  Fully Qualified file Name is the path and name of qvd or qvw file
+  //  Table Name (Optional) is name of the table returning the result
+  //  default table name is QVFileInfo linked with QVFileInfo_field (field details table)
+  //  First include the QVFileInfo Function $(Include=$(vG.SubPath)\8.QVFileInfo.qvs);
+  //  Usage QVFileInfo( 'Fully Qualified file Name',['Table Name'])
+  //  Example: QVFileInfo('$(vG.QVDPath)\Customer.qvd')
+  //  Example: QVFileInfo('$(vG.QVDPath)\Customer.qvd','QVFileTable')
+  //  
+  //  QVFileInfo works together with 5.DoDir.qvs 
+  //  the field FullyQualifiedName will automatically link with DoDir result table
+ //  ___________________________________________________________________________
 
 SUB QVFileInfo(vL.QDF.QVFile,vL.QDF.QVTableName);
 

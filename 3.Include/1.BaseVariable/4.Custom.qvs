@@ -1,12 +1,12 @@
 ﻿; 
- /*____________________________________________________________
- |  Qlik Deployment Framework BaseVariable 4.Custom.qvs       
- |  This Include contains Custom path like QVD Sub folders   
- |  If possible path should be based on Variables created     
- |  by the framework like $(vG.QVDPath) and $(vG.BasePath)
- |  Used to add custom Global Variables (vG.)
- |  Recommendation is to use Deployment Framework Global Variable Editor (VariableEditor.qvw) instead of this file
- |___________________________________________________________*/
+ //____________________________________________________________
+ //  Qlik Deployment Framework BaseVariable 4.Custom.qvs       
+ //  This Include contains Custom path like QVD Sub folders   
+ //  If possible path should be based on Variables created     
+ //  by the framework like $(vG.QVDPath) and $(vG.BasePath)
+ //  Used to add custom Global Variables (vG.)
+ //  Recommendation is to use Deployment Framework Global Variable Editor (VariableEditor.qvw) instead of this file
+ //___________________________________________________________*/
 
 
 // trace '### QDF Info, executing 4.Custom.qvs'; // Uncomment to Write information log

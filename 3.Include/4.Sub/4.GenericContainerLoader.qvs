@@ -1,9 +1,8 @@
-﻿;
-/* ____________________________________________________________
-| Deployment Framework BaseVariable 4.GenericContainerLoader|
-|  All path are based on vG.BasePath                        |
-|  This script is used to connect to any container          |
-|___________________________________________________________|
+﻿// ____________________________________________________________
+// Deployment Framework BaseVariable 4.GenericContainerLoader//
+//  All path are based on vG.BasePath                        //
+//  This script is used to connect to any container          //
+//___________________________________________________________//
 
 This script should only be accessed via the LCGV function
  SUB LCGV(‘Container Path Name’,['Optional Single Folder']);
