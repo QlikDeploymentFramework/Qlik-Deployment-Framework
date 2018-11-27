@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ;
 /* ___________________________________________________________________________
   |  Qlik  Deployment Framework DoDir sub function 5.DoDir.qvs 
@@ -9,6 +10,18 @@
   | call DoDir ('$(vG.RootPath)\*.qvd'); Simple Example
   | call DoDir ('$(vG.BasePath),Table Name)'); Change Table name 
 */
+=======
+// ___________________________________________________________________________
+//  |   Deployment Framework DoDir sub function 5.DoDir.qvs 
+//  |
+//  | Returns a Table containing files and path in selected file system (vL.QDF.DoDirRoot)
+//  | First include the DoDir Function $(Include=$(vG.SubPath)\5.DoDir.qvs);
+//  | Use the function DoDir to execute. examples:
+//  | call DoDir ('$(vG.RootPath)'); //Simple Example
+//  | call DoDir ('$(vG.RootPath)\*.qvd'); //Simple Example
+//  | call DoDir ('$(vG.BasePath),Table Name)'); //Change Table name 
+//
+>>>>>>> pr/13
 sub DoDir (vL.QDF.DoDirRoot,vL.QDF.DoDirTableName,vL.QDF.FoldersOnly,vL.QDF.SingleFolder,vL.QDF.QualifyFelds,vL.QDF.Template_Exeptions)
 
 let vL.QDF.DoDirRoot=trim('$(vL.QDF.DoDirRoot)'); // Trim vL.QDF.DoDirRoot
