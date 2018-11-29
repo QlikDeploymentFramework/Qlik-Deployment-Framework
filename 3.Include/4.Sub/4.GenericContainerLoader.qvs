@@ -2,12 +2,11 @@
 // Deployment Framework BaseVariable 4.GenericContainerLoader//
 //  All path are based on vG.BasePath                        //
 //  This script is used to connect to any container          //
+// This script should only be accessed via the LCGV function
+// SUB LCGV(‘Container Path Name’,['Optional Single Folder']);
+// Example: call LCGV('1.AcmeStore');
 //___________________________________________________________//
 
-This script should only be accessed via the LCGV function
- SUB LCGV(‘Container Path Name’,['Optional Single Folder']);
-Example: call LCGV('1.AcmeStore');
-*/
 SUB LoadContainerGlobalVariables(vL.QDF.ContainerName,vL.QDF.SingleFolder,vL.QDF.Alias);
 
 sub vL.QDF.FindFolders;

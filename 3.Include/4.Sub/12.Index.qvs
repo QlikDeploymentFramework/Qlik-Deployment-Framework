@@ -165,23 +165,22 @@ Set vL.QDF.IndexFolderName = ;
 
 END SUB
 
-/*=================================================================================================
-IndexLoad loads qvd data based on index search criteria’s like tags and field names. The qvd fieldname is the primary search criteria so it’s strongly recommended to have a qvd naming convention like day-month-year-TableName.qvd.
-Execute IndexLoad sub function inside the script:
+//=================================================================================================
+//IndexLoad loads qvd data based on index search criteria’s like tags and field names. The qvd fieldname is the primary search criteria so it’s strongly recommended to have a qvd naming convention like day-month-year-TableName.qvd.
+//Execute IndexLoad sub function inside the script:
+//
+//Call IndexLoad([‘QVD file name’],['Table Name'] ,['Index Folder Name'] ,['Tags'] ,['Fields'] ,['Index Only'] ,['Load Max Rows'] ,[ ['Alternative Index path'])
+//
+//• QVD file name  (Optional) Name of QVD to load, wild cards (*01-2015*) is supported
+//• Table Name (Optional) Load in a table, can be combined with QVD file name
+//• Index Folder Name (Optional) use this specific index only, can be combined with QVD file name
+//• Tags (Optional) load data containing a specific  tag, can be combined with QVD file name
+//• Fields (Optional) load selected fields separated by comma (,) can be combined with QVD file name
+//• Index Only (Optional) will only load in the Index, true will use default table name (vL.QDF.QVDIndexTable). Type table name from default vL.QDF.QVDIndexTable. This is used when developing apps where the Index is needed. 
+//• LoadMaxRows (Optional) will limit how many rows that can be loaded. This will only stop sequential QVD file to load a big QVD will probably load above this limit.
+//• Alternative Index path (Optional) will change the default Index path ($(vG.SharedConfigPath)/Index) This is not recommended as all functions would need the alternative path specified
 
-Call IndexLoad([‘QVD file name’],['Table Name'] ,['Index Folder Name'] ,['Tags'] ,['Fields'] ,['Index Only'] ,['Load Max Rows'] ,[ ['Alternative Index path'])
-
-• QVD file name  (Optional) Name of QVD to load, wild cards (*01-2015*) is supported
-• Table Name (Optional) Load in a table, can be combined with QVD file name
-• Index Folder Name (Optional) use this specific index only, can be combined with QVD file name
-• Tags (Optional) load data containing a specific  tag, can be combined with QVD file name
-• Fields (Optional) load selected fields separated by comma (,) can be combined with QVD file name
-• Index Only (Optional) will only load in the Index, true will use default table name (vL.QDF.QVDIndexTable). Type table name from default vL.QDF.QVDIndexTable. This is used when developing apps where the Index is needed. 
-• LoadMaxRows (Optional) will limit how many rows that can be loaded. This will only stop sequential QVD file to load a big QVD will probably load above this limit.
-• Alternative Index path (Optional) will change the default Index path ($(vG.SharedConfigPath)/Index) This is not recommended as all functions would need the alternative path specified
-
-Convert timestamp to date : Let vL.Date = timestamp(42031.554270833,'$(DateFormat)');
-*/
+//Convert timestamp to date : Let vL.Date = timestamp(42031.554270833,'$(DateFormat)');
 
 SUB IndexLoad(vL.QDF.IndexQVD,vL.QDF.Table,vL.QDF.IndexFolderName,vL.QDF.TAG,vL.QDF.InFields,vL.QDF.LoadIndexOnly,vL.QDF.LoadMaxRows,vL.QDF.AltIndexPath,vL.QDF.LoadExp);
 
@@ -434,23 +433,21 @@ SET vL.QDF.QVDSourcePath=;
 
 END SUB
 
-/*=================================================================================================
-IndexDel delete indexes and optionally associated qvd files. This could be needed keeping a consistent qvd strategy. Example, Storing 24 month of history indexes and qvd files older than 24 month should be removed else history will keep on growing infinite. IndexDel will search for the qvd fieldname (from the index) so it’s strongly recommended to have a qvd file naming convention, like TableName\day-month-year-TableName.qvd.
-
-Execute IndexDel sub function inside the script:
-Call IndexDel(‘Index file name’,['Delete associated QVD files'] ,['Index Folder Name'] ,['Alternative Index path'])
-
-• Index file name Name of index to delete, wild cards (*) is supported
-• Delete associated QVD files (Optional) if true qvd files associated to the indexes will also be deleted
-• Index Folder Name (Optional) use this specific index only, can be combined with Index file name
-• Alternative Index path (Optional) will change the default Index path ($(vG.SharedConfigPath)/Index) This is not recommended as all functions would need the alternative path specified
-
-Call IndexDel(‘2011-12*’); Deletes all Index files that starts with the name 2011-12 
-
-Call IndexDel(‘2011-12*’,’true’);  Will delete all index and associated qvd files that starts with the name 2011-12
-
-*/
-
+//=================================================================================================
+//IndexDel delete indexes and optionally associated qvd files. This could be needed keeping a consistent qvd strategy. Example, Storing 24 month of history indexes and qvd files older than 24 month should be removed else history will keep on growing infinite. IndexDel will search for the qvd fieldname (from the index) so it’s strongly recommended to have a qvd file naming convention, like TableName\day-month-year-TableName.qvd.
+//
+//Execute IndexDel sub function inside the script:
+//Call IndexDel(‘Index file name’,['Delete associated QVD files'] ,['Index Folder Name'] ,['Alternative Index path'])
+//
+//• Index file name Name of index to delete, wild cards (*) is supported
+//• Delete associated QVD files (Optional) if true qvd files associated to the indexes will also be deleted
+//• Index Folder Name (Optional) use this specific index only, can be combined with Index file name
+//• Alternative Index path (Optional) will change the default Index path ($(vG.SharedConfigPath)/Index) This is not recommended as all functions would need the alternative path specified
+//
+//Call IndexDel(‘2011-12*’); Deletes all Index files that starts with the name 2011-12 
+//
+//Call IndexDel(‘2011-12*’,’true’);  Will delete all index and associated qvd files that starts with the name 2011-12
+//
 
 SUB IndexDel(vL.QDF.IndexQVD,vL._DeleteQVD,vL.QDF.IndexFolderName,vL.QDF.AltIndexPath);
 
