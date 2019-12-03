@@ -22,7 +22,7 @@ Params: vL.TableName = The name of the table that has been loaded for which an e
         vL.LogName = Default = ETLLog -The name of the output log table
 ****************************************************************************************************/
 
-SUB ETLLogEntry(vL.TableName, vL.TimeStamp, vL.StoreType, vL.Written,vL.LogName,);
+SUB ETLLogEntry(vL.TableName, vL.TimeStamp, vL.StoreType, vL.Written, vL.LogName);
 
 Trace 'Recording an ETL log entry for $(vL.TableName), vL.Written = $(vL.Written)';
 
@@ -85,7 +85,7 @@ Params: vL.LogFile = Default(ETLLog) - the desired name of the logging file.
         vL.LogName = Default = ETLLog -The name of the current log table that should be exported
 ****************************************************************************************************/
 
-SUB WriteETLLog(vL.LogFile, vL.LogKeep, vL.LogName:)
+SUB WriteETLLog(vL.LogFile, vL.LogKeep, vL.LogName)
 
 Trace 'Storing the ETL Log file, LogKeep parameter is set to: $(vL.LogKeep)';
 
