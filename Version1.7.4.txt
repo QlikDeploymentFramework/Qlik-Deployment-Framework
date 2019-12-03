@@ -1,3 +1,6 @@
+Whats new in release 1.7.4?
+New function ETLLogEntry and WriteETLLog that creates an ETL log as a table and writes this log to disk when needed (15.ETLLogEntry.qvs) /thx Rod Stewart
+
 Whats new in release 1.7.3?
 Corrections for Qlik Sense November 2018 
 

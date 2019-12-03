@@ -1,0 +1,159 @@
+// ___________________________________________________________________________
+  //  Deployment Framework custom inclusion    
+  //   
+  //  This script will build the ETL Log record for a common ETL Log schema to
+  //  be stored in a QVD.
+  //
+  //    To do:
+  //    Sort out params to check for nulls and empty strings?
+  //    it would be good to allow an empty default.
+ //  ___________________________________________________________________________
+
+ /****************************************************************************************************
+                                    ETLLogEntry
+                                    -----------
+
+This function creates an ETL Log Entry in a resident table That can later be stored as desired 
+using WriteETLLog.
+Params: vL.TableName = The name of the table that has been loaded for which an entry is to be created
+        vL.TimeStamp = Default = now. The desired timestamp to be recorded.
+        vL.StoreType = Default('QVD') - The format of the stored file if written.
+        vL.Written = Default(True()) - Indicates if the loaded file was written
+        vL.LogName = Default = ETLLog -The name of the output log table
+****************************************************************************************************/
+
+SUB ETLLogEntry(vL.TableName, vL.TimeStamp, vL.StoreType, vL.Written,vL.LogName,);
+
+Trace 'Recording an ETL log entry for $(vL.TableName), vL.Written = $(vL.Written)';
+
+// Initialise local vars
+Set vL.RecordCount = 0;
+
+// The name of the output log table, default ETLLog
+if isnull(vL.LogName) then 
+    Let vL.LogName = 'ETLLog';
+end if;
+
+// What timestamp are we using to put in the log
+if isnull(vL.TimeStamp) then 
+    Let vL.TimeStamp = TimeStamp(Now());
+end if;
+
+// What type of file are we writing
+if isnull(vL.StoreType) then 
+    let vL.StoreType = 'QVD';
+end if;
+
+//Was the table intending to be stored
+if isnull(vL.Written) then 
+    let vL.Written = 'Unknown';
+end if;
+
+// Get the record number count
+Let vL.RecordCount = NoOfRows('$(vL.TableName)');
+
+
+// Create the ETLLog table entry
+
+Unqualify ETL_Timestamp, Target_Loaded, Target_Type, Records_Loaded, Stored;
+
+[$(vL.LogName)]:
+Load * Inline [
+ETL_Timestamp, Target_Loaded, Target_Type, Stored, Records_Loaded
+	$(vL.TimeStamp), $(vL.TableName), $(vL.StoreType), $(vL.Written), $(vL.RecordCount)
+    ];
+
+// Clean up
+SET vL.TableName=;
+SET vL.TimeStamp=;
+SET vL.RecordCount=;
+set vL.Written =;
+set vL.LogName =;
+
+END SUB
+
+
+
+/****************************************************************************************************
+                                    WriteETLLog
+                                    -----------
+
+This function writes an ETL Log file in CSV format.
+Params: vL.LogFile = Default(ETLLog) - the desired name of the logging file.
+        vL.LogKeep = Default(True()) - determines whether the temporary ETL Log file is kept in the
+                     app. Set to False to avoid writing the file and keep in memory.
+        vL.LogName = Default = ETLLog -The name of the current log table that should be exported
+****************************************************************************************************/
+
+SUB WriteETLLog(vL.LogFile, vL.LogKeep, vL.LogName:)
+
+Trace 'Storing the ETL Log file, LogKeep parameter is set to: $(vL.LogKeep)';
+
+// The name of the output log table, default ETLLog
+if isnull(vL.LogName) then 
+    Let vL.LogName = 'ETLLog';
+end if;
+
+// Check to see if the ETLLog table exists, otherwise exit the sub
+if ISNULL(TableNumber('$(vL.LogName)'))  then 
+    Set vL.LogFile =;
+    Set vL.LogKeep =;
+    set vL.LogName =;
+    EXIT SUB;
+end if;
+
+// Initialise Variables
+if isnull(vL.LogFile) then 
+    Set vL.LogFile = 'ETLLog';
+end if;
+
+if isnull(vL.LogKeep) then
+    Set vL.LogKeep = True();
+end if;
+
+// Check to see if the file already exists, if not add a header record.
+
+Unqualify Environment, App_Name, Stored, ETL_Timestamp, Target_Loaded, Target_Type, Records_Loaded;
+
+Call vL.FileExist('$(vG.ConfigPath)\$(vL.LogFile).csv');
+If vL.FileExist = 'false' Then
+	ETLLogWrite:
+    Load * inline [
+    	Environment, App_Name, Stored, ETL_Timestamp, Target_Loaded, Target_Type, Records_Loaded
+    ];
+else
+// if the file exists, load it so we can append the new records
+	ETLLogWrite:
+    Load
+		Environment, App_Name, Stored, ETL_Timestamp, Target_Loaded, Target_Type, Records_Loaded
+    FROM [$(vG.ConfigPath)\$(vL.LogFile).csv] (txt, utf8, embedded labels, delimiter is ',', msq);
+end if;
+
+// Append the generated log entries
+ETLLogWrite:
+Concatenate
+Load
+	'$(vL.QDF)' as Environment,
+	DocumentTitle() as App_Name,
+	Stored,	ETL_Timestamp, Target_Loaded, Target_Type, Records_Loaded
+Resident [$(vL.LogName)];
+
+if $(vL.LogKeep) = True() then
+    // Store the log file and drop the source table
+	store ETLLogWrite into '$(vG.ConfigPath)\$(vL.LogFile).csv' (txt);
+   	drop table [$(vL.LogName)];
+else
+    // Do Nothing
+end if;
+
+// Cleanup
+drop table ETLLogWrite;
+Set vL.LogFile =;
+Set vL.LogKeep =;
+set vL.LogName =;
+
+END SUB
+
+// *************************************
+// Functions written by Rod Stewart
+// *************************************
