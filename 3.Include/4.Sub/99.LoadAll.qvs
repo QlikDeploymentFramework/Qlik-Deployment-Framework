@@ -17,6 +17,7 @@ $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\11.DynamicContainerLoader.qv
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\12.Index.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\13.NiceTrace.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\14.QVDReduce.qvs);
+$(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\15.ETLLog.qvs);
 
 
 // Loading in Qlikview Components, source avalible on GitHub
