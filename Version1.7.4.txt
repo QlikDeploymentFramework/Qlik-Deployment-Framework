@@ -1,5 +1,6 @@
 Whats new in release 1.7.4?
 New function ETLLogEntry and WriteETLLog that creates an ETL log as a table and writes this log to disk when needed (15.ETLLogEntry.qvs) /thx Rod Stewart
+Added MIT license in containers
 QlikView Variable Editor Application might not work on QlikView 12.3 and newer due to macro execution issues. Recommendation is to use Deploy Tool instead for Variable Editor
 
 Whats new in release 1.7.3?
@@ -27,7 +28,7 @@ During Qlik Sense initiation Search for shared_folders and use as home container
 Whats new in release 1.7.0?
 Installer improvements, select between three container layouts: Classic, Sense and Slimmed Down
 New container layout, Qlik Sense Only, including extract transform load folders
-New container layout, slimmed Down containers, including extract, transform load folders
+New container layout, slimmed down containers, including extract, transform load folders
 Added documentation extracts change depending on selected container layout
 Added code to GitHub
 Added Negative Fiscal Year in CalendarGen.qvs
