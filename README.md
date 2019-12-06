@@ -1,5 +1,5 @@
 # Qlik-Deployment-Framework (QDF)
-**QDF version 1.7.3**
+**QDF version 1.7.4**
 
 ## QDF is a set of Qlik scripts and utilities that enables: 
 Resource Sharing, Reuse, Organization, Structure and Standards providing an effective and efficient Qlik deployment.
