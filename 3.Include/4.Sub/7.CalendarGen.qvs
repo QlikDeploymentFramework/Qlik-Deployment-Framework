@@ -34,23 +34,6 @@ endif
 // Clean older dateformat
 LET vL.QDF.DateFormat_$(vL.QDF.IndexFields_tmp)=;
 
-// ## Calendar format parsing End
-
-
-
-// Cleanup
-SET vL.QDF.TableNameIdentified = ;
-SET vL.QDF.TableNoIdentified = ;
-SET vL.QDF.FieldNoIdentified = ;
-
-// If calendar link table not found, Skip function
-//if not '$(vL.QDF.FindFieldTableName)' = '' then  
-
-//tmp_Calendars:
-//////LOAD
-//	'$(vL.QDF.CalendarTableName)' AS tmp_Calendar
-//AUTOGENERATE(1);
-
 // if Min and Max set manual
 if not '$(vL.QDF.CalendarGenMinDateOrg)' = '' and not '$(vL.QDF.CalendarGenMaxDateOrg)' = ''  then
 LET vL.QDF.CalendarGenMinDate = Num(Date(Date#('$(vL.QDF.CalendarGenMinDateOrg)','$(vL.QDF.DateFormat)'))) ;
