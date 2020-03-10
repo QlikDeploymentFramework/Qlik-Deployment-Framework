@@ -158,8 +158,6 @@ SET vL.QDF.DateFieldLinkName_new=;
 Set vL.QDF.CalendarGenMinDate = ;
 Set vL.QDF.CalendarGenMaxDate = ;
 
-Next vL.QDF.IndexFields_tmp
-
 // Add basic Qlik Sense calendar in UI  (if Sense is identifyed)
 if lower(left('$(vG.BasePath)',3))='lib' and not '$(vL.QDF.DateFieldLinkName_Derive)' = '' then 
 [std]: // will create a virtual calendar named $(vL.QDF.CalendarTableName).cal
@@ -178,6 +176,7 @@ FIELDS
 Derive Fields from Fields $(vL.QDF.DateFieldLinkName_Derive) Using [std];
 endif
 
+Next vL.QDF.IndexFields_tmp
 
 Set vL.QDF.FindFieldTableName = ;
 Set vL.QDF.DateFieldLinkName = ;
