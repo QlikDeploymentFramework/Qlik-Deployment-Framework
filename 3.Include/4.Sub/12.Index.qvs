@@ -202,9 +202,9 @@ endif
 
 
 If not '$(vL.QDF.IndexQVD)' = '' and substringcount( '$(vL.QDF.IndexQVD)' , '*') =0 then 
-  let vL.QDF.IndexQVD ='*'&'$(vL.QDF.IndexQVD)'&'*.index';
+  let vL.QDF.IndexQVD ='*'&'$(vL.QDF.IndexFolderName)$(vL.QDF.IndexQVD)'&'*.index';
 else
-  let vL.QDF.IndexQVD ='*.index';
+  let vL.QDF.IndexQVD ='*$(vL.QDF.IndexFolderName).index';
 endif
 
 //-----------------Load in Index folders ---------------------------
