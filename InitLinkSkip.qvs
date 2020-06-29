@@ -1,0 +1,49 @@
+;
+/*  ___________________________________________________________________________
+   | Qlik Deployment Framework InitLinkSkip.qvs    
+   | InitLinkSkip.qvs is used to shorten script complexity when developing, 
+   | will only work after previously successful initiation                                       
+   | InitLinkSkip is used to bypass 1.Init.qvs for QlikView and Qlik Sense               
+   |___________________________________________________________________________*/
+   
+trace '### QDF Info, InitLinkSkip check if vG.BasePath exists'; //Writing information in log 
+
+// Check if vG.BasePath variable exists, else exit the script
+If '$(vG.BasePath)'= '' then
+		trace '### DF Warning, could not identify any valid container path, will exit';
+		trace '### DF Warning, use InitLink.qvs to generate global variables';
+		exit script;
+endif
+
+// Creating function vL.GettContainerStructure for vL.ContainerStructure table containing sub folders,
+// variable path to main folders based on this include file
+sub GetContainerStructure;
+	vL.ContainerStructure:
+	REPLACE LOAD * INLINE [
+    PhysicalFolderName, VariablePrefix, Subfolder, Comments
+    Application, Application, , QlikView Applications are resided in subfolders under 1.Applications
+    QVD, QVD, , QlikView Data files are stored in subfolders under 2.QVD
+    Include, Include, , Folder where QlikView Include files are stored. These are script parts that are called from the main QlikView script.
+    Mart, Mart, , "Resides QlikView Qvw marts (in subfolders) for data discovery usage, these folders could be shared."
+    Config, Config, , Configuration and language files like Excel and txt. This folders could be shared to make configuration changes easier
+    Script, Script, , Store for special scripts run by the publisher or scheduled tasks
+    Export, Export, , "Folder used to store from QlikView exported data, probably txt or qvx"
+    Import, Import, , Folder used to store import data from external systems
+    BaseVariable, BaseVariable, Include, "Stores all the variables needed to use the framework, like paths inside the container"
+    Locale, Locale, Include, "Locale for different regions, used for easy migration between regions"
+    ConnString, ConnString, Include, Stores connection strings to data sources
+    Sub, Sub, Include, "Store for sub routines, this is a way to reuse code between applications"
+    ColorScheme, ColorScheme, Include, Company standard Color Scheme would be placed here
+    Custom, Custom, Include, Store for custom include scripts
+    Template, Template, , Used to identify Admin container and create extra variables used by Variable Editor
+    Extract, Extract, QVD, Optional store for data extracts
+    Transform, Transform, QVD, Optional store for data transformation
+    Load, Load, QVD, Optional store for data load
+];
+end sub;
+
+// 99.LoadAll.qvs pre-loads QDF function-library within current container
+$(Include=$(vG.SubPath)\99.LoadAll.qvs); 
+
+// Initiation of 4.Custom within home container
+$(Include=$(vG.BaseVariablePath)\4.Custom.qvs); // Loading 4.Custom from current container
