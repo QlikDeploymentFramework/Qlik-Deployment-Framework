@@ -36,8 +36,6 @@ else
 	Let vL.QDF.ContainerMapPath='$(vG.BaseVariablePath)\ContainerMap.csv';
 endif
 
-
-
 // Loading Container Map csv table as vL.temp_table_map
 unqualify ContainerPathName,Prefix,ContainerPathNameCount ;
 vL.temp_table_map:
