@@ -15,8 +15,7 @@ If '$(vG.BasePath)'= '' then
 		exit script;
 endif
 
-// Creating function vL.GettContainerStructure for vL.ContainerStructure table containing sub folders,
-// variable path to main folders based on this include file
+// Sub function vL.GetContainerStructure containing possible container folders (vL.ContainerStructure table)
 sub GetContainerStructure;
 	vL.ContainerStructure:
 	REPLACE LOAD * INLINE [

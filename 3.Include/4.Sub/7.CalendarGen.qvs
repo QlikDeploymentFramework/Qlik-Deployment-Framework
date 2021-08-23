@@ -25,7 +25,7 @@ LET vL.QDF.DateFormat_$(vL.QDF.IndexFields_tmp)=trim(TextBetween(',$(vL.QDF.Date
 if not '$(vL.QDF.DateFormat_$(vL.QDF.IndexFields_tmp))' ='' then //validate if dateformat avalible
 	LET vL.QDF.DateFormat='$(vL.QDF.DateFormat_$(vL.QDF.IndexFields_tmp))';
 	let vL.QDF.DateFormat_old='$(vL.QDF.DateFormat)'; // set vL.QDF.IndexFields_old to current format number
-elseif not '$(vL.QDF.DateFormat_old)' ='' then // If dateformat missin try using previous 
+elseif not '$(vL.QDF.DateFormat_old)' ='' then // If dateformat missing try using previous 
 	LET vL.QDF.DateFormat='$(vL.QDF.DateFormat_old)'; 
 else
 	LET vL.QDF.DateFormat='$(DateFormat)'; //Use standard dateformat if speciffic format is missing
