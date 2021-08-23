@@ -25,9 +25,21 @@ vL.QDF.CreateFolder:
     store * from [vL.QDF.CreateFolder] into '$(vL.QDF.FolderName_1)\Info.txt' (txt,delimiter is ';' );
     drop table [vL.QDF.CreateFolder];
 else //QlikView is executing
+	// Handle special characters in folder name for CMD pipeline
+	// Ref: https://ss64.com/nt/syntax-redirection.html
+	[vL.QDF.CreateFolder.EscapeCharsMap]:
+	Mapping LOAD * Inline [
+	Char,EscapedChar
+	&,^&
+	\,^\
+	>,^>
+	<,^<
+	^,^^
+	|,^|
+	];
 	Let vL.QDF.FolderIndex_tmp=index('$(vL.QDF.FolderName_1)','\',-1);
-	let vL.QDF.FolderName_2=left('$(vL.QDF.FolderName_1)',vL.QDF.FolderIndex_tmp-1); // Identifying folder path
-	let vL.QDF.FolderName_3=mid('$(vL.QDF.FolderName_1)',vL.QDF.FolderIndex_tmp+1,Len('$(vL.QDF.FolderName_1)'));// Identifying folder name
+	let vL.QDF.FolderName_2=MapSubString('vL.QDF.CreateFolder.EscapeCharsMap',left('$(vL.QDF.FolderName_1)',vL.QDF.FolderIndex_tmp-1)); // Identifying folder path
+	let vL.QDF.FolderName_3=MapSubString('vL.QDF.CreateFolder.EscapeCharsMap',mid('$(vL.QDF.FolderName_1)',vL.QDF.FolderIndex_tmp+1,Len('$(vL.QDF.FolderName_1)')));// Identifying folder name
 	execute cmd.exe /Q /C pushd ^"$(vL.QDF.FolderName_2)^" & mkdir ^"$(vL.QDF.FolderName_3)^" & popd; // Mounting folder path and create Folder
 endif
 endif
