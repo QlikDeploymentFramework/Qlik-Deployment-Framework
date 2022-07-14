@@ -5,6 +5,7 @@
   // v3.0  23-Jan-2013, Authors: Finn Nordensjö, Magnus Berg
   // v3.1  05-Mar-2014, Author: Magnus Berg (minor fixes and added additional flags)
   // v3.2 		 2016, Author: Magnus Berg added native Qlik Sense calendar
+  // v3.3  14-Jul-2022, Author: Mario Weigl (fixed issue 25 wrong year for week)
   // Notes: Generic calendar generation script that enables scalable handling of creating and navigating multiple date fields
 
 SUB CalendarGen(vL.QDF.DateFieldLinkName,vL.QDF.CalendarTableName,vL.QDF.MonthsLeftFiscalDates,vL.QDF.CalendarGenMinDateOrg,vL.QDF.CalendarGenMaxDateOrg,vL.QDF.DateFormatOrg);
@@ -102,7 +103,7 @@ LOAD
 	Date(monthStart([$(vL.QDF.DateFieldLinkName_new)]), 'MM-YYYY') AS [$(vL.QDF.CalendarTableName) MonthYear],
 	dual(applyMap('CalendargenQuarterMap', num(month([$(vL.QDF.DateFieldLinkName_new)])),null())
 		& '-' & Year([$(vL.QDF.DateFieldLinkName_new)]),QuarterStart([$(vL.QDF.DateFieldLinkName_new)])) AS [$(vL.QDF.CalendarTableName) QuarterYear],
-	dual(Week([$(vL.QDF.DateFieldLinkName_new)]) & '-' & Year([$(vL.QDF.DateFieldLinkName_new)]),WeekStart([$(vL.QDF.DateFieldLinkName_new)])) AS [$(vL.QDF.CalendarTableName) WeekYear],
+	dual(Week([$(vL.QDF.DateFieldLinkName_new)]) & '-' & WeekYear([$(vL.QDF.DateFieldLinkName_new)]),WeekStart([$(vL.QDF.DateFieldLinkName_new)])) AS [$(vL.QDF.CalendarTableName) WeekYear],
 	if(Year2Date([$(vL.QDF.DateFieldLinkName_new)], 0, 1, $(vL.QDF.CalendarGenToday)),1) AS [$(vL.QDF.CalendarTableName) YTD Flag],
 	if(Year2Date([$(vL.QDF.DateFieldLinkName_new)], -1, 1, $(vL.QDF.CalendarGenToday)),1) AS [$(vL.QDF.CalendarTableName) PYTD Flag],
 	// If(DayNumberOfQuarter($(vL.QDF.DateFieldLinkName_new)) <= DayNumberOfQuarter($(vL.QDF.CalendarGenToday)), 1, 0) as [$(vL.QDF.CalendarTableName) QTD Flag],
