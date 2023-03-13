@@ -1,0 +1,10 @@
+//  ____________________________________________________________
+// |      Deployment Framework Path Info txt                   |
+// | Contains information folder purpose and base variable     |
+// |  All path are based on vG.BasePath                        |
+// |___________________________________________________________|
+
+// IncludePath points to 3.Include base folder, all Qlik include scripts are stored here
+
+Global Variable = vG.IncludePath
+Shared Global Variable= vG.SharedIncludePath

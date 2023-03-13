@@ -1,0 +1,14 @@
+//  ____________________________________________________________
+// |      Deployment Framework Path Info txt                   |
+// | Contains information folder purpose and base variable     |
+// |  All path are based on vG.BasePath                        |
+// |___________________________________________________________|
+
+// vG.SubPath points to 3.Include\4.Sub path
+
+// Sub include scripts are stored here = $(vG.SubPath)
+// Use call inside QlikView Script to execute a sub, example:
+// CALL LoadVariableCSV('Custom.Variables.csv');
+
+Global Variable = vG.SubPath
+Shared Global Variable= vG.SharedSubPath

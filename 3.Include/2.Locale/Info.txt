@@ -1,0 +1,13 @@
+//  ____________________________________________________________
+// |      Deployment Framework Path Info txt                   |
+// | Contains information folder purpose and base variable     |
+// |  All path are based on vG.LocalePath                      |
+// |___________________________________________________________|
+
+// vG.IncludePath points to 3.Include\2.Locale folder
+
+// Store for language specific settings
+// Example: $(Include=$(vG.LocalePath)\1.US.qvs);
+
+Global Variable = vG.IncludePath
+Shared Global Variable= vG.SharedIncludePath
