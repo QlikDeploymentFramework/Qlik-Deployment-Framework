@@ -12,7 +12,6 @@ $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\6.CreateFolder.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\7.CalendarGen.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\8.QVFileInfo.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\9.QVDMigration.qvs);
-$(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\10.QVDLoad.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\11.DynamicContainerLoader.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\12.Index.qvs);
 $(Include=$(vG.$(vL.QDF.LinkShared_Folders)SubPath)\13.NiceTrace.qvs);
